@@ -4,7 +4,7 @@ import { getToken, setToken, removeToken } from "../storage/localStorage";
 export const axiosInstance = axios.create({
   baseURL: "https://dummyjson.com",
   timeout: 5000,
-  withCredentials: true,
+  withCredentials: false,
 });
 
 axiosInstance.interceptors.request.use((config) => {

@@ -3,8 +3,8 @@ import { ROUTES } from "@/config/routes.config";
 import { PublicRoute } from "../PublicRoute";
 
 import { HomePage } from "@/pages/HomePage";
-import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { RegisterPage } from "@/features/auth/pages/RegisterPage";
+import LoginPage from "@/features/auth/pages/LoginPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 

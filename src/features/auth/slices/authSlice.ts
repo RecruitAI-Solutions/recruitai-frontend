@@ -4,18 +4,19 @@ import {
   getToken,
   removeToken,
 } from "@/services/storage/localStorage";
+import type { UserRole } from "@/routes/RoleBasedRoute";
 
 type User = {
   id: string;
   email: string;
-  role: "candidate" | "recruiter" | "admin";
+  role: UserRole;
   fullName?: string;
 };
 
 type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
-  role: string | null;
+  role: UserRole | null;
   loading: boolean;
 };
 
