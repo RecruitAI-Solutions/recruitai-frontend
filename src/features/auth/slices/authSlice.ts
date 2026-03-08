@@ -10,7 +10,7 @@ type User = {
   id: string;
   email: string;
   role: UserRole;
-  fullName?: string;
+  username?: string;
 };
 
 type AuthState = {

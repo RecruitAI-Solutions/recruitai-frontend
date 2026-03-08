@@ -1,10 +1,10 @@
 import axios from "axios";
-import { getToken, setToken, removeToken } from "../storage/localStorage";
+import { getToken, setToken } from "../storage/localStorage";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://dummyjson.com",
+  baseURL: "http://localhost:5000",
   timeout: 5000,
-  withCredentials: false,
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use((config) => {
@@ -18,27 +18,15 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    if (error.response?.status === 401 && !error.config._retry) {
+      error.config._retry = true;
+      const refresh = await axiosInstance.post("/refresh");
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const refreshRes = await axios.post(
-          "https://dummyjson.com/auth/refresh",
-          {
-            refreshToken: localStorage.getItem("refresh_token"),
-          },
-        );
-        const newAccessToken = refreshRes.data.accessToken;
-        setToken(newAccessToken);
+      setToken(refresh.data.accessToken);
 
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        removeToken();
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
-      }
+      error.config.headers.Authorization = `Bearer ${refresh.data.accessToken}`;
+
+      return axiosInstance(error.config);
     }
     return Promise.reject(error);
   },

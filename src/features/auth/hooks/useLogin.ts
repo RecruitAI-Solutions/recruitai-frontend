@@ -5,7 +5,6 @@ import { authApi, type LoginCredentials } from "../services/authApi";
 import { setCredentials } from "../slices/authSlice";
 import { useAppDispatch } from "@/app/hooks";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
-import type { AxiosError } from "axios";
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +20,7 @@ export const useLogin = () => {
         }),
       );
 
-      toast.success(`Chào mừng ${data.user.fullName}!`, {
+      toast.success(`Chào mừng`, {
         duration: 3000,
       });
 
@@ -29,7 +28,7 @@ export const useLogin = () => {
       navigate(redirectPath, { replace: true });
     },
 
-    onError: (error: AxiosError) => {
+    onError: (error) => {
       console.error("Login error: ", error);
       const message = "Đăng nhập thất bại!";
       toast.error(message, {

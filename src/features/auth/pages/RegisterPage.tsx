@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
+import { RegisterForm } from "../components/RegisterForm";
 
 export const RegisterPage = () => {
   return (
@@ -24,6 +25,10 @@ export const RegisterPage = () => {
           <p className="text-center text-gray-600">
             Register form sẽ được implement ở đây
           </p>
+        </div>
+
+        <div className="bg-white py-8 px-6 shadow-lg rounded-lg">
+          <RegisterForm />
         </div>
       </div>
     </div>
