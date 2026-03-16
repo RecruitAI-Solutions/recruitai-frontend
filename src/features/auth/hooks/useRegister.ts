@@ -1,18 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { authApi, type RegisterCredentials } from "../services/authApi";
-
+import { authApi, type RegisterRequest } from "../services/authApi";
+import { useAppDispatch } from "@/app/hooks";
+import { setCredentials } from "../slices/authSlice";
 import type { AxiosError } from "axios";
 
 export const useRegister = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   return useMutation({
-    mutationFn: (credentials: RegisterCredentials) =>
-      authApi.register(credentials),
+    mutationFn: (credentials: RegisterRequest) => authApi.register(credentials),
 
-    onSuccess: () => {
+    onSuccess: (data) => {
+      dispatch(
+        setCredentials({
+          user: data.user,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        }),
+      );
+
       toast.success("Đăng ký thành công", {
         duration: 3000,
       });
@@ -21,8 +30,8 @@ export const useRegister = () => {
     },
 
     onError: (error: AxiosError) => {
-      console.error("Register erorr: ", error);
-      toast.error("Đăng ký thất bại", {
+      const message = error.message || "Đăng ký thất bật";
+      toast.error(message || "Đăng ký thất bại", {
         duration: 3000,
       });
     },

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { LoginForm } from "../components/LoginForm";
+import { OAuthButtons } from "../components/OAuthButtons";
 
 const LoginPage = () => {
   return (
@@ -25,6 +26,8 @@ const LoginPage = () => {
         {/* Login Form Card */}
         <div className="bg-white py-8 px-6 shadow-lg rounded-lg">
           <LoginForm />
+
+          <OAuthButtons />
         </div>
 
         {/* Footer info */}

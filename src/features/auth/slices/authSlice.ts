@@ -2,30 +2,19 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import {
   setToken,
   getToken,
-  removeToken,
+  setRefreshToken,
+  clearAuthTokens,
 } from "@/services/storage/localStorage";
-import type { UserRole } from "@/routes/RoleBasedRoute";
-
-type User = {
-  id: string;
-  email: string;
-  role: UserRole;
-  username?: string;
-};
-
-type AuthState = {
-  user: User | null;
-  isAuthenticated: boolean;
-  role: UserRole | null;
-  loading: boolean;
-};
+import type { AuthState, User } from "../types/auth.types";
 
 const token = getToken();
+
 const initialState: AuthState = {
   user: null,
   isAuthenticated: !!token,
   role: null,
   loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
@@ -37,6 +26,7 @@ const authSlice = createSlice({
       action: PayloadAction<{
         user: User;
         accessToken: string;
+        refreshToken: string;
       }>,
     ) => {
       state.user = action.payload.user;
@@ -44,6 +34,7 @@ const authSlice = createSlice({
       state.role = action.payload.user.role;
 
       setToken(action.payload.accessToken);
+      setRefreshToken(action.payload.refreshToken);
     },
 
     setUser: (state, action: PayloadAction<User>) => {
@@ -56,7 +47,8 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.role = null;
-      removeToken();
+
+      clearAuthTokens();
     },
 
     setLoading: (state, action: PayloadAction<boolean>) => {

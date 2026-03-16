@@ -2,6 +2,10 @@ export const ROUTES = {
   HOME: "/",
   LOGIN: "/login",
   REGISTER: "/register",
+  AUTH_CALLBACK: "/auth/callback",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  VERIFY_EMAIL: "/verify-email",
   ABOUT: "/about",
   CONTACT: "/contact",
 
@@ -50,6 +54,10 @@ export const PUBLIC_ROUTES = [
   ROUTES.HOME,
   ROUTES.LOGIN,
   ROUTES.REGISTER,
+  ROUTES.AUTH_CALLBACK,
+  ROUTES.FORGOT_PASSWORD,
+  ROUTES.RESET_PASSWORD,
+  ROUTES.VERIFY_EMAIL,
   ROUTES.ABOUT,
   ROUTES.CONTACT,
 ] as const;

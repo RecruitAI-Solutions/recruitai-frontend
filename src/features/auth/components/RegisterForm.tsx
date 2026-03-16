@@ -4,11 +4,9 @@ import * as yup from "yup";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
 import { useRegister } from "../hooks/useRegister";
-import { type RegisterCredentials } from "../services/authApi";
+import { Gender, type GenderType } from "../types/auth.types";
 
 const registerSchema = yup.object({
-  username: yup.string().required("Vui lòng nhập tên đăng nhập"),
-
   email: yup
     .string()
     .email("Email không hợp lệ")
@@ -19,46 +17,46 @@ const registerSchema = yup.object({
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
     .required("Vui lòng nhập mật khẩu"),
 
-  confirmPassword: yup
+  fullName: yup.string().required("Vui lòng nhập họ tên"),
+  role: yup
     .string()
-    .oneOf([yup.ref("password")], "Mật khẩu không khớp")
-    .required("Vui lòng nhập lại mật khẩu"),
+    .oneOf(["Candidate", "Recruiter", "Admin"])
+    .required("Vui lòng chọn vai trò"),
+  gender: yup.number().oneOf([0, 1, 2, 3]).required("Vui lòng chọn giới tính"),
+  phoneNumber: yup.string().required("Vui lòng nhập ngày sinh"),
+  dateOfBirth: yup.string().required("Vui lòng chọn ngày tháng năm sinh"),
 });
 
-type RegisterFormData = RegisterCredentials & {
-  confirmPassword: string;
-};
+type RegisterFormData = yup.InferType<typeof registerSchema>;
 
 export const RegisterForm = () => {
-  const { mutate: registerUser, isPending } = useRegister();
+  const { mutate: register, isPending } = useRegister();
 
   const {
-    register,
+    register: formRegister,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
+    defaultValues: {
+      role: "Candidate",
+      gender: Gender.UNSPECIFIED,
+    },
   });
 
   const onSubmit = (data: RegisterFormData) => {
-    const payload = data as Omit<RegisterFormData, "confirmPassword">;
-
-    registerUser(payload);
+    register({
+      ...data,
+      gender: data.gender as GenderType,
+    });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
-        label="Tên đăng nhập"
-        {...register("username")}
-        error={errors.username?.message}
-        disabled={isPending}
-      />
-
-      <Input
         label="Email"
         type="email"
-        {...register("email")}
+        {...formRegister("email")}
         error={errors.email?.message}
         disabled={isPending}
       />
@@ -66,16 +64,45 @@ export const RegisterForm = () => {
       <Input
         label="Mật khẩu"
         type="password"
-        {...register("password")}
+        {...formRegister("password")}
         error={errors.password?.message}
         disabled={isPending}
       />
 
       <Input
-        label="Nhập lại mật khẩu"
-        type="password"
-        {...register("confirmPassword")}
-        error={errors.confirmPassword?.message}
+        label="Họ và tên"
+        {...formRegister("fullName")}
+        error={errors.fullName?.message}
+        disabled={isPending}
+      />
+
+      {/* Role Select */}
+      <select {...formRegister("role")}>
+        <option value="Candidate">Ứng viên</option>
+        <option value="Recruiter">Nhà tuyển dụng</option>
+        <option value="Admin">Quản trị viên</option>
+      </select>
+
+      {/* Gender Select */}
+      <select {...formRegister("gender")}>
+        <option value={0}>Không xác định</option>
+        <option value={1}>Nam</option>
+        <option value={2}>Nữ</option>
+        <option value={3}>Khác</option>
+      </select>
+
+      <Input
+        label="Số điện thoại"
+        {...formRegister("phoneNumber")}
+        error={errors.phoneNumber?.message}
+        disabled={isPending}
+      />
+
+      <Input
+        label="Ngày sinh"
+        type="date"
+        {...formRegister("dateOfBirth")}
+        error={errors.dateOfBirth?.message}
         disabled={isPending}
       />
 
