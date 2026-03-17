@@ -27,7 +27,7 @@ export const UserStatus = {
   DELETED: 5,
 } as const;
 
-export type UserRoleType = (typeof UserRoleValue)[keyof typeof UserRoleValue];
+export type UserRoleType = (typeof UserRoleNumber)[keyof typeof UserRoleNumber];
 export type GenderType = (typeof Gender)[keyof typeof Gender];
 export type UserStatusType = (typeof UserStatus)[keyof typeof UserStatus];
 
@@ -37,7 +37,7 @@ export type LoginRequest = {
 };
 
 export type RegisterRequest = {
-  role: string;
+  role: number;
   email: string;
   password: string;
   fullName: string;

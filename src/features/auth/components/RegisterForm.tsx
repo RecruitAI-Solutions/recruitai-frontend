@@ -4,7 +4,12 @@ import * as yup from "yup";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
 import { useRegister } from "../hooks/useRegister";
-import { Gender, type GenderType } from "../types/auth.types";
+import {
+  Gender,
+  UserRoleNumber,
+  type GenderType,
+  type UserRoleType,
+} from "../types/auth.types";
 
 const registerSchema = yup.object({
   email: yup
@@ -19,12 +24,15 @@ const registerSchema = yup.object({
 
   fullName: yup.string().required("Vui lòng nhập họ tên"),
   role: yup
-    .string()
-    .oneOf(["Candidate", "Recruiter", "Admin"])
+    .mixed<UserRoleType>()
+    .oneOf(Object.values(UserRoleNumber))
     .required("Vui lòng chọn vai trò"),
   gender: yup.number().oneOf([0, 1, 2, 3]).required("Vui lòng chọn giới tính"),
-  phoneNumber: yup.string().required("Vui lòng nhập ngày sinh"),
-  dateOfBirth: yup.string().required("Vui lòng chọn ngày tháng năm sinh"),
+  phoneNumber: yup.string().required("Vui lòng nhập số điện thoại"),
+  dateOfBirth: yup
+    .string()
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Ngày sinh không hợp lệ")
+    .required("Vui lòng chọn ngày tháng năm sinh"),
 });
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
@@ -39,7 +47,7 @@ export const RegisterForm = () => {
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
     defaultValues: {
-      role: "Candidate",
+      role: 1,
       gender: Gender.UNSPECIFIED,
     },
   });
@@ -77,14 +85,14 @@ export const RegisterForm = () => {
       />
 
       {/* Role Select */}
-      <select {...formRegister("role")}>
-        <option value="Candidate">Ứng viên</option>
-        <option value="Recruiter">Nhà tuyển dụng</option>
-        <option value="Admin">Quản trị viên</option>
+      <select {...formRegister("role", { valueAsNumber: true })}>
+        <option value={UserRoleNumber.CANDIDATE}>Ứng viên</option>
+        <option value={UserRoleNumber.RECRUITER}>Nhà tuyển dụng</option>
+        <option value={UserRoleNumber.ADMIN}>Quản trị viên</option>
       </select>
 
       {/* Gender Select */}
-      <select {...formRegister("gender")}>
+      <select {...formRegister("gender", { valueAsNumber: true })}>
         <option value={0}>Không xác định</option>
         <option value={1}>Nam</option>
         <option value={2}>Nữ</option>

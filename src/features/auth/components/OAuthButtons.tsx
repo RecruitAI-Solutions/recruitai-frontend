@@ -2,7 +2,7 @@ import { API_BASE_URL, AUTH_ENDPOINTS } from "@/config/api.config";
 
 export const OAuthButtons = () => {
   const buildOAuthUrl = (
-    provider: "Google" | "Facebook" | "Github",
+    provider: "Google" | "Facebook" | "GitHub",
   ): string => {
     const returnUrl = `${window.location.origin}/auth/callback`;
 
@@ -21,7 +21,7 @@ export const OAuthButtons = () => {
   };
 
   const handleGithubLogin = () => {
-    window.location.href = buildOAuthUrl("Github");
+    window.location.href = buildOAuthUrl("GitHub");
   };
 
   return (
