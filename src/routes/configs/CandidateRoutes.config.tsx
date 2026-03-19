@@ -1,7 +1,8 @@
 import { type RouteObject } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { RoleBasedRoute } from "../RoleBasedRoute";
-import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { CandidateLayout } from "@/shared/layouts/candidate/CandidateLayout";
+import CandidateDashboard from "@/features/candidate/pages/Candidate";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -17,12 +18,13 @@ export const createCandidateRoutes = (
   ),
   children: [
     {
-      path: ROUTES.CANDIDATE.DASHBOARD,
-      element: (
-        <>
-          CANDIDATE DASHBOARD <LogoutButton />
-        </>
-      ),
+      element: <CandidateLayout />,
+      children: [
+        {
+          path: ROUTES.CANDIDATE.DASHBOARD,
+          element: <CandidateDashboard />,
+        },
+      ],
     },
   ],
 });

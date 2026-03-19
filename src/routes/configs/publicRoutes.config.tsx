@@ -2,7 +2,7 @@ import { type RouteObject } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { PublicRoute } from "../PublicRoute";
 
-import { HomePage } from "@/pages/HomePage";
+import HomePage from "@/pages/HomePage";
 import { RegisterPage } from "@/features/auth/pages/RegisterPage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import OAuthCallbackPage from "@/features/auth/pages/OAuthCallbackPage";
