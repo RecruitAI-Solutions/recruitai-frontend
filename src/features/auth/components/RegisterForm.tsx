@@ -114,7 +114,12 @@ export const RegisterForm = () => {
         disabled={isPending}
       />
 
-      <Button type="submit" isLoading={isPending} fullWidth>
+      <Button
+        className="cursor-pointer"
+        type="submit"
+        isLoading={isPending}
+        fullWidth
+      >
         Đăng ký
       </Button>
     </form>

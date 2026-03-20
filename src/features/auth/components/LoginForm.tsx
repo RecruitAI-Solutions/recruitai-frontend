@@ -56,7 +56,12 @@ export const LoginForm = () => {
       />
 
       {/* Submit Button */}
-      <Button type="submit" isLoading={isPending} fullWidth>
+      <Button
+        className="cursor-pointer"
+        type="submit"
+        isLoading={isPending}
+        fullWidth
+      >
         Đăng nhập
       </Button>
     </form>
