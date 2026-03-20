@@ -1,17 +1,18 @@
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 interface SectionProps {
   children: ReactNode;
   className?: string;
-  background?: "white" | "gray" | "blue" | "transparent";
+  background?: "default" | "surface" | "muted" | "transparent";
   padding?: "none" | "sm" | "md" | "lg" | "xl";
   id?: string;
 }
 
 const backgrounds = {
-  white: "bg-white",
-  gray: "bg-gray-50",
-  blue: "bg-blue-50",
+  default: "bg-[var(--color-background)]",
+  surface: "bg-[var(--color-surface)]",
+  muted: "bg-gray-100",
   transparent: "bg-transparent",
 };
 
@@ -26,14 +27,14 @@ const paddings = {
 export const Section = ({
   children,
   className = "",
-  background = "white",
+  background = "default",
   padding = "md",
   id,
 }: SectionProps) => {
   return (
     <section
       id={id}
-      className={`${backgrounds[background]} ${paddings[padding]} ${className}`}
+      className={cn(backgrounds[background], paddings[padding], className)}
     >
       {children}
     </section>

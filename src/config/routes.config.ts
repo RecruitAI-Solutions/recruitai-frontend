@@ -8,6 +8,7 @@ export const ROUTES = {
   VERIFY_EMAIL: "/verify-email",
   ABOUT: "/about",
   CONTACT: "/contact",
+  JOB: "/jobs",
 
   CANDIDATE: {
     DASHBOARD: "/candidate/dashboard",
