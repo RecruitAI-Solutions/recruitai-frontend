@@ -88,7 +88,6 @@ export const RegisterForm = () => {
       <select {...formRegister("role", { valueAsNumber: true })}>
         <option value={UserRoleNumber.CANDIDATE}>Ứng viên</option>
         <option value={UserRoleNumber.RECRUITER}>Nhà tuyển dụng</option>
-        <option value={UserRoleNumber.ADMIN}>Quản trị viên</option>
       </select>
 
       {/* Gender Select */}
