@@ -20,8 +20,8 @@ export const DashboardLayout = ({ navConfig }: DashboardLayoutProps) => {
       <Sidebar
         open={open}
         setOpen={setOpen}
-        navConfig={navConfig} // ← PASS CONFIG
-        userPermissions={user?.permissions || []} // ← PASS PERMISSIONS
+        navConfig={navConfig}
+        userPermissions={user?.permissions || []}
       />
 
       {/* Main content */}
