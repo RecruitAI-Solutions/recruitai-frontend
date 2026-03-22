@@ -1,5 +1,4 @@
-import type { CV } from "../types/cv.types";
-import { CVStatus } from "../types/cv.types";
+import { CV_STATUS, type CV } from "../types/cv.types";
 import { CVStatusBadge } from "./CVStatusBadge";
 import { Button } from "@/shared/components/ui/Button";
 import { useDownloadCV } from "../hooks/useDownloadCV";
@@ -39,7 +38,7 @@ export const CVCard = ({ cv }: Props) => {
           <Button
             variant="outline"
             isLoading={isDownloading}
-            disabled={cv.status !== CVStatus.COMPLETED}
+            disabled={cv.status !== CV_STATUS.COMPLETED}
             onClick={() => download({ id: cv.id, fileName: cv.fileName })}
           >
             Tải xuống

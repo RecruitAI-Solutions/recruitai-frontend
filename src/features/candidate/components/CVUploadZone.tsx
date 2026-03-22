@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { Button } from "@/shared/components/ui/Button";
 import { useUploadCV } from "../hooks/useUploadCV";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";

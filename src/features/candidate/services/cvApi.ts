@@ -14,6 +14,8 @@ export const cvApi = {
     const formData = new FormData();
     formData.append("file", file);
 
+    console.log(formData.get("file"));
+
     const response = await axiosInstance.post<CVUploadResponse>(
       CV_ENDPOINTS.UPLOAD,
       formData,

@@ -1,12 +1,29 @@
+import { formatFileSize } from "@/lib/utils";
+
 // CV Status — từ DB Schema: 1=Pending, 2=Processing, 3=Completed, 4=Failed
-export const CVStatus = {
-  PENDING: 1,
-  PROCESSING: 2,
-  COMPLETED: 3,
-  FAILED: 4,
+export const CV_STATUS = {
+  PENDING: "Pending",
+  PROCESSING: "Processing",
+  COMPLETED: "Completed",
+  FAILED: "Failed",
 } as const;
 
-export type CVStatusType = (typeof CVStatus)[keyof typeof CVStatus];
+export type CVStatus = (typeof CV_STATUS)[keyof typeof CV_STATUS];
+
+export type RawStatus = number | string;
+
+export const normalizeStatus = (status: RawStatus): CVStatus => {
+  if (typeof status === "string") return status as CVStatus;
+
+  const map: Record<number, CVStatus> = {
+    1: "Pending",
+    2: "Processing",
+    3: "Completed",
+    4: "Failed",
+  };
+
+  return map[status] ?? "Pending";
+};
 
 // ---- RAW RESPONSE từ backend ----
 export type CVUploadResponse = {
@@ -14,10 +31,9 @@ export type CVUploadResponse = {
   fileName: string;
   filePath: string;
   fileSize: number;
-  formattedFileSize: string;
   uploadedAt: string;
-  status: CVStatusType;
-  statusName: string;
+  status: RawStatus;
+  downloadUrl: string | null;
 };
 
 export type CVListItemResponse = {
@@ -26,7 +42,7 @@ export type CVListItemResponse = {
   fileSize: number;
   formattedFileSize: string;
   uploadedAt: string;
-  status: CVStatusType;
+  status: RawStatus;
   statusName: string;
 };
 
@@ -48,7 +64,7 @@ export type CVDetailResponse = {
   contentType: string;
   uploadedAt: string;
   processedAt: string;
-  status: CVStatusType;
+  status: RawStatus;
   errorMessage: string;
   downloadUrl: string;
   formattedFileSize: string;
@@ -66,44 +82,39 @@ export type CV = {
   fileSize: number;
   formattedFileSize: string;
   uploadedAt: string;
-  status: CVStatusType;
+  status: CVStatus;
   statusName: string;
 };
 
 // ---- TRANSFORM FUNCTION ----
-export const transformCV = (data: CVUploadResponse): CV => ({
-  id: data.cvId,
+const baseTransform = (data: {
+  id: string;
+  fileName: string;
+  fileSize: number;
+  uploadedAt: string;
+  status: RawStatus;
+  filePath?: string;
+  formattedFileSize?: string;
+  statusName?: string;
+}): CV => ({
+  id: data.id,
   fileName: data.fileName,
-  filePath: data.filePath,
+  filePath: data.filePath ?? "",
   fileSize: data.fileSize,
-  formattedFileSize: data.formattedFileSize,
+  formattedFileSize: data.formattedFileSize ?? formatFileSize(data.fileSize),
   uploadedAt: data.uploadedAt,
-  status: data.status,
-  statusName: data.statusName,
+  status: normalizeStatus(data.status),
+  statusName: data.statusName ?? normalizeStatus(data.status),
 });
 
 // Transform từ upload response (có cvId)
-export const transformCVUpload = (data: CVUploadResponse): CV => ({
-  id: data.cvId, // ← cvId
-  fileName: data.fileName,
-  filePath: data.filePath,
-  fileSize: data.fileSize,
-  formattedFileSize: data.formattedFileSize,
-  uploadedAt: data.uploadedAt,
-  status: data.status,
-  statusName: data.statusName,
-});
+export const transformCVUpload = (data: CVUploadResponse): CV =>
+  baseTransform({
+    id: data.cvId,
+    ...data,
+  });
 
 // Transform từ list/detail response (có id)
 export const transformCVItem = (
   data: CVListItemResponse | CVDetailResponse,
-): CV => ({
-  id: data.id, // ← id
-  fileName: data.fileName,
-  filePath: "filePath" in data ? data.filePath : "",
-  fileSize: data.fileSize,
-  formattedFileSize: data.formattedFileSize,
-  uploadedAt: data.uploadedAt,
-  status: data.status,
-  statusName: data.statusName,
-});
+): CV => baseTransform(data);

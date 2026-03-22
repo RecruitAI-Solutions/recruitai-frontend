@@ -67,9 +67,6 @@ export const authApi = {
       credentials,
     );
 
-    console.log("response: ", response);
-    console.log("authAPI: ", transformAuthResponse(response.data));
-
     return transformAuthResponse(response.data);
   },
 
