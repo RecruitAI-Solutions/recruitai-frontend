@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Container } from "../Container";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";
+import { LogoutButton } from "@/features/auth/components/LogoutButton";
 
 export const CandidateHeader = () => {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,7 @@ export const CandidateHeader = () => {
             {can(PERMISSIONS.VIEW_APPLICATIONS) && (
               <Link to="/candidate/applications">Applications</Link>
             )}
+            <LogoutButton />
           </nav>
 
           {/* Mobile toggle */}
@@ -45,6 +47,7 @@ export const CandidateHeader = () => {
             {can(PERMISSIONS.VIEW_APPLICATIONS) && (
               <Link to="/candidate/applications">Applications</Link>
             )}
+            <LogoutButton />
           </div>
         )}
       </Container>
