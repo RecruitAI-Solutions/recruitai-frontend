@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container } from "../Container";
+import { usePermission } from "@/lib/usePermission";
+import { PERMISSIONS } from "@/config/permissions.constants";
+import { LogoutButton } from "@/features/auth/components/LogoutButton";
 
 export const CandidateHeader = () => {
   const [open, setOpen] = useState(false);
+  const { can } = usePermission();
 
   return (
     <header className="bg-[var(--color-surface)] border-b">
@@ -17,8 +21,13 @@ export const CandidateHeader = () => {
           <nav className="hidden md:flex gap-6 text-sm">
             <Link to="/candidate/dashboard">Dashboard</Link>
             <Link to="/jobs">Jobs</Link>
-            <Link to="/candidate/cv">My CV</Link>
-            <Link to="/candidate/applications">Applications</Link>
+            {can(PERMISSIONS.VIEW_OWN_CVS) && (
+              <Link to="/candidate/cv">My CV</Link>
+            )}
+            {can(PERMISSIONS.VIEW_APPLICATIONS) && (
+              <Link to="/candidate/applications">Applications</Link>
+            )}
+            <LogoutButton />
           </nav>
 
           {/* Mobile toggle */}
@@ -31,7 +40,14 @@ export const CandidateHeader = () => {
           <div className="md:hidden py-4 space-y-2 border-t">
             <Link to="/candidate/dashboard">Dashboard</Link>
             <Link to="/jobs">Jobs</Link>
-            <Link to="/candidate/cv">My CV</Link>
+
+            {can(PERMISSIONS.VIEW_OWN_CVS) && (
+              <Link to="/candidate/cv">My CV</Link>
+            )}
+            {can(PERMISSIONS.VIEW_APPLICATIONS) && (
+              <Link to="/candidate/applications">Applications</Link>
+            )}
+            <LogoutButton />
           </div>
         )}
       </Container>

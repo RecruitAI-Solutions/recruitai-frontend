@@ -1,3 +1,4 @@
+import { PERMISSIONS } from "@/config/permissions.constants";
 import { ROUTES } from "@/config/routes.config";
 import type { NavConfig } from "@/shared/types/NavConfig";
 
@@ -16,13 +17,13 @@ export const adminNavConfig: NavConfig = {
       label: "User Management",
       path: ROUTES.ADMIN.USERS,
       icon: "👤",
-      permissions: ["P011"], // Manage Users
+      permissions: [PERMISSIONS.MANAGE_USERS], // Manage Users
     },
     {
       label: "Roles & Permissions",
       path: "/admin/roles-permissions", // Thêm vào routes.config.ts
       icon: "🔐",
-      permissions: ["P012"], // Manage Roles
+      permissions: [PERMISSIONS.MANAGE_ROLES], // Manage Roles
     },
     {
       label: "Job Moderation",
@@ -38,18 +39,13 @@ export const adminNavConfig: NavConfig = {
       label: "Analytics",
       path: ROUTES.ADMIN.ANALYTICS,
       icon: "📈",
-      permissions: ["P013"], // View Analytics
+      permissions: [PERMISSIONS.VIEW_ANALYTICS], // View Analytics
     },
     {
       label: "System Settings",
       path: ROUTES.ADMIN.SETTINGS,
       icon: "⚙️",
-      permissions: ["P014"], // Manage System
+      permissions: [PERMISSIONS.MANAGE_SYSTEM], // Manage System
     },
   ],
-
-  permissionSection: {
-    title: "Administrator Permissions",
-    badgeColor: "purple",
-  },
 };

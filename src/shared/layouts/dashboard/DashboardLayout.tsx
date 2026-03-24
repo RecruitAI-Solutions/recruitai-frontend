@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
-import { useAppSelector } from "@/app/hooks";
-import { selectCurrentUser } from "@/features/auth/slices/authSlice";
 import type { NavConfig } from "@/shared/types/NavConfig";
 
 interface DashboardLayoutProps {
@@ -12,17 +10,11 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ navConfig }: DashboardLayoutProps) => {
   const [open, setOpen] = useState(false);
-  const user = useAppSelector(selectCurrentUser);
 
   return (
     <div className="flex min-h-screen bg-[var(--color-background)]">
       {/* Sidebar */}
-      <Sidebar
-        open={open}
-        setOpen={setOpen}
-        navConfig={navConfig}
-        userPermissions={user?.permissions || []}
-      />
+      <Sidebar open={open} setOpen={setOpen} navConfig={navConfig} />
 
       {/* Main content */}
       <div className="flex-1 flex flex-col md:ml-64">

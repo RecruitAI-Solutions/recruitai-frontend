@@ -3,6 +3,7 @@ import { ROUTES } from "@/config/routes.config";
 import { RoleBasedRoute } from "../RoleBasedRoute";
 import { CandidateLayout } from "@/shared/layouts/candidate/CandidateLayout";
 import CandidateDashboard from "@/features/candidate/pages/Candidate";
+import { CVManagementPage } from "@/features/candidate/pages/CVManagementPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -23,6 +24,10 @@ export const createCandidateRoutes = (
         {
           path: ROUTES.CANDIDATE.DASHBOARD,
           element: <CandidateDashboard />,
+        },
+        {
+          path: ROUTES.CANDIDATE.CV_MANAGEMENT,
+          element: <CVManagementPage />,
         },
       ],
     },

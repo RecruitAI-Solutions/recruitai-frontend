@@ -9,32 +9,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Check if user has specific permission
- */
-export function hasPermission(
-  userPermissions: string[],
-  requiredPermission: string,
-): boolean {
-  return userPermissions.includes(requiredPermission);
-}
+// HELPER FORMAR FILE SIZE
+export const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return "0 KB";
 
-/**
- * Check if user has any of the permissions
- */
-export function hasAnyPermission(
-  userPermissions: string[],
-  requiredPermissions: string[],
-): boolean {
-  return requiredPermissions.some((p) => userPermissions.includes(p));
-}
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
 
-/**
- * Check if user has all permissions
- */
-export function hasAllPermissions(
-  userPermissions: string[],
-  requiredPermissions: string[],
-): boolean {
-  return requiredPermissions.every((p) => userPermissions.includes(p));
-}
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};

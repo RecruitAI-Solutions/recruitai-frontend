@@ -1,6 +1,7 @@
 import { Container } from "@/shared/layouts/Container";
 import { useAppSelector } from "@/app/hooks";
 import { selectCurrentUser } from "@/features/auth/slices/authSlice";
+import { LogoutButton } from "@/features/auth/components/LogoutButton";
 
 export default function CandidateDashboard() {
   const user = useAppSelector(selectCurrentUser);
@@ -30,6 +31,7 @@ export default function CandidateDashboard() {
           <p className="text-sm text-gray-600 mb-1">CVs Uploaded</p>
           <p className="text-3xl font-bold text-gray-900">3</p>
         </div>
+        <LogoutButton />
       </div>
     </Container>
   );
