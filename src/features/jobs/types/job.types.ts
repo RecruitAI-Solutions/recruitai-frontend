@@ -76,6 +76,31 @@ export const normalizeExperienceLevel = (
   return ExperienceLevelMap[value as ExperienceLevelValue] ?? "Entry";
 };
 
+// Thêm vào job.types.ts:
+export const EMPLOYMENT_TYPE_TO_VALUE: Record<
+  EmploymentTypeLabel,
+  EmploymentTypeValue
+> = {
+  "Full-time": 1,
+  "Part-time": 2,
+  Remote: 3,
+  Hybrid: 4,
+  Contract: 5,
+  Internship: 6,
+};
+
+export const EXPERIENCE_LEVEL_TO_VALUE: Record<
+  ExperienceLevelLabel,
+  ExperienceLevelValue
+> = {
+  Entry: 1,
+  Junior: 2,
+  Intermediate: 3,
+  Senior: 4,
+  Lead: 5,
+  Manager: 6,
+};
+
 // CURRENCY
 export const CURRENCY = { VND: 1, USD: 2, EUR: 3, JPY: 4, GBP: 5 } as const;
 

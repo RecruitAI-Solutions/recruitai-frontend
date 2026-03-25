@@ -1,3 +1,4 @@
+import { FeaturedJobs } from "@/features/jobs/components/FeaturedJobs";
 import { JobCard } from "@/shared/components/ui/JobCard";
 import { StatItem } from "@/shared/components/ui/StatItem";
 import { Container } from "@/shared/layouts/Container";
@@ -62,58 +63,7 @@ export default function HomePage() {
       </Section>
 
       {/* ================= FEATURED JOBS ================= */}
-      <Section background="default" padding="lg">
-        <Container>
-          {/* Title */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold mb-2">Featured Jobs</h2>
-            <p className="text-gray-500 text-sm">
-              Discover the latest job opportunities from top companies
-            </p>
-          </div>
-
-          {/* Jobs Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <JobCard
-              title="Senior Frontend Developer"
-              location="San Francisco"
-              salary="$120k - $180k"
-            />
-            <JobCard
-              title="Backend Engineer"
-              location="New York"
-              salary="$100k - $150k"
-            />
-            <JobCard
-              title="UX/UI Designer"
-              location="Remote"
-              salary="$80k - $120k"
-            />
-            <JobCard
-              title="DevOps Engineer"
-              location="Austin"
-              salary="$110k - $160k"
-            />
-            <JobCard
-              title="Product Manager"
-              location="Boston"
-              salary="$130k - $180k"
-            />
-            <JobCard
-              title="Mobile Developer"
-              location="Seattle"
-              salary="$90k - $140k"
-            />
-          </div>
-
-          {/* Button */}
-          <div className="text-center mt-10">
-            <button className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg">
-              View All Jobs →
-            </button>
-          </div>
-        </Container>
-      </Section>
+      <FeaturedJobs />
     </>
   );
 }

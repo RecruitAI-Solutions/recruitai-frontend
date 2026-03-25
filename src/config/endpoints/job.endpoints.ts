@@ -1,6 +1,6 @@
 const JOB_BASE = "/api/v1/jobs";
 
-export const JOB_ENPOINTS = {
+export const JOB_ENDPOINTS = {
   LIST: JOB_BASE,
   CREATE: JOB_BASE,
   MY_JOBS: `${JOB_BASE}/my-jobs`,
