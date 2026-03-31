@@ -36,7 +36,7 @@ export const JobListPage = () => {
 
         {/* EMPTY */}
         {!isLoading && jobs.length === 0 && (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-text-secondary">
             <p>Không tìm thấy việc làm nào.</p>
           </div>
         )}

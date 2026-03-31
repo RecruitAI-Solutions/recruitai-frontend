@@ -15,16 +15,16 @@ export const CVManagementPage = () => {
         </div>
 
         {/* Upload Zone */}
-        <div className="bg-white rounded-xl border p-6">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
+        <div className="bg-white rounded-xl border border-border p-6">
+          <h2 className="text-sm font-semibold text-text-primary mb-4">
             Upload CV mới
           </h2>
           <CVUploadZone />
         </div>
 
         {/* CV List */}
-        <div className="bg-white rounded-xl border p-6">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
+        <div className="bg-white rounded-xl border border-border p-6">
+          <h2 className="text-sm font-semibold text-text-primary mb-4">
             CV của tôi
           </h2>
           <CVList />

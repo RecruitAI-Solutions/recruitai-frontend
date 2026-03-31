@@ -7,13 +7,13 @@ export const PublicHeader = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-[var(--color-surface)] border-b">
+    <header className="bg-surface border-b">
       <Container>
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             to="/"
-            className="text-lg font-bold text-[var(--color-primary)]"
+            className="text-lg font-bold text-primary"
           >
             RecruitAI
           </Link>
@@ -23,7 +23,7 @@ export const PublicHeader = () => {
             <Link to="/jobs">Find Jobs</Link>
             <Link
               to={ROUTES.LOGIN}
-              className="px-4 py-2 rounded-lg bg-[var(--color-primary)] text-white"
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground"
             >
               Sign In
             </Link>
@@ -43,7 +43,7 @@ export const PublicHeader = () => {
             </Link>
             <Link
               to={ROUTES.LOGIN}
-              className="block px-4 py-2 bg-[var(--color-primary)] text-white rounded"
+              className="block px-4 py-2 bg-primary text-primary-foreground rounded"
             >
               Sign In
             </Link>

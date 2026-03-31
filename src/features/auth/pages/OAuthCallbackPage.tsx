@@ -70,7 +70,7 @@ export default function OAuthCallbackPage() {
   }, [searchParams, navigate, dispatch]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
         {/* Spinner */}
         <div className="inline-block w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
@@ -78,7 +78,7 @@ export default function OAuthCallbackPage() {
         <h2 className="text-xl font-semibold text-gray-900 mb-2">
           Đang xử lý đăng nhập...
         </h2>
-        <p className="text-gray-600">Vui lòng đợi trong giây lát</p>
+        <p className="text-text-primary">Vui lòng đợi trong giây lát</p>
       </div>
     </div>
   );

@@ -16,9 +16,9 @@ export const JobTable = ({ jobs, onDelete, isDeleting }: Props) => {
     return "";
   };
   return (
-    <table className="w-full bg-white rounded-lg shadow">
+    <table className="w-full bg-background rounded-lg shadow">
       <thead>
-        <tr className="text-left text-sm text-gray-500">
+        <tr className="text-left text-sm text-text-primary">
           <th className="p-4">Title</th>
           <th>Location</th>
           <th>Type</th>

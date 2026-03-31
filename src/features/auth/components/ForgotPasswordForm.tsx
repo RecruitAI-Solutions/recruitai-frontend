@@ -30,7 +30,7 @@ export const ForgotPasswordForm = () => {
   if (isSuccess) {
     return (
       <div className="text-center py-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-success/10 rounded-full mb-4">
           <svg
             className="w-8 h-8 text-green-600"
             fill="none"

@@ -10,10 +10,10 @@ export const CandidateHeader = () => {
   const { can } = usePermission();
 
   return (
-    <header className="bg-[var(--color-surface)] border-b">
+    <header className="bg-surface border-b border-text-secondary">
       <Container>
         <div className="flex items-center justify-between h-16">
-          <span className="font-bold text-[var(--color-primary)]">
+          <span className="font-bold text-primary">
             RecruitAI
           </span>
 

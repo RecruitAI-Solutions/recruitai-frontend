@@ -17,30 +17,43 @@ export const JobCard = ({ job, onClick }: Props) => {
     <Link
       to={ROUTES.CANDIDATE.JOB_DETAIL(job.id)}
       onClick={onClick}
-      className="bg-white p-5 rounded-lg shadow hover:shadow-md transition cursor-pointer"
+      className="
+bg-surface border border-border rounded-xl p-5
+        transition-all duration-200 cursor-pointer
+
+        hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5
+        active:scale-[0.98]
+      "
     >
-      <div className="flex justify-between">
-        <h3 className="font-semibold">{job.title}</h3>
-        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+      <div className="flex justify-between items-start gap-2">
+        <h3 className="font-semibold text-text-primary line-clamp-2">
+          {job.title}
+        </h3>
+        <span className="text-sm px-2 py-1 rounded-md bg-primary/10 text-primary whitespace-nowrap">
           {job.employmentType}
         </span>
       </div>
 
-      <p className="text-sm text-gray-500">{job.recruiterName}</p>
+      <p className="text-sm text-text-secondary mt-1">{job.recruiterName}</p>
 
-      <p className="text-sm mt-2">{job.location}</p>
+      <p className="text-sm text-text-secondary mt-2">{job.location}</p>
 
       <div className="flex flex-wrap gap-2 mt-3">
         {job.skillNames.map((s) => (
-          <span key={s} className="text-xs bg-gray-100 px-2 py-1 rounded">
+          <span
+            key={s}
+            className="text-sm px-2 py-1 rounded-md bg-primary/10 text-primary"
+          >
             {s}
           </span>
         ))}
       </div>
 
-      <p className="mt-4 font-medium">
+      <p className="mt-4 font-medium text-text-primary">
         {formatSalary(job.salaryMin, job.salaryMax)}
       </p>
+
+      <span className="text-xs text-success">85% match</span>
     </Link>
   );
 };

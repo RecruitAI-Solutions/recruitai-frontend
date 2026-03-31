@@ -6,8 +6,8 @@ const itemVariants = cva(
   {
     variants: {
       active: {
-        true: "bg-[var(--color-primary)] text-white",
-        false: "hover:bg-gray-100 text-gray-700",
+        true: "bg-primary text-primary-foreground",
+        false: "hover:bg-gray-100 text-text-secondary",
       },
     },
   },

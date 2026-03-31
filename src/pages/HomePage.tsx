@@ -1,5 +1,5 @@
 import { FeaturedJobs } from "@/features/jobs/components/FeaturedJobs";
-import { JobCard } from "@/shared/components/ui/JobCard";
+import { Button } from "@/shared/components/ui/Button";
 import { StatItem } from "@/shared/components/ui/StatItem";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
@@ -61,7 +61,9 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
-
+      <Button variant="outline" fullWidth>
+        ASDNIASNDIAS
+      </Button>
       {/* ================= FEATURED JOBS ================= */}
       <FeaturedJobs />
     </>

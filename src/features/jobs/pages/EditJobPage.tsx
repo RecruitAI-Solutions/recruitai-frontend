@@ -21,7 +21,7 @@ export const EditJobPage = () => {
     return (
       <Container className="py-8">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-xl border p-6 space-y-4">
+          <div className="bg-background rounded-xl border p-6 space-y-4">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}

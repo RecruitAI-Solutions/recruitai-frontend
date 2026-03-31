@@ -8,10 +8,10 @@ export const CreateJobPage = () => {
   return (
     <Container className="py-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">
+        <h1 className="text-2xl font-bold text-text-primary mb-6">
           Đăng việc làm mới
         </h1>
-        <div className="bg-white rounded-xl border p-6">
+        <div className="bg-background rounded-xl border border-border p-6">
           <JobForm
             isPending={isPending}
             submitLabel="Đăng việc làm"
