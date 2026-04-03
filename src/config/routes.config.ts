@@ -9,6 +9,7 @@ export const ROUTES = {
   ABOUT: "/about",
   CONTACT: "/contact",
   JOB: "/jobs",
+  JOB_DETAILS: (id: string) => `/jobs/${id}`,
 
   CANDIDATE: {
     DASHBOARD: "/candidate/dashboard",

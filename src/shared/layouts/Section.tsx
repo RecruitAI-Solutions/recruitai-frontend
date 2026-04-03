@@ -28,7 +28,7 @@ export const Section = ({
   children,
   className = "",
   background = "default",
-  padding = "md",
+  padding = "sm",
   id,
 }: SectionProps) => {
   return (

@@ -15,7 +15,7 @@ export const JobCard = ({ job, onClick }: Props) => {
   };
   return (
     <Link
-      to={ROUTES.CANDIDATE.JOB_DETAIL(job.id)}
+      to={ROUTES.JOB_DETAILS(job.id)}
       onClick={onClick}
       className="
 bg-surface border border-border rounded-xl p-5
