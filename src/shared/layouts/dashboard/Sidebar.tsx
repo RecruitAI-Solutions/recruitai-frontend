@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import type { NavConfig } from "@/shared/types/NavConfig";
 import { usePermission } from "@/lib/usePermission";
+import { UserMenu } from "@/shared/components/ui/UserMenu";
 
 type SidebarProps = {
   open: boolean;
@@ -39,7 +40,7 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
 
       <aside
         className={cn(
-          "fixed flex flex-col h-screen z-50 top-0 left-0 w-64 bg-white border-r transition-transform",
+          "fixed flex flex-col h-screen z-100 top-0 left-0 w-64 bg-white border-r transition-transform",
           open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
@@ -50,12 +51,12 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
           {/* Role Badge */}
           <div className="flex items-center gap-2 mt-2">
             <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-            <p className="text-xs text-gray-500">{navConfig.roleDisplay}</p>
+            <p className="text-sm text-gray-500">{navConfig.roleDisplay}</p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="p-4 space-y-1 text-sm flex-1 overflow-y-auto">
+        <nav className="p-4 space-y-1 text-md flex-1 overflow-y-auto">
           {navConfig.navItems.map((item) => {
             // Check permission before rendering
 
@@ -79,6 +80,9 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
             );
           })}
         </nav>
+        <div className="p-4">
+          <UserMenu />
+        </div>
       </aside>
     </>
   );

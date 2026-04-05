@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Container } from "../Container";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";
-import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { UserMenu } from "@/shared/components/ui/UserMenu";
 
 export const CandidateHeader = () => {
   const [open, setOpen] = useState(false);
@@ -13,9 +13,7 @@ export const CandidateHeader = () => {
     <header className="bg-surface border-b border-text-secondary">
       <Container>
         <div className="flex items-center justify-between h-16">
-          <span className="font-bold text-primary">
-            RecruitAI
-          </span>
+          <span className="font-bold text-primary">RecruitAI</span>
 
           {/* Desktop */}
           <nav className="hidden md:flex gap-6 text-sm">
@@ -27,7 +25,7 @@ export const CandidateHeader = () => {
             {can(PERMISSIONS.VIEW_APPLICATIONS) && (
               <Link to="/candidate/applications">Applications</Link>
             )}
-            <LogoutButton />
+            <UserMenu />
           </nav>
 
           {/* Mobile toggle */}
@@ -47,7 +45,7 @@ export const CandidateHeader = () => {
             {can(PERMISSIONS.VIEW_APPLICATIONS) && (
               <Link to="/candidate/applications">Applications</Link>
             )}
-            <LogoutButton />
+            <UserMenu />
           </div>
         )}
       </Container>

@@ -5,6 +5,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { mapRoleNumberToString, type User } from "../types/auth.types";
 import { setCredentials } from "../slices/authSlice";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
+import {
+  clearAuthTokens,
+  setRefreshToken,
+  setToken,
+} from "@/services/storage/localStorage";
+import { axiosInstance } from "@/services/api/axiosInstance";
+import { authApi } from "../services/authApi";
 
 export default function OAuthCallbackPage() {
   const [searchParams] = useSearchParams();
@@ -12,61 +19,47 @@ export default function OAuthCallbackPage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const token = searchParams.get("token");
-    const refreshToken = searchParams.get("refreshToken");
-    const remoteError = searchParams.get("remoteError");
+    const handleOAuthCallback = async () => {
+      const token = searchParams.get("token");
+      const refreshToken = searchParams.get("refreshToken");
+      const remoteError = searchParams.get("remoteError");
 
-    if (remoteError) {
-      toast.error(decodeURIComponent(remoteError), {
-        duration: 5000,
-      });
-      navigate("/login", { replace: true });
-      return;
-    }
+      if (remoteError) {
+        toast.error(decodeURIComponent(remoteError), { duration: 5000 });
+        navigate("/login", { replace: true });
+        return;
+      }
 
-    if (!token || !refreshToken) {
-      toast.error("OAuth authentication failed. Missing Tokens", {
-        duration: 5000,
-      });
-      navigate("/login", { replace: true });
-      return;
-    }
+      if (!token || !refreshToken) {
+        toast.error("OAuth authentication failed. Missing Tokens", {
+          duration: 5000,
+        });
+        navigate("/login", { replace: true });
+        return;
+      }
 
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      try {
+        setToken(token);
+        setRefreshToken(refreshToken);
 
-      const user: User = {
-        id: payload.sub || payload.userId,
-        email: payload.email || payload.Email,
-        fullName: payload.fullName || payload.FullName || payload.name,
-        role: mapRoleNumberToString(parseInt(payload.role || payload.Role)),
-        roleNumber: parseInt(payload.role || payload.Role),
-        roleName: payload.roleName || payload.RoleName,
-        permissions: payload.permissions || payload.Permissions || [],
-      };
+        const user = await authApi.getMe();
 
-      dispatch(
-        setCredentials({
-          user,
-          accessToken: token,
-          refreshToken,
-        }),
-      );
+        dispatch(setCredentials({ user, accessToken: token, refreshToken }));
 
-      toast.success(`Chào mừng ${user.fullName}`, {
-        duration: 3000,
-      });
+        toast.success(`Chào mừng ${user.fullName}`, { duration: 3000 });
+        const redirectPath = redirectByRole(user.role);
+        navigate(redirectPath, { replace: true });
+      } catch (error) {
+        clearAuthTokens();
+        console.error("OAuth callback error:", error);
+        toast.error("Đăng nhập thất bại. Vui lòng thử lại.", {
+          duration: 5000,
+        });
+        navigate("/login", { replace: true });
+      }
+    };
 
-      const redirectPath = redirectByRole(user.role);
-      navigate(redirectPath, { replace: true });
-    } catch (error) {
-      console.error("Failed to parse OAuth token: ", error);
-      toast.error("Failed to process authentication", {
-        duration: 5000,
-      });
-
-      navigate("/login", { replace: true });
-    }
+    handleOAuthCallback();
   }, [searchParams, navigate, dispatch]);
 
   return (

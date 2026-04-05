@@ -3,7 +3,7 @@ import { Container } from "@/shared/layouts/Container";
 export default function RecruiterDashboard() {
   return (
     // ═══ PAGE USES CONTAINER ═══
-    <Container className="py-8">
+    <Container size="full" className="py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
         Recruiter Dashboard
       </h1>

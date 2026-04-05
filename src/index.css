@@ -61,4 +61,7 @@
   p {
     @apply text-base leading-relaxed;
   }
+  .menu-item {
+    @apply px-3 py-2 text-sm rounded-md cursor-pointer text-text-primary hover:bg-primary/10 focus:outline-none;
+  }
 }
