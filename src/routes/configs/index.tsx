@@ -6,6 +6,7 @@ import { createCandidateRoutes } from "./CandidateRoutes.config";
 import { createRecuiterRoutes } from "./RecruiterRoutes.config";
 import { createAdminRoutes } from "./AdminRoutes.config";
 import { errorRoutes } from "./ErrorRoutes.config";
+import { createCommonRoutes } from "./CommonRoutes.config";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -15,7 +16,7 @@ export const createRouteConfig = (
 ): RouteObject[] => {
   return [
     ...createPublicRoutes(isAuthenticated, userRole),
-
+    ...createCommonRoutes(isAuthenticated),
     {
       element: (
         <ProtectedRoute

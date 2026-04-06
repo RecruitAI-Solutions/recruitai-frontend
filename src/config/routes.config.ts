@@ -5,6 +5,7 @@ export const ROUTES = {
   AUTH_CALLBACK: "/auth/callback",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  CHANGE_PASSWORD: "/change-password",
   VERIFY_EMAIL: "/verify-email",
   ABOUT: "/about",
   CONTACT: "/contact",

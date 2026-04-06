@@ -27,6 +27,15 @@ export const createPublicRoutes = (
         element: <HomePage />,
       },
       {
+        path: ROUTES.JOB,
+        element: <JobListPage />,
+      },
+      {
+        path: ROUTES.JOB_DETAILS(":id"),
+        element: <JobDetailPage />,
+      },
+
+      {
         element: (
           <PublicRoute isAuthenticated={isAuthenticated} userRole={userRole} />
         ),
@@ -54,14 +63,6 @@ export const createPublicRoutes = (
           {
             path: ROUTES.VERIFY_EMAIL,
             element: <VerifyEmailPage />,
-          },
-          {
-            path: ROUTES.JOB,
-            element: <JobListPage />,
-          },
-          {
-            path: ROUTES.JOB_DETAILS(":id"),
-            element: <JobDetailPage />,
           },
         ],
       },

@@ -8,6 +8,8 @@ import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { selectCurrentUser, logout } from "@/features/auth/slices/authSlice";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@/config/routes.config";
 
 export const UserMenu = () => {
   const user = useAppSelector(selectCurrentUser);
@@ -59,8 +61,13 @@ export const UserMenu = () => {
             <DropdownMenu.Item className="menu-item">
               Hồ sơ cá nhân
             </DropdownMenu.Item>
-            <DropdownMenu.Item className="menu-item">
-              Đổi mật khẩu
+            <DropdownMenu.Item asChild>
+              <Link
+                to={ROUTES.CHANGE_PASSWORD}
+                className="menu-item w-full block"
+              >
+                Đổi mật khẩu
+              </Link>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item className="menu-item">
