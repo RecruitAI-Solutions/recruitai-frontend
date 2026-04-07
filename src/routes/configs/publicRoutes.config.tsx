@@ -10,6 +10,8 @@ import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/features/auth/pages/ResetPasswordPage";
 import VerifyEmailPage from "@/features/auth/pages/VerifyEmailPage";
 import { PublicLayout } from "@/shared/layouts/public/PublicLayout";
+import { JobListPage } from "@/features/jobs/pages/JobListPage";
+import JobDetailPage from "@/features/jobs/pages/JobDetailPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -24,6 +26,15 @@ export const createPublicRoutes = (
         path: ROUTES.HOME,
         element: <HomePage />,
       },
+      {
+        path: ROUTES.JOB,
+        element: <JobListPage />,
+      },
+      {
+        path: ROUTES.JOB_DETAILS(":id"),
+        element: <JobDetailPage />,
+      },
+
       {
         element: (
           <PublicRoute isAuthenticated={isAuthenticated} userRole={userRole} />

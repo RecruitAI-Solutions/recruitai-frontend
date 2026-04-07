@@ -7,22 +7,38 @@
     "Segoe UI Emoji";
 
   /* ===== BRAND COLORS ===== */
-  --color-brand-blue: #2a4389;
-  --color-brand-sky: #5bc0eb;
+  --color-brand-green: #005461;
+  --color-brand-moregreen: #249e94;
 
-  /* ===== SEMANTIC TOKENS ===== */
-  --color-primary: var(--color-brand-blue);
-  --color-secondary: var(--color-brand-sky);
+  /* ===== PRIMARY SYSTEM ===== */
+  --color-primary: var(--color-brand-green);
+  --color-primary-hover: #00424d;
+  --color-primary-active: #00363f;
+  --color-primary-foreground: #ffffff;
 
-  --color-text-primary: #111827; /* gray-900 */
-  --color-text-secondary: #6b7280; /* gray-500 */
+  /* ===== SECONDARY ===== */
+  --color-secondary: var(--color-brand-moregreen);
+  --color-secondary-foreground: #ffffff;
 
+  /* ===== BACKGROUND ===== */
   --color-background: #f9fafb; /* gray-50 */
   --color-surface: #ffffff;
+
+  /* ===== TEXT ===== */
+  --color-text-primary: #111827; /* gray-900 */
+  --color-text-secondary: #6b7280; /* gray-500 */
+  --color-text-muted: #9ca3af; /* gray-400 */
+
+  /* ===== BORDER ===== */
+  --color-border: oklch(87.2% 0.01 258.338); /* gray-200 */
+
+  /* ===== STATE COLORS ===== */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
 }
 
 /* ===== BASE ===== */
-
 @layer base {
   body {
     @apply font-sans;
@@ -44,5 +60,8 @@
 
   p {
     @apply text-base leading-relaxed;
+  }
+  .menu-item {
+    @apply px-3 py-2 text-sm rounded-md cursor-pointer text-text-primary hover:bg-primary/10 focus:outline-none;
   }
 }

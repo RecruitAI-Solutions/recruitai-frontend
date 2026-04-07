@@ -1,7 +1,9 @@
 import { Toaster } from "react-hot-toast";
 import { AppRoutes } from "./routes/AppRoutes";
+import { useInitAuth } from "./features/auth/hooks/useInitAuth";
 
 function App() {
+  useInitAuth();
   return (
     <>
       <AppRoutes />

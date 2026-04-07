@@ -14,7 +14,7 @@ export const CVCard = ({ cv }: Props) => {
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString("vi-VN");
 
   return (
-    <div className="bg-white rounded-lg border p-4 flex items-center justify-between gap-4">
+    <div className="bg-surface rounded-lg border p-4 flex items-center justify-between gap-4">
       {/* Icon + Info */}
       <div className="flex items-center gap-3 min-w-0">
         {/* PDF icon */}

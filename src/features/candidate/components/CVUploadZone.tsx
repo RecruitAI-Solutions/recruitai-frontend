@@ -91,18 +91,18 @@ export const CVUploadZone = () => {
         <p className="text-sm text-blue-600 font-medium">Đang tải lên...</p>
       ) : (
         <>
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-sm font-medium text-text-secondary">
             Kéo thả file vào đây hoặc{" "}
             <span className="text-blue-600">chọn file</span>
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-sm text-text-secondary mt-1">
             Chỉ chấp nhận PDF · Tối đa 10MB
           </p>
         </>
       )}
 
       {clientError && (
-        <p className="mt-2 text-xs text-red-600 font-medium">{clientError}</p>
+        <p className="mt-2 text-xs text-error font-medium">{clientError}</p>
       )}
     </div>
   );

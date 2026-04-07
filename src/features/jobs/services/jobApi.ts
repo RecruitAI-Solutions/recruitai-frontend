@@ -9,14 +9,14 @@ import {
   type CreateJobRequest,
   type UpdateJobRequest,
 } from "../types/job.types";
-import { JOB_ENPOINTS } from "@/config/endpoints/job.endpoints";
+import { JOB_ENDPOINTS } from "@/config/endpoints/job.endpoints";
 
 export const jobApi = {
   getJobs: async (
     params?: Record<string, unknown>,
   ): Promise<{ data: JobListItem[]; total: number }> => {
     const response = await axiosInstance.get<JobListPaginatedResponse>(
-      JOB_ENPOINTS.LIST,
+      JOB_ENDPOINTS.LIST,
       { params },
     );
     return {
@@ -28,7 +28,7 @@ export const jobApi = {
     params?: Record<string, unknown>,
   ): Promise<{ data: JobListItem[]; total: number }> => {
     const response = await axiosInstance.get<JobListPaginatedResponse>(
-      JOB_ENPOINTS.MY_JOBS,
+      JOB_ENDPOINTS.MY_JOBS,
       { params },
     );
     return {
@@ -38,26 +38,26 @@ export const jobApi = {
   },
   getJob: async (id: string): Promise<Job> => {
     const response = await axiosInstance.get<JobDetailResponse>(
-      JOB_ENPOINTS.DETAIL(id),
+      JOB_ENDPOINTS.DETAIL(id),
     );
 
     return transformJob(response.data);
   },
   createJob: async (payload: CreateJobRequest): Promise<Job> => {
     const response = await axiosInstance.post<JobDetailResponse>(
-      JOB_ENPOINTS.CREATE,
+      JOB_ENDPOINTS.CREATE,
       payload,
     );
     return transformJob(response.data);
   },
   updateJob: async (id: string, payload: UpdateJobRequest): Promise<Job> => {
     const response = await axiosInstance.put<JobDetailResponse>(
-      JOB_ENPOINTS.UPDATE(id),
+      JOB_ENDPOINTS.UPDATE(id),
       payload,
     );
     return transformJob(response.data);
   },
   deleteJob: async (id: string): Promise<void> => {
-    await axiosInstance.delete(JOB_ENPOINTS.DELETE(id));
+    await axiosInstance.delete(JOB_ENDPOINTS.DELETE(id));
   },
 };

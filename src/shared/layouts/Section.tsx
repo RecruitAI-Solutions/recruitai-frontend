@@ -10,8 +10,8 @@ interface SectionProps {
 }
 
 const backgrounds = {
-  default: "bg-[var(--color-background)]",
-  surface: "bg-[var(--color-surface)]",
+  default: "bg-background",
+  surface: "bg-surface",
   muted: "bg-gray-100",
   transparent: "bg-transparent",
 };
@@ -28,7 +28,7 @@ export const Section = ({
   children,
   className = "",
   background = "default",
-  padding = "md",
+  padding = "sm",
   id,
 }: SectionProps) => {
   return (

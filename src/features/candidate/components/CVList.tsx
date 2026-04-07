@@ -13,7 +13,7 @@ export const CVList = () => {
     return (
       <div className="space-y-3">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-gray-100 rounded-lg h-20 animate-pulse" />
+          <div key={i} className="bg-background rounded-lg h-20 animate-pulse" />
         ))}
       </div>
     );
@@ -21,7 +21,7 @@ export const CVList = () => {
 
   if (isError) {
     return (
-      <div className="text-center py-8 text-red-500 text-sm">
+      <div className="text-center py-8 text-error text-sm">
         Không thể tải danh sách CV. Vui lòng thử lại.
       </div>
     );
@@ -29,7 +29,7 @@ export const CVList = () => {
 
   if (!cvs || cvs.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-400">
+      <div className="text-center py-10 text-text-secondary">
         <p className="text-sm">Bạn chưa có CV nào.</p>
         <p className="text-xs mt-1">Hãy upload CV đầu tiên của bạn ở trên.</p>
       </div>

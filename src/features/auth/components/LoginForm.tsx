@@ -5,6 +5,8 @@ import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
 import { useLogin } from "../hooks/useLogin";
 import { type LoginRequest } from "../services/authApi";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@/config/routes.config";
 
 const loginSchema = yup.object({
   email: yup.string().required("Vui lòng nhập email đăng nhập"),
@@ -64,6 +66,12 @@ export const LoginForm = () => {
       >
         Đăng nhập
       </Button>
+      <Link
+        to={ROUTES.FORGOT_PASSWORD}
+        className="text-text-primary underline text-right"
+      >
+        Quên mật khẩu?
+      </Link>
     </form>
   );
 };

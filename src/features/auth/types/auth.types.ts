@@ -207,4 +207,5 @@ export type AuthState = {
   role: UserRole | null;
   loading: boolean;
   error: string | null;
+  isInitialized?: boolean;
 };
