@@ -59,6 +59,10 @@ export const EditJobPage = () => {
               benefits: job.benefits,
               expirationDate: job.expirationDate.slice(0, 16),
             }}
+            defaultSkills={job.skillDetails.map((s) => ({
+              id: s.id,
+              name: s.name,
+            }))}
             onSubmit={updateJob}
           />
         </div>

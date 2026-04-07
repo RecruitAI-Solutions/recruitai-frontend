@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "@/shared/components/ui/Input";
@@ -8,6 +8,8 @@ import {
   ExperienceLevelMap,
   type CreateJobRequest,
 } from "../types/job.types";
+import type { SelectedSkill } from "../types/skill.types";
+import { SkillInput } from "./SkillInput";
 
 const schema = yup.object({
   title: yup.string().required("Vui lòng nhập tiêu đề"),
@@ -20,7 +22,10 @@ const schema = yup.object({
   employmentType: yup.number().required(),
   experienceLevel: yup.number().required(),
   department: yup.string().default(""),
-  skillIds: yup.array(yup.number().required()).default([]),
+  skillIds: yup
+    .array(yup.number().required())
+    .min(1, "Vui lòng chọn ít nhất 1 kỹ năng")
+    .required(),
   benefits: yup.string().default(""),
   expirationDate: yup.string().required("Vui lòng chọn ngày hết hạn"),
 });
@@ -29,6 +34,7 @@ type FormData = yup.InferType<typeof schema>;
 
 type Props = {
   defaultValues?: Partial<FormData>;
+  defaultSkills?: SelectedSkill[];
   onSubmit: (data: CreateJobRequest) => void;
   isPending: boolean;
   submitLabel: string;
@@ -37,12 +43,14 @@ type Props = {
 export const JobForm = ({
   defaultValues,
   onSubmit,
+  defaultSkills,
   isPending,
   submitLabel,
 }: Props) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -151,7 +159,20 @@ export const JobForm = ({
           </select>
         </div>
       </div>
-
+      <Controller
+        name="skillIds"
+        control={control}
+        render={({ field }) => (
+          <SkillInput
+            label="Kỹ năng yêu cầu"
+            value={field.value}
+            defaultSkills={defaultSkills}
+            onChange={field.onChange}
+            disabled={isPending}
+            error={errors.skillIds?.message}
+          />
+        )}
+      />
       <Input
         label="Phòng ban"
         {...register("department")}
