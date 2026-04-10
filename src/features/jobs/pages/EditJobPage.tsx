@@ -49,7 +49,9 @@ export const EditJobPage = () => {
               title: job.title,
               description: job.description,
               requirements: job.requirements,
-              location: job.location,
+              location: job.location
+                ? { refId: "temp", display: job.location, lat: 0, lng: 0 }
+                : null,
               salaryMin: job.salaryMin ?? 0,
               salaryMax: job.salaryMax ?? 0,
               employmentType: EMPLOYMENT_TYPE_TO_VALUE[job.employmentType],

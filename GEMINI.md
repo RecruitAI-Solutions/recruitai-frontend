@@ -1,190 +1,78 @@
-# RecruitAI Frontend - Gemini Context
+# RecruitAI Frontend - Gemini Context (v2.0)
 
-This document provides essential context and instructions for AI agents working on the RecruitAI Frontend project.
+This document is the **foundational mandate** for all AI agents. It defines the project's architecture, strict coding standards, and newly implemented advanced features.
 
-## Project Overview
+---
 
-RecruitAI Frontend is a modern recruitment platform built with **React 19**, **TypeScript**, and **Vite**. It features an AI-powered matching system and role-based access control for Candidates, Recruiters, and Admins.
+## 🏗️ Project Architecture & Features
 
-### Core Tech Stack
-
+### 1. Core Tech Stack
 - **Framework:** React 19 + TypeScript + Vite 7 (SWC)
-- **Styling:** TailwindCSS v4
-- **State Management:**
-  - **Global:** Redux Toolkit (Auth & User session)
-  - **Server State:** TanStack React Query v5 (Data fetching & caching)
-- **Routing:** React Router DOM v7 (Role-based guarding)
-- **API Client:** Axios (with automated token refresh interceptors)
-- **Forms:** React Hook Form + Yup (Schema-based validation)
-- **Notifications:** react-hot-toast
+- **State Management:** Redux Toolkit (Global Auth) & TanStack React Query v5 (Server State)
+- **Styling:** TailwindCSS v4 with Semantic Tokens (`index.css`)
+- **API Client:** Axios with automated JWT refresh interceptor (`src/services/api/axiosInstance.ts`)
 
-## Project Structure
+### 2. Feature-Based Modules (`src/features/`)
+Each module (e.g., `auth`, `jobs`, `candidate`, `geocoding`) is self-contained:
+- `types/`: Mandatory separation between Raw API (`Response`) and UI (`Model`) types.
+- `services/`: Axios calls with mandatory transform functions.
+- `hooks/`: TanStack Query hooks and complex UI logic (e.g., `useSkillInput`, `useLocationInput`).
+- `components/`: Domain-specific UI (e.g., `JobCard`, `SkillInput`, `LocationInput`).
+- `pages/`: Page-level components composed of feature components.
 
-The project follows a modular, feature-based architecture:
+### 3. Key Advanced Features
+- **Geocoding Integration:** Structured location search using `refId` (NOT raw text). Uses `LocationInput` with 300ms debounce.
+- **Skill Selection:** Multi-skill autocomplete using `SkillInput` with standardized `Badge` UI.
+- **Role-Based Access Control (RBAC):** Guarded routes for `candidate`, `recruiter`, and `admin`.
 
-- `src/app/`: Redux store configuration and typed hooks.
-- `src/config/`: Centralized route paths (`routes.config.ts`) and API constants.
-- `src/features/`: Domain-specific modules (e.g., `auth`, `jobs`, `candidate`). Each feature co-locates its components, hooks, services, and slices.
-- `src/routes/`: Complex routing logic, including guards (`ProtectedRoute`, `RoleBasedRoute`) and role-specific configurations.
-- `src/services/`: Cross-cutting services like the Axios instance and localStorage utilities.
-- `src/shared/`: Reusable UI components (`src/shared/components/ui`) and Layouts.
-- `src/pages/`: Top-level standalone pages (Home, 404, Unauthorized).
+---
 
-## Development Conventions
+## 📜 Mandatory Engineering Standards
 
-### Path Aliases
+### 1. Separation of Concerns (THE "FLOW")
+All data fetching **MUST** follow this sequence:
+1.  **API Response:** Received in `services/`.
+2.  **Transform Layer:** Normalizes fields, converts enums to labels, and formats dates/currencies.
+3.  **React Query:** Caches the *transformed* object.
+4.  **UI:** Consumes the clean `Job` or `User` model.
 
-Always use the `@` alias for imports from the `src` directory (configured in `vite.config.ts` and `tsconfig.json`).
+### 2. UI & Styling Rules
+- **Semantic Tokens:** Use CSS variables (e.g., `text-primary`, `bg-surface`) defined in `index.css`. Avoid standard Tailwind colors (e.g., `text-blue-600`) for primary brand elements.
+- **Layout Hierarchy:** `Page` → `Section` → `Container` → `Feature Components`.
+- **Reusable Components:** Always check `src/shared/components/ui` (Button, Input, Badge, StatItem) before building new UI.
+- **UX Standards:** 
+    - Use `debounce` (300ms-500ms) for all search inputs.
+    - Show `Loading Skeletons` during data fetching.
+    - Implement clear `Empty States`.
 
-- Example: `import { Button } from "@/shared/components/ui/Button";`
+### 3. Form Standards
+- Use **React Hook Form** + **Yup** for validation.
+- Complex inputs (Skills, Locations) **MUST** be integrated via `<Controller />`.
+- Prefer the **Upsert Pattern**: Combine Create and Edit into a single page/component that toggles logic based on the presence of an `id`.
 
-### Authentication & Roles
+### 4. Enum & Mapping
+- **NEVER** display raw enum numbers in the UI.
+- Use `normalize[EnumName]` functions in the transform layer to map values to readable Vietnamese labels.
 
-The application supports three roles: `candidate`, `recruiter`, and `admin`.
+---
 
-- Role-based redirects are handled in `src/routes/utils/roleRedirect.ts`.
-- Protected routes are managed via `ProtectedRoute` and `RoleBasedRoute` components.
+## 🛠️ Key Commands & Workflow
 
-### API Integration
+| Task | Command |
+| :--- | :--- |
+| Start Dev | `npm run dev` |
+| Lint | `npm run lint` |
+| Build | `npm run build` |
+| Test | (TODO: Implement Vitest) |
 
-- Use **Axios Instance** (`src/services/api/axiosInstance.ts`) for all HTTP requests to benefit from automatic token handling and interceptors.
-- Use **TanStack React Query** hooks for data fetching to ensure consistent server state management.
-- API endpoints are centralized in `src/config/endpoints/`.
+### Git Policy
+- **DO NOT** commit `GEMINI.md` or `.gemini/` folder.
+- **DO NOT** commit `.env` files.
+- Propose clear, "why-focused" commit messages.
 
-### UI & Styling
+### Navigation
+Always use the centralized `ROUTES` object from `@/config/routes.config.ts`. Hardcoded path strings are strictly forbidden.
 
-- Follow the existing TailwindCSS v4 patterns.
-- Prefer reusable components from `src/shared/components/ui`.
-- All forms must use **React Hook Form** with **Yup** validation.
+---
 
-## Key Commands
-
-| Action                | Command           |
-| :-------------------- | :---------------- |
-| **Start Development** | `npm run dev`     |
-| **Build Project**     | `npm run build`   |
-| **Lint Codebase**     | `npm run lint`    |
-| **Preview Build**     | `npm run preview` |
-
-## Authentication Flow (JWT)
-
-1. Tokens (`access_token`, `refresh_token`) are stored in `localStorage`.
-2. Axios request interceptor attaches the Bearer token automatically.
-3. On `401 Unauthorized`, the response interceptor attempts a silent refresh.
-4. If refresh fails, tokens are cleared and the user is redirected to `/login`.
-
-## Navigation & Routes
-
-Centralized route constants are located in `src/config/routes.config.ts`. Always use these constants instead of hardcoded strings for internal navigation.
-
-## Additional Coding References
-
-### Core Principles
-
-1.1 Separation of Concerns (MANDATORY)
-Do not mix API logic, data transformation, and UI in the same layer.
-Follow this strict flow:
-API (raw response)
-→ Transform layer
-→ React Query (data fetching)
-→ UI components
-1.2 Backend is the Source of Truth
-Do not hardcode business logic (roles, permissions, enums) on the frontend.
-Always rely on backend data.
-The frontend is responsible only for rendering.
-1.3 Normalize Data Before UI
-All backend responses must be transformed before reaching UI.
-UI must never consume raw API response directly.
-
-### Transform Layer Rules
-
-2.1 Always Use Transform Functions
-Every API response must go through a transform function.
-
-Example:
-
-transformJob()
-transformJobListItem()
-2.2 Responsibilities of Transform Layer
-Normalize inconsistent fields (e.g., cvId → id)
-Convert enums to readable labels
-Format data (dates, numbers, sizes)
-Ensure consistent data shape for UI
-
-### UI Architecture Rules
-
-3.1 Layout System
-Use Container for width control
-Use Section for vertical spacing
-3.2 Component Hierarchy
-Page
-→ Section
-→ Container
-→ Feature Components
-3.3 Reusable Components (MANDATORY)
-Build reusable components instead of duplicating code
-
-Examples:
-
-JobCard
-JobList
-JobSearch
-StatusBadge
-
-### Enum & Mapping Rules
-
-4.1 Do Not Use Raw Enum Values in UI
-UI must not display raw enum values (numbers or codes)
-10.2 Always Map Enum to Label
-
-Example:
-
-1 → "Full-time"
-2 → "Part-time"
-10.3 Use Normalize Functions
-normalizeEmploymentType(value)
-normalizeExperienceLevel(value)
-All enum conversion logic must be centralized
-Avoid hardcoding labels in components
-
-### UX Rules
-
-51 Loading State
-Always show loading skeletons when fetching data
-52 Empty State
-Show clear message when no data is available
-
-Example:
-
-"No jobs found"
-"No CV uploaded"
-5.3 Disabled State
-Disable buttons and actions during loading or processing
-Prevent duplicate actions
-13.4 Smooth Interaction
-Use debounce for search inputs (e.g., 300ms)
-Avoid excessive API calls
-
-### Error Handling
-
-Never let the UI crash
-Always handle API errors gracefully
-Show clear and user-friendly error messages
-Provide fallback UI when data is unavailable
-6.1 Goal
-
-The frontend system must be:
-
-Scalable
-Maintainable
-Predictable
-Reusable
-🚀 Final Objective
-
-Build a frontend architecture that:
-
-Separates concerns clearly
-Works seamlessly with backend APIs
-Supports role-based and permission-based UI
-Is ready for AI-driven features (e.g., CV parsing, job matching)
-Can scale for future features without major refactoring
+🚀 **Final Objective:** Build a scalable, predictable frontend that separates raw data from presentation, ensuring 100% type safety and consistent UX across all roles.

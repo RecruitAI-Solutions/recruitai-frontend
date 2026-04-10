@@ -78,7 +78,7 @@ const JobDetailPage = () => {
         <Container>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-sm text-text-secondary hover:text-primary mb-6 transition-colors"
+            className="cursor-pointer flex items-center text-sm text-text-secondary hover:text-primary mb-6 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" /> Quay lại danh sách
           </button>
