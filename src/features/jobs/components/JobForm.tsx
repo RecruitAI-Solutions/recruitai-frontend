@@ -8,14 +8,23 @@ import {
   ExperienceLevelMap,
   type CreateJobRequest,
 } from "../types/job.types";
-import type { SelectedSkill } from "../types/skill.types";
-import { SkillInput } from "./SkillInput";
+import type { SelectedSkill } from "@/features/skills/types/skill.types";
+import { SkillInput } from "@/features/skills/components/SkillInput";
+import { LocationInput } from "@/features/geocoding/components/LocationInput";
 
 const schema = yup.object({
   title: yup.string().required("Vui lòng nhập tiêu đề"),
   description: yup.string().required("Vui lòng nhập mô tả"),
   requirements: yup.string().required("Vui lòng nhập yêu cầu"),
-  location: yup.string().required("Vui lòng nhập địa điểm"),
+  location: yup
+    .object({
+      refId: yup.string().required(),
+      display: yup.string().required(),
+      lat: yup.number().required(),
+      lng: yup.number().required(),
+    })
+    .required("Vui lòng chọn địa điểm từ gợi ý")
+    .nullable(),
   salaryMin: yup.number().required("Vui lòng nhập lương tối thiểu").min(0),
   salaryMax: yup.number().required("Vui lòng nhập lương tối đa").min(0),
   currency: yup.number().default(1),
@@ -64,7 +73,18 @@ export const JobForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      className="space-y-4"
+      onSubmit={handleSubmit((data) => {
+        if (!data.location) return;
+        const payload: CreateJobRequest = {
+          ...data,
+          location: data.location?.display,
+        };
+
+        onSubmit(payload);
+      })}
+    >
       <Input
         label="Tiêu đề công việc"
         {...register("title")}
@@ -103,11 +123,17 @@ export const JobForm = ({
         />
       </div>
 
-      <Input
-        label="Địa điểm"
-        {...register("location")}
-        error={errors.location?.message}
-        disabled={isPending}
+      <Controller
+        name="location"
+        control={control}
+        render={({ field, fieldState }) => (
+          <LocationInput
+            value={field.value}
+            onChange={field.onChange}
+            error={fieldState.error?.message}
+            label="Địa điểm"
+          />
+        )}
       />
 
       <div className="grid grid-cols-2 gap-4">

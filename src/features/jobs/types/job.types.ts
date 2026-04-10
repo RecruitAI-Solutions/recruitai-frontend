@@ -128,6 +128,7 @@ export type JobListItemResponse = {
   salaryMin: number | null;
   salaryMax: number | null;
   currency: number;
+  skillIds?: number[];
   employmentType: EmploymentTypeValue;
   experienceLevel: ExperienceLevelValue;
   recruiterName: string;
@@ -210,6 +211,9 @@ export type JobListItem = {
   location: string;
   salaryMin: number | null;
   salaryMax: number | null;
+  skillIds?: number[];
+  employmentTypeValue: EmploymentTypeValue; // Giữ giá trị số để lọc
+  experienceLevelValue: ExperienceLevelValue;
   employmentType: EmploymentTypeLabel;
   experienceLevel: ExperienceLevelLabel;
   recruiterName: string;
@@ -261,6 +265,9 @@ export const transformJobListItem = (
   expirationDate: data.expirationDate,
   isActive: data.isActive,
   skillNames: data.skillNames,
+  skillIds: data.skillIds || [],
+  employmentTypeValue: data.employmentType,
+  experienceLevelValue: data.experienceLevel,
 });
 
 export const transformJob = (data: JobDetailResponse): Job => ({
@@ -288,3 +295,35 @@ export const transformJob = (data: JobDetailResponse): Job => ({
   views: data.views,
   applications: data.applications,
 });
+
+export type JobFilters = {
+  title?: string;
+  location?: string;
+  minSalary?: number;
+  maxSalary?: number;
+  employmentType?: string;
+  experienceLevel?: string;
+  skill?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  limit?: number;
+};
+
+//PARAMS FOR JOB FILTERS
+export interface LocationFilterInputProps {
+  value?: string;
+  onChange: (value: string) => void;
+}
+
+export interface EmploymentTypeFilterProps {
+  value?: string; // single value or comma-separated
+  onChange: (value: string | undefined) => void;
+}
+
+export interface SalaryRangeFilterProps {
+  minSalary?: number;
+  maxSalary?: number;
+  onChangeMin: (value: number | undefined) => void;
+  onChangeMax: (value: number | undefined) => void;
+}
