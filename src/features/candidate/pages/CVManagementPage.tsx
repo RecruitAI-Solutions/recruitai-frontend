@@ -1,13 +1,13 @@
 import { Container } from "@/shared/layouts/Container";
-import { CVUploadZone } from "../components/CVUploadZone";
-import { CVList } from "../components/CVList";
 import { Section } from "@/shared/layouts/Section";
+import { CVUploadZone } from "../components/CVUploadZone";
+import { CVFilterBar } from "../components/CVFilterBar";
+import { CVList } from "../components/CVList";
 
 export const CVManagementPage = () => {
   return (
     <Section>
       <Container>
-        {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Quản lý CV</h1>
           <p className="text-sm text-gray-500 mt-2">
@@ -23,12 +23,15 @@ export const CVManagementPage = () => {
           <CVUploadZone />
         </div>
 
-        {/* CV List */}
+        {/* CV List with Filter */}
         <div className="bg-white rounded-xl border border-border p-6 mt-3">
           <h2 className="text-sm font-semibold text-text-primary mb-4">
             CV của tôi
           </h2>
-          <CVList />
+          <CVFilterBar />
+          <div className="mt-4">
+            <CVList />
+          </div>
         </div>
       </Container>
     </Section>

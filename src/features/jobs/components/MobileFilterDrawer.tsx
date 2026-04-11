@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/shared/components/ui/Button";
 import { X } from "lucide-react";
-import { JobFilterSidebar } from "./JobFilterSidebar";
+import JobFilterSidebar from "./JobFilterSidebar";
 
 export const MobileFilterDrawer = () => {
   return (

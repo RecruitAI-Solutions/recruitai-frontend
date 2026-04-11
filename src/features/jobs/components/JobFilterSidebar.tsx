@@ -6,7 +6,7 @@ import { employmentTypeMap, ExperienceLevelMap } from "../types/job.types";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { SkillInput } from "@/features/skills/components/SkillInput";
 import type { SelectedSkill } from "@/features/skills/types/skill.types";
 
@@ -14,7 +14,7 @@ type JobFilterSidebarProps = {
   className?: string;
 };
 
-export const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
+const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
   const { filter, updateFilter, resetFilter } = useFilter();
   const [skillInputKey, setSkillInputKey] = useState(0);
 
@@ -82,6 +82,11 @@ export const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
     [updateFilter],
   );
 
+  const handleReset = useCallback(() => {
+    resetFilter();
+    setSkillInputKey((pre) => pre + 1);
+  }, [resetFilter]);
+
   return (
     <aside
       className={cn(
@@ -92,7 +97,7 @@ export const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-lg">Bộ lọc</h3>
-          <Button variant="outline" onClick={resetFilter}>
+          <Button variant="outline" onClick={handleReset}>
             Xóa tất cả
           </Button>
         </div>
@@ -224,3 +229,5 @@ export const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
     </aside>
   );
 };
+
+export default memo(JobFilterSidebar);

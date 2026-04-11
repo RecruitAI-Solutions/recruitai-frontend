@@ -44,7 +44,7 @@ export const UserMenu = () => {
       <DropdownMenu.Content
         align="end"
         className="
-          w-56 rounded-lg bg-surface border border-border shadow-lg p-2
+          w-56 rounded-lg bg-surface border border-border shadow-lg p-2 z-[99999]
         "
       >
         {/* User info */}

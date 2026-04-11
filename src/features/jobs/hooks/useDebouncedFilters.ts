@@ -1,25 +1,21 @@
-import { useFilter } from "./useFilter";
 import { useDebounce } from "@/lib/useDebounce";
+import type { JobFilters } from "../types/job.types";
 
-export const useDebouncedFilters = () => {
-  const { filter } = useFilter();
+export const useDebouncedFilters = (filters: JobFilters): JobFilters => {
+  const debouncedTitle = useDebounce(filters.title, 300);
+  const debouncedLocation = useDebounce(filters.location, 300);
 
-  // Debounce only text fields
-  const debouncedTitle = useDebounce(filter.title, 300);
-  const debouncedLocation = useDebounce(filter.location, 300);
-
-  // Return merged: debounced text + immediate checkboxes/selects
   return {
     title: debouncedTitle,
     location: debouncedLocation,
-    minSalary: filter.minSalary,
-    maxSalary: filter.maxSalary,
-    employmentType: filter.employmentType,
-    experienceLevel: filter.experienceLevel,
-    skill: filter.skill,
-    sortBy: filter.sortBy,
-    sortOrder: filter.sortOrder,
-    page: filter.page,
-    limit: filter.limit,
+    minSalary: filters.minSalary,
+    maxSalary: filters.maxSalary,
+    employmentType: filters.employmentType,
+    experienceLevel: filters.experienceLevel,
+    skill: filters.skill,
+    sortBy: filters.sortBy,
+    sortOrder: filters.sortOrder,
+    page: filters.page,
+    pageSize: filters.pageSize,
   };
 };

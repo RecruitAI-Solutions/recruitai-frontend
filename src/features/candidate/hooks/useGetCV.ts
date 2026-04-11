@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { cvApi } from "../services/cvApi";
-import { CV_QUERY_KEYS } from "./useUploadCV";
+import { CV_QUERY_KEYS } from "./CVQueryKeys";
 
 export const useGetCV = (id: string) => {
   return useQuery({

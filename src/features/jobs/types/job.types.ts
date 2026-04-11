@@ -212,7 +212,7 @@ export type JobListItem = {
   salaryMin: number | null;
   salaryMax: number | null;
   skillIds?: number[];
-  employmentTypeValue: EmploymentTypeValue; // Giữ giá trị số để lọc
+  employmentTypeValue: EmploymentTypeValue;
   experienceLevelValue: ExperienceLevelValue;
   employmentType: EmploymentTypeLabel;
   experienceLevel: ExperienceLevelLabel;
@@ -307,7 +307,7 @@ export type JobFilters = {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   page?: number;
-  limit?: number;
+  pageSize?: number;
 };
 
 //PARAMS FOR JOB FILTERS

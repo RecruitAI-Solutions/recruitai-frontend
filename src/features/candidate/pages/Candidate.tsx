@@ -2,9 +2,14 @@ import { Container } from "@/shared/layouts/Container";
 import { useAppSelector } from "@/app/hooks";
 import { selectCurrentUser } from "@/features/auth/slices/authSlice";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { useGetMyCVs } from "../hooks/useGetMyCVs";
+import { useCVFilter } from "../hooks/useCVFilter";
 
 export default function CandidateDashboard() {
   const user = useAppSelector(selectCurrentUser);
+  const { filter } = useCVFilter();
+  const { data } = useGetMyCVs(filter);
+  const cvCount = data?.data?.length ?? 0;
 
   return (
     // ═══ PAGE USES CONTAINER ═══
@@ -29,7 +34,7 @@ export default function CandidateDashboard() {
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <p className="text-sm text-gray-600 mb-1">CVs Uploaded</p>
-          <p className="text-3xl font-bold text-gray-900">3</p>
+          <p className="text-3xl font-bold text-gray-900">{cvCount}</p>
         </div>
         <LogoutButton />
       </div>

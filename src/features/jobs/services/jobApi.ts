@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/services/api/axiosInstance";
+import qs from "qs";
 import {
   type JobListItem,
   transformJobListItem,
@@ -14,30 +15,41 @@ import { JOB_ENDPOINTS } from "@/config/endpoints/job.endpoints";
 
 export const jobApi = {
   getJobs: async (filters?: JobFilters) => {
-    // Convert filters to API params format
-    // Some renaming might be needed based on backend API
     const params = {
-      title: filters?.title, // backend expects "title"
+      title: filters?.title,
       location: filters?.location,
       salaryMin: filters?.minSalary,
       salaryMax: filters?.maxSalary,
       employmentType: filters?.employmentType,
       experienceLevel: filters?.experienceLevel,
       skill: filters?.skill,
-      sortBy: filters?.sortBy, // backend expects "sortBy"
+      sortBy: filters?.sortBy,
       sortOrder: filters?.sortOrder,
       page: filters?.page,
-      pageSize: filters?.limit, // backend expects "pageSize"
+      pageSize: filters?.pageSize,
     };
 
     const response = await axiosInstance.get<JobListPaginatedResponse>(
       JOB_ENDPOINTS.LIST,
-      { params },
+      {
+        params: {
+          ...params,
+          employmentType: filters?.employmentType?.split(",").map(Number),
+          experienceLevel: filters?.experienceLevel?.split(",").map(Number),
+        },
+        paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
+      },
     );
+
+    const pageSize = filters?.pageSize || 6;
+    const totalPages =
+      response.data.totalPages ||
+      Math.ceil((response.data.total || 0) / pageSize);
 
     return {
       data: response.data.data.map(transformJobListItem),
       total: response.data.total,
+      totalPages,
     };
   },
   getMyJobs: async (

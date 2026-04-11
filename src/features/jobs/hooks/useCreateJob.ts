@@ -15,7 +15,7 @@ export const useCreateJob = () => {
     mutationFn: (payload: CreateJobRequest) => jobApi.createJob(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: JOB_QUERY_KEYS.myJobs });
-      queryClient.invalidateQueries({ queryKey: JOB_QUERY_KEYS.list });
+      queryClient.invalidateQueries({ queryKey: JOB_QUERY_KEYS.list() });
       toast.success("Đăng việc làm thành công");
       navigate(ROUTES.RECRUITER.JOBS);
     },

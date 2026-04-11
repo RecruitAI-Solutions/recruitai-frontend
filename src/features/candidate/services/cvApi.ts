@@ -14,8 +14,6 @@ export const cvApi = {
     const formData = new FormData();
     formData.append("file", file);
 
-    console.log(formData.get("file"));
-
     const response = await axiosInstance.post<CVUploadResponse>(
       CV_ENDPOINTS.UPLOAD,
       formData,
@@ -25,14 +23,41 @@ export const cvApi = {
         },
       },
     );
+
+    console.log(response.data);
     return transformCVUpload(response.data);
   },
-
-  getMyCVs: async (): Promise<CV[]> => {
+  getMyCVs: async (params?: {
+    page?: number;
+    pageSize?: number;
+    status?: number[];
+    fileName?: string;
+    fromDate?: string;
+    toDate?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }): Promise<{
+    data: CV[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
+  }> => {
     const response = await axiosInstance.get<CVListPaginatedResponse>(
       CV_ENDPOINTS.MY_CVS,
+      { params },
     );
-    return response.data.data.map(transformCVItem);
+    return {
+      data: response.data.data.map(transformCVItem),
+      total: response.data.total,
+      page: response.data.page,
+      pageSize: response.data.pageSize,
+      totalPages: response.data.totalPages,
+      hasPrevious: response.data.hasPrevious,
+      hasNext: response.data.hasNext,
+    };
   },
 
   getCV: async (id: string): Promise<CV> => {
@@ -55,5 +80,9 @@ export const cvApi = {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
+  },
+
+  deleteCV: async (id: string): Promise<void> => {
+    await axiosInstance.delete(CV_ENDPOINTS.DETAIL(id));
   },
 };

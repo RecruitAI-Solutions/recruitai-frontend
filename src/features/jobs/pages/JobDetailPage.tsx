@@ -23,6 +23,7 @@ import { Badge } from "@/shared/components/ui/Badge";
 import { Section } from "@/shared/layouts/Section";
 import { Container } from "@/shared/layouts/Container";
 import { ROUTES } from "@/config/routes.config";
+import { MatchCVButton } from "@/features/ai/components/MatchCVButton";
 
 const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -190,6 +191,14 @@ const JobDetailPage = () => {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {userRole === "candidate" && (
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">
+                    Kiểm tra độ phù hợp với CV của bạn
+                  </h3>
+                  <MatchCVButton jobId={job.id} />
+                </div>
+              )}
               {/* Job Info Card */}
               <div className="bg-[var(--color-surface)] p-6 rounded-2xl shadow-sm border border-gray-100">
                 <h3 className="font-bold mb-4">Thông tin chung</h3>
