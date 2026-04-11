@@ -3,10 +3,12 @@ import { useAppSelector } from "@/app/hooks";
 import { selectCurrentUser } from "@/features/auth/slices/authSlice";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
 import { useGetMyCVs } from "../hooks/useGetMyCVs";
+import { useCVFilter } from "../hooks/useCVFilter";
 
 export default function CandidateDashboard() {
   const user = useAppSelector(selectCurrentUser);
-  const { data } = useGetMyCVs();
+  const { filter } = useCVFilter();
+  const { data } = useGetMyCVs(filter);
   const cvCount = data?.data?.length ?? 0;
 
   return (

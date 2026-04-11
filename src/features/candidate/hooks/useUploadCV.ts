@@ -2,11 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { cvApi } from "../services/cvApi";
-
-export const CV_QUERY_KEYS = {
-  myCVs: ["cvs", "my"] as const,
-  detail: (id: string) => ["cvs", id] as const,
-};
+import { CV_STATUS } from "../types/cv.types";
+import { CV_QUERY_KEYS } from "./CVQueryKeys";
 
 export const useUploadCV = () => {
   const queryClient = useQueryClient();
@@ -14,10 +11,14 @@ export const useUploadCV = () => {
   return useMutation({
     mutationFn: (file: File) => cvApi.upload(file),
 
-    onSuccess: () => {
+    onSuccess: (cv) => {
       // Invalidate list → tự refetch
       queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.myCVs });
-      toast.success("Upload CV thành công!");
+      if (cv.status === CV_STATUS.FAILED) {
+        toast.error("Upload CV thất bại. Vui lòng thử lại.");
+      } else {
+        toast.success("Upload CV thành công!");
+      }
     },
 
     onError: (error: AxiosError<{ message: string; errorCode?: number }>) => {

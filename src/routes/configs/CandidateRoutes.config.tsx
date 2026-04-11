@@ -4,6 +4,8 @@ import { RoleBasedRoute } from "../RoleBasedRoute";
 import { CandidateLayout } from "@/shared/layouts/candidate/CandidateLayout";
 import CandidateDashboard from "@/features/candidate/pages/Candidate";
 import { CVManagementPage } from "@/features/candidate/pages/CVManagementPage";
+import { CVDetailPage } from "@/features/candidate/pages/CVDetailPage";
+import { MatchingJobsPage } from "@/features/candidate/pages/MatchingJobPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -28,6 +30,14 @@ export const createCandidateRoutes = (
         {
           path: ROUTES.CANDIDATE.CV_MANAGEMENT,
           element: <CVManagementPage />,
+        },
+        {
+          path: "/candidate/cv/:id",
+          element: <CVDetailPage />,
+        },
+        {
+          path: "/candidate/cv/:cvId/matching-jobs",
+          element: <MatchingJobsPage />,
         },
       ],
     },
