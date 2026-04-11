@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import type { JobListItem } from "../types/job.types";
 import { ROUTES } from "@/config/routes.config";
+import React from "react";
 
 type Props = {
   job: JobListItem;
   onClick?: () => void;
 };
 
-export const JobCard = ({ job, onClick }: Props) => {
+export const JobCard = React.memo(({ job, onClick }: Props) => {
   const formatSalary = (min: number | null, max: number | null) => {
     if (!min && !max) return "Thỏa thuận";
     const fmt = (n: number) => `${(n / 1_000_000).toFixed(0)}M`;
@@ -37,7 +38,6 @@ active:scale-[0.98]
 
       <p className="text-sm text-text-secondary mt-1">{job.recruiterName}</p>
 
-      {/* ✅ FIX LOCATION */}
       <p className="text-sm text-text-secondary mt-2">
         {job.location ?? "Đang tải địa điểm..."}
       </p>
@@ -60,4 +60,4 @@ active:scale-[0.98]
       <span className="text-xs text-success">85% match</span>
     </Link>
   );
-};
+});

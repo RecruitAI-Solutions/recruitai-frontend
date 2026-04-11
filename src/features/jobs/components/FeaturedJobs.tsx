@@ -5,7 +5,7 @@ import { JobCard } from "./JobCard";
 import { JobSkeleton } from "./JobSkeleton";
 
 export const FeaturedJobs = () => {
-  const { data, isLoading } = useGetJobs();
+  const { data, isLoading } = useGetJobs({});
 
   if (isLoading)
     return (

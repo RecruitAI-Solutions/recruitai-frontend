@@ -3,27 +3,48 @@ import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { JobList } from "../components/JobList";
 import { JobSkeleton } from "../components/JobSkeleton";
-import { JobFilterSidebar } from "../components/JobFilterSidebar";
 import { MobileFilterDrawer } from "../components/MobileFilterDrawer";
 import { Pagination } from "@/shared/components/ui/Pagination";
 import { useFilter } from "../hooks/useFilter";
 import { Select } from "@/shared/components/ui/Select";
 import { JobSearch } from "../components/JobSearch";
+import JobFilterSidebar from "../components/JobFilterSidebar";
+import { useCallback } from "react";
 
 export const JobListPage = () => {
   const { filter, updateFilter } = useFilter();
-  const { data, isLoading } = useGetJobs();
+  const { data, isLoading, isFetching } = useGetJobs(filter);
 
   const jobs = data?.data ?? [];
   const total = data?.total ?? 0;
-  const currentPage = filter.page || 1;
-  const pageSize = filter.limit || 10;
-  const totalPages = Math.ceil(total / pageSize);
+  const currentPage = filter.page ?? 1;
+  const totalPages = data?.totalPages ?? 0;
 
-  const handlePageChange = (page: number) => {
-    updateFilter({ page });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // useCallback để ổn định reference — tránh trigger effect trong child components
+  const handleTitleChange = useCallback(
+    (value: string) => updateFilter({ title: value || undefined }),
+    [updateFilter],
+  );
+
+  const handleSortByChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) =>
+      updateFilter({ sortBy: e.target.value }),
+    [updateFilter],
+  );
+
+  const handleSortOrderChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) =>
+      updateFilter({ sortOrder: e.target.value as "asc" | "desc" }),
+    [updateFilter],
+  );
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      updateFilter({ page });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [updateFilter],
+  );
 
   return (
     <Section>
@@ -32,10 +53,7 @@ export const JobListPage = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
-          <JobSearch
-            value={filter.title || ""}
-            onChange={(value) => updateFilter({ title: value })}
-          />
+          <JobSearch value={filter.title || ""} onChange={handleTitleChange} />
         </div>
 
         {/* Mobile Filter Button */}
@@ -54,17 +72,23 @@ export const JobListPage = () => {
             {/* Sort & Count */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-text-secondary">
-                Hiển thị{" "}
-                <span className="font-medium text-text-primary">
-                  {jobs.length}
-                </span>{" "}
-                / {total} việc làm
+                {isFetching ? (
+                  <span className="animate-pulse">Đang tải...</span>
+                ) : (
+                  <>
+                    Hiển thị{" "}
+                    <span className="font-medium text-text-primary">
+                      {jobs.length}
+                    </span>{" "}
+                    / {total} việc làm
+                  </>
+                )}
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-text-secondary">Sắp xếp:</span>
                 <Select
                   value={filter.sortBy || "createdAt"}
-                  onChange={(e) => updateFilter({ sortBy: e.target.value })}
+                  onChange={handleSortByChange}
                   options={[
                     { value: "createdAt", label: "Ngày đăng" },
                     { value: "salary", label: "Mức lương" },
@@ -74,11 +98,7 @@ export const JobListPage = () => {
                 />
                 <Select
                   value={filter.sortOrder || "desc"}
-                  onChange={(e) =>
-                    updateFilter({
-                      sortOrder: e.target.value as "asc" | "desc",
-                    })
-                  }
+                  onChange={handleSortOrderChange}
                   options={[
                     { value: "desc", label: "Giảm dần" },
                     { value: "asc", label: "Tăng dần" },
@@ -100,7 +120,12 @@ export const JobListPage = () => {
                 <p>Không tìm thấy việc làm nào phù hợp.</p>
               </div>
             ) : (
-              <>
+              // isFetching (load trang mới): dùng opacity thay vì pointer-events-none
+              // pointer-events-none làm cursor nhấp nháy vì toggle liên tục
+              <div
+                className="flex-1 transition-opacity duration-200"
+                style={{ opacity: isFetching ? 0.6 : 1 }}
+              >
                 <JobList jobs={jobs} />
                 {totalPages > 1 && (
                   <div className="mt-8">
@@ -111,7 +136,7 @@ export const JobListPage = () => {
                     />
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
         </div>

@@ -2,7 +2,15 @@ import { useSearchParams } from "react-router-dom";
 import { useMemo, useCallback } from "react";
 import type { JobFilters } from "../types/job.types";
 
-export const useFilter = () => {
+const DEFAULT_SORT_BY = "createdAt";
+const DEFAULT_SORT_ORDER = "desc";
+const DEFAULT_PAGE_SIZE = 6;
+
+export const useFilter = (): {
+  filter: JobFilters;
+  updateFilter: (newValues: Partial<JobFilters>) => void;
+  resetFilter: () => void;
+} => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const filter: JobFilters = useMemo(
@@ -18,37 +26,54 @@ export const useFilter = () => {
       employmentType: searchParams.get("employmentType") || undefined,
       experienceLevel: searchParams.get("experienceLevel") || undefined,
       skill: searchParams.get("skill") || undefined,
-      sortBy: searchParams.get("sortBy") || "createdAt",
-      sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
+      sortBy: searchParams.get("sortBy") || DEFAULT_SORT_BY,
+      sortOrder:
+        (searchParams.get("sortOrder") as "asc" | "desc") || DEFAULT_SORT_ORDER,
       page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
-      limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 10,
+      pageSize: searchParams.get("pageSize")
+        ? Number(searchParams.get("pageSize"))
+        : DEFAULT_PAGE_SIZE,
     }),
     [searchParams],
   );
 
   const updateFilter = useCallback(
     (newValues: Partial<JobFilters>) => {
-      const updated = new URLSearchParams(searchParams);
+      setSearchParams((prevParams) => {
+        const updated = new URLSearchParams(prevParams);
 
-      Object.entries(newValues).forEach(([key, value]) => {
-        if (value === undefined || value === null || value === "") {
-          updated.delete(key);
-        } else {
-          updated.set(key, String(value));
+        Object.entries(newValues).forEach(([key, value]) => {
+          if (value === undefined || value === null || value === "") {
+            updated.delete(key);
+          } else {
+            updated.set(key, String(value));
+          }
+        });
+        const filterKeys = [
+          "title",
+          "location",
+          "minSalary",
+          "maxSalary",
+          "employmentType",
+          "experienceLevel",
+          "skill",
+        ];
+        const isCriteriaChanging = Object.keys(newValues).some((key) =>
+          filterKeys.includes(key),
+        );
+
+        if (isCriteriaChanging && !("page" in newValues)) {
+          updated.delete("page");
         }
+
+        return updated;
       });
-
-      if (!("page" in newValues)) {
-        updated.set("page", "1");
-      }
-
-      setSearchParams(updated);
     },
-    [searchParams, setSearchParams],
+    [setSearchParams],
   );
 
   const resetFilter = useCallback(() => {
-    setSearchParams(new URLSearchParams());
+    setSearchParams({}, { replace: true });
   }, [setSearchParams]);
 
   return {

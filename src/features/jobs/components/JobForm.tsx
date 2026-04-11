@@ -193,7 +193,7 @@ export const JobForm = ({
             label="Kỹ năng yêu cầu"
             value={field.value}
             defaultSkills={defaultSkills}
-            onChange={field.onChange}
+            onChange={(ids) => field.onChange(ids)}
             disabled={isPending}
             error={errors.skillIds?.message}
           />

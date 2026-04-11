@@ -20,9 +20,30 @@ export const useUploadCV = () => {
       toast.success("Upload CV thành công!");
     },
 
-    onError: (error: AxiosError<{ message: string }>) => {
-      const message =
-        error.response?.data?.message || "Upload thất bại. Vui lòng thử lại.";
+    onError: (error: AxiosError<{ message: string; errorCode?: number }>) => {
+      const errorCode = error.response?.data?.errorCode;
+      let message = "Upload thất bại. Vui lòng thử lại.";
+
+      switch (errorCode) {
+        case 3009:
+          message = "File không hợp lệ hoặc trống.";
+          break;
+        case 3010:
+          message = "File quá lớn, tối đa 10MB.";
+          break;
+        case 3011:
+          message = "Chỉ chấp nhận file PDF.";
+          break;
+        case 4001:
+          message = "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.";
+          break;
+        case 4002:
+          message = "Bạn không có quyền thực hiện thao tác này.";
+          break;
+        default:
+          message = error.response?.data?.message || message;
+      }
+
       toast.error(message);
     },
   });

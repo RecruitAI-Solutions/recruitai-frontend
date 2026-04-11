@@ -12,33 +12,23 @@ export type CVStatus = (typeof CV_STATUS)[keyof typeof CV_STATUS];
 
 export type RawStatus = number | string;
 
-export const normalizeStatus = (
-  status: RawStatus,
-  statusName?: string,
-): CVStatus => {
-  if (statusName) {
-    const matched = Object.values(CV_STATUS).find(
-      (v) => v.toLowerCase() === statusName.toLowerCase(),
-    );
-    if (matched) return matched;
-  }
+export const normalizeStatus = (status: RawStatus): CVStatus => {
   if (typeof status === "string") {
-    // Tìm trong danh sách values của CV_STATUS (không phân biệt hoa thường)
     const matched = Object.values(CV_STATUS).find(
       (v) => v.toLowerCase() === status.toLowerCase(),
     );
     if (matched) return matched;
-    return CV_STATUS.PENDING;
+    return "Pending";
   }
 
   const map: Record<number, CVStatus> = {
-    1: CV_STATUS.PENDING,
-    2: CV_STATUS.PROCESSING,
-    3: CV_STATUS.COMPLETED,
-    4: CV_STATUS.FAILED,
+    1: "Pending",
+    2: "Processing",
+    3: "Completed",
+    4: "Failed",
   };
 
-  return map[status] ?? CV_STATUS.PENDING;
+  return map[status] ?? "Pending";
 };
 
 // ---- RAW RESPONSE từ backend ----
@@ -119,9 +109,7 @@ const baseTransform = (data: {
   fileSize: data.fileSize,
   formattedFileSize: data.formattedFileSize ?? formatFileSize(data.fileSize),
   uploadedAt: data.uploadedAt,
-  status: data.statusName
-    ? normalizeStatus(data.statusName)
-    : normalizeStatus(data.status),
+  status: normalizeStatus(data.status),
   statusName: data.statusName ?? normalizeStatus(data.status),
 });
 

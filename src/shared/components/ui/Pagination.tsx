@@ -51,7 +51,7 @@ export const Pagination = ({
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
         className={cn(
-          "px-3 py-1 rounded border",
+          "px-3 py-1 rounded border cursor-pointer",
           currentPage === 1
             ? "text-gray-400 border-gray-200 cursor-not-allowed"
             : "hover:bg-gray-100",
@@ -71,7 +71,7 @@ export const Pagination = ({
             key={p}
             onClick={() => onPageChange(p)}
             className={cn(
-              "px-3 py-1 rounded border",
+              "px-3 py-1 rounded border cursor-pointer",
               currentPage === p
                 ? "bg-primary text-white border-primary"
                 : "hover:bg-gray-100",
@@ -87,7 +87,7 @@ export const Pagination = ({
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
         className={cn(
-          "px-3 py-1 rounded border",
+          "px-3 py-1 rounded border cursor-pointer",
           currentPage === totalPages
             ? "text-gray-400 border-gray-200 cursor-not-allowed"
             : "hover:bg-gray-100",

@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { jobApi } from "../services/jobApi";
 import { useDebouncedFilters } from "./useDebouncedFilters";
 import { JOB_QUERY_KEYS } from "./jobQueryKeys";
+import type { JobFilters } from "../types/job.types";
 
-export const useGetJobs = () => {
-  const debouncedFilters = useDebouncedFilters();
+export const useGetJobs = (filters: JobFilters) => {
+  const debouncedFilters = useDebouncedFilters(filters);
 
   return useQuery({
     queryKey: JOB_QUERY_KEYS.list(debouncedFilters),

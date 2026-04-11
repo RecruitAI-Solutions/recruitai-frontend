@@ -5,15 +5,18 @@ import { PERMISSIONS } from "@/config/permissions.constants";
 
 export const CVList = () => {
   const { can } = usePermission();
-  const { data: cvs, isLoading, isError } = useGetMyCVs();
+  const { data: response, isLoading, isError } = useGetMyCVs();
 
-  if (!can(PERMISSIONS.VIEW_OWN_CVS)) return null; // P102
+  if (!can(PERMISSIONS.VIEW_OWN_CVS)) return null;
 
   if (isLoading) {
     return (
       <div className="space-y-3">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-background rounded-lg h-20 animate-pulse" />
+          <div
+            key={i}
+            className="bg-background rounded-lg h-20 animate-pulse"
+          />
         ))}
       </div>
     );
@@ -27,7 +30,9 @@ export const CVList = () => {
     );
   }
 
-  if (!cvs || cvs.length === 0) {
+  const cvs = response?.data ?? [];
+
+  if (cvs.length === 0) {
     return (
       <div className="text-center py-10 text-text-secondary">
         <p className="text-sm">Bạn chưa có CV nào.</p>
