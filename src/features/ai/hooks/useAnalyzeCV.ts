@@ -27,8 +27,26 @@ export const useAnalyzeCV = () => {
         toast.success("CV đang được phân tích, vui lòng đợi...");
       }
     },
-    onError: (error) => {
-      const message = error.response?.data?.message || "Phân tích CV thất bại";
+
+    onError: (error: AxiosError<{ message: string; errorCode?: number }>) => {
+      const errorCode = error.response?.data?.errorCode;
+      let message = "Phân tích CV thất bại. Vui lòng thử lại.";
+
+      switch (errorCode) {
+        case 7001: // CV not found
+          message = "Không tìm thấy CV.";
+          break;
+        case 400: // Validation error
+          message =
+            error.response?.data?.message || "CV chưa sẵn sàng để phân tích.";
+          break;
+        case 5001: // AI service error
+          message = "Dịch vụ AI đang bận, thử lại sau.";
+          break;
+        default:
+          message = error.response?.data?.message || message;
+      }
+
       toast.error(message);
     },
   });

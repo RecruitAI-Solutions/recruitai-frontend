@@ -22,6 +22,7 @@ export const CVCard = ({ cv }: Props) => {
     cv.status === CV_STATUS.COMPLETED,
   );
 
+  console.log(cv);
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString("vi-VN");
 
   const handleAnalyze = (e: React.MouseEvent) => {
