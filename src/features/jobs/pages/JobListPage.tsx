@@ -9,11 +9,38 @@ import { useFilter } from "../hooks/useFilter";
 import { Select } from "@/shared/components/ui/Select";
 import { JobSearch } from "../components/JobSearch";
 import JobFilterSidebar from "../components/JobFilterSidebar";
+import { useAppSelector } from "@/app/hooks";
+import { selectUserRole } from "@/features/auth/slices/authSlice";
+import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
+import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
+import { useMemo } from "react";
 import { useCallback } from "react";
 
 export const JobListPage = () => {
+  const userRole = useAppSelector(selectUserRole);
+  const isCandidate = userRole === "candidate";
+
   const { filter, updateFilter } = useFilter();
   const { data, isLoading, isFetching } = useGetJobs(filter);
+
+  const { data: cvData } = useGetMyCVs({
+    pageSize: 1,
+    status: [3],
+    sortBy: "uploadedAt",
+    sortOrder: "desc",
+  });
+  const primaryCvId = isCandidate ? (cvData?.data[0]?.id ?? "") : "";
+
+  const { data: matchData } = useMatchingJobsForCV(
+    primaryCvId,
+    { pageSize: 100 }, // lấy nhiều để cover hết jobs đang hiển thị
+    isCandidate && !!primaryCvId,
+  );
+
+  const matchMap = useMemo(() => {
+    if (!matchData?.data) return undefined;
+    return new Map(matchData.data.map((m) => [m.jobId, m.matchPercentage]));
+  }, [matchData]);
 
   const jobs = data?.data ?? [];
   const total = data?.total ?? 0;
@@ -123,10 +150,13 @@ export const JobListPage = () => {
               // isFetching (load trang mới): dùng opacity thay vì pointer-events-none
               // pointer-events-none làm cursor nhấp nháy vì toggle liên tục
               <div
-                className="flex-1 transition-opacity duration-200"
-                style={{ opacity: isFetching ? 0.6 : 1 }}
+                className="transition-all duration-200 ease-out will-change-transform"
+                style={{
+                  opacity: isFetching ? 0.7 : 1,
+                  transform: isFetching ? "translateY(2px)" : "translateY(0)",
+                }}
               >
-                <JobList jobs={jobs} />
+                <JobList jobs={jobs} matchMap={matchMap} />
                 {totalPages > 1 && (
                   <div className="mt-8">
                     <Pagination
