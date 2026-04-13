@@ -6,6 +6,8 @@ import CandidateDashboard from "@/features/candidate/pages/Candidate";
 import { CVManagementPage } from "@/features/candidate/pages/CVManagementPage";
 import { CVDetailPage } from "@/features/candidate/pages/CVDetailPage";
 import { MatchingJobsPage } from "@/features/candidate/pages/MatchingJobPage";
+import { MyApplicationsPage } from "@/features/applications/pages/MyApplicationsPage";
+import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -38,6 +40,15 @@ export const createCandidateRoutes = (
         {
           path: "/candidate/cv/:cvId/matching-jobs",
           element: <MatchingJobsPage />,
+        },
+        {
+          path: ROUTES.CANDIDATE.APPLICATIONS,
+          element: <MyApplicationsPage />,
+        },
+
+        {
+          path: ROUTES.CANDIDATE.APPLICATION_DETAIL(":applicationId"),
+          element: <ApplicationDetailPage />,
         },
       ],
     },

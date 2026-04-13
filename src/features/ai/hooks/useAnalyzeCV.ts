@@ -4,6 +4,7 @@ import type { AnalyzeCVResponse } from "../types/ai.types";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { AI_QUERY_KEYS } from "./aiQueryKeys";
+import { CV_QUERY_KEYS } from "@/features/candidate/hooks/CVQueryKeys";
 
 export const useAnalyzeCV = () => {
   const queryClient = useQueryClient();
@@ -22,7 +23,8 @@ export const useAnalyzeCV = () => {
         queryClient.invalidateQueries({
           queryKey: AI_QUERY_KEYS.analysis(cvId),
         });
-        queryClient.invalidateQueries({ queryKey: ["my-cvs"] });
+        queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.myCVs });
+        queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.detail(cvId) });
       } else {
         toast.success("CV đang được phân tích, vui lòng đợi...");
       }

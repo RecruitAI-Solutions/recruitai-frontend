@@ -3,15 +3,23 @@ import { CV_STATUS, type CVStatus } from "../types/cv.types";
 const STATUS_CONFIG: Record<CVStatus, { label: string; className: string }> = {
   [CV_STATUS.PENDING]: {
     label: "Chờ xử lý",
-    className: "bg-yellow-100 text-yellow-700",
+    className: "bg-gray-100 text-gray-700",
+  },
+  [CV_STATUS.UPLOADED]: {
+    label: "Đã upload",
+    className: "bg-blue-100 text-blue-700",
   },
   [CV_STATUS.PROCESSING]: {
     label: "Đang xử lý",
-    className: "bg-blue-100 text-blue-700 animate-pulse",
+    className: "bg-yellow-100 text-yellow-700 animate-pulse",
   },
   [CV_STATUS.COMPLETED]: {
     label: "Hoàn thành",
     className: "bg-green-100 text-green-700",
+  },
+  [CV_STATUS.ANALYZED]: {
+    label: "Đã phân tích",
+    className: "bg-purple-100 text-purple-700",
   },
   [CV_STATUS.FAILED]: {
     label: "Thất bại",

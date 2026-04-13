@@ -19,7 +19,7 @@ export const CVCard = ({ cv }: Props) => {
   const { mutate: analyze, isPending: isAnalyzing } = useAnalyzeCV();
   const { data: analysis } = useAnalysisResult(
     cv.id,
-    cv.status === CV_STATUS.COMPLETED,
+    cv.status === CV_STATUS.COMPLETED || cv.status === CV_STATUS.ANALYZED,
   );
 
   console.log(cv);

@@ -7,6 +7,8 @@ import RecruiterDashboard from "@/features/jobs/pages/RecruiterDashboard";
 import { MyJobsPage } from "@/features/jobs/pages/MyJobPage";
 import { CreateJobPage } from "@/features/jobs/pages/CreateJobPage";
 import { EditJobPage } from "@/features/jobs/pages/EditJobPage";
+import { JobApplicationsPage } from "@/features/applications/pages/JobApplicationsPage";
+import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -39,6 +41,14 @@ export const createRecuiterRoutes = (
         {
           path: ROUTES.RECRUITER.JOB_EDIT(":id"),
           element: <EditJobPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.APPLICANTS(":jobId"),
+          element: <JobApplicationsPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.APPLICATION_DETAIL(":applicationId"),
+          element: <ApplicationDetailPage />,
         },
       ],
     },

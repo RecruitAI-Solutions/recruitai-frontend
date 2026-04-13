@@ -13,7 +13,7 @@ export const useGetMyCVs = (filters: CVFilters) => {
       const data = query.state.data;
       if (!data) return false;
       const hasProcessing = data.data.some(
-        (cv) => cv.status === "Pending" || cv.status === "Processing",
+        (cv) => cv.status === "Processing" || cv.status === "Uploaded",
       );
       return hasProcessing ? 5000 : false;
     },

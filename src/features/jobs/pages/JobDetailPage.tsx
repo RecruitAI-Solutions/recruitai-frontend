@@ -24,6 +24,7 @@ import { Section } from "@/shared/layouts/Section";
 import { Container } from "@/shared/layouts/Container";
 import { ROUTES } from "@/config/routes.config";
 import { MatchCVButton } from "@/features/ai/components/MatchCVButton";
+import { ApplySection } from "@/features/applications/components/ApplySection";
 
 const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -139,12 +140,12 @@ const JobDetailPage = () => {
                     Xem ứng viên ({job.applications})
                   </Button>
                 </>
-              ) : (
-                <>
-                  <Button variant="outline">Lưu tin</Button>
-                  <Button>Ứng tuyển ngay</Button>
-                </>
-              )}
+              ) : userRole === "candidate" ? (
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Ứng tuyển</h3>
+                  <ApplySection jobId={job.id} />
+                </div>
+              ) : null}
             </div>
           </div>
         </Container>
