@@ -5,6 +5,8 @@ import { StatusBadge } from "../components/StatusBadge";
 import { Link } from "react-router-dom";
 import { useGetMyApplications } from "../hooks/useGetMyApplication";
 import { useApplicationsFilter } from "../hooks/useApplicationsFilter";
+import { Select } from "@/shared/components/ui/Select";
+import type { ApplicationStatusValue } from "../types/application.type";
 
 export const MyApplicationsPage = () => {
   const { filter, updateFilter } = useApplicationsFilter();
@@ -19,8 +21,29 @@ export const MyApplicationsPage = () => {
     <Section>
       <Container>
         <h1 className="text-2xl font-bold mb-6">Đơn ứng tuyển của tôi</h1>
+
+        <div className="mb-4 w-48">
+          <Select
+            value={filter.status?.toString() || ""}
+            onChange={(e) =>
+              updateFilter({
+                status: e.target.value
+                  ? (Number(e.target.value) as ApplicationStatusValue)
+                  : undefined,
+              })
+            }
+            options={[
+              { value: "", label: "Tất cả trạng thái" },
+              { value: "1", label: "Chờ duyệt" },
+              { value: "2", label: "Đã xem" },
+              { value: "3", label: "Đạt" },
+              { value: "4", label: "Từ chối" },
+            ]}
+          />
+        </div>
+
         {isLoading ? (
-          <div className="space-y-3">{/* skeletons */}</div>
+          <div className="space-y-3">Loading...</div>
         ) : data?.data.length === 0 ? (
           <p className="text-center py-16 text-text-secondary">
             Bạn chưa ứng tuyển công việc nào.

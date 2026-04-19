@@ -8,15 +8,16 @@ import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { APPLICATION_QUERY_KEYS } from "./applicationQueryKeys";
 
-export const useUpdateApplicationStatus = (applicationId: string) => {
+export const useUpdateApplicationStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
     UpdateStatusResponse,
     AxiosError<{ message: string }>,
-    UpdateStatusRequest
+    { applicationId: string; data: UpdateStatusRequest }
   >({
-    mutationFn: (data) => applicationApi.updateStatus(applicationId, data),
+    mutationFn: ({ applicationId, data }) =>
+      applicationApi.updateStatus(applicationId, data),
     onSuccess: () => {
       toast.success("Cập nhật trạng thái thành công");
       queryClient.invalidateQueries({ queryKey: APPLICATION_QUERY_KEYS.all });

@@ -1,48 +1,119 @@
+import { Table, Button, Space, Tag } from "antd";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import type { JobListItem } from "../types/job.types";
-import { Link } from "react-router-dom";
+import type { FilterValue, SorterResult } from "antd/es/table/interface";
 
 type Props = {
   jobs: JobListItem[];
+  loading?: boolean;
   onDelete?: (id: string) => void;
-  isDeleting?: boolean;
+  pagination?: TablePaginationConfig;
+  onTableChange?: (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<JobListItem> | SorterResult<JobListItem>[],
+  ) => void;
 };
 
-export const JobTable = ({ jobs, onDelete, isDeleting }: Props) => {
-  const formatSalary = (min: number | null, max: number | null) => {
-    if (!min && !max) return "Thỏa thuận";
-    const fmt = (n: number) => `${(n / 1_000_000).toFixed(0)}M`;
-    if (min && max) return `${fmt(min)} – ${fmt(max)} VND`;
-    return "";
-  };
-  return (
-    <table className="w-full bg-background rounded-lg shadow">
-      <thead>
-        <tr className="text-left text-sm text-text-primary">
-          <th className="p-4">Title</th>
-          <th>Location</th>
-          <th>Type</th>
-          <th>Salary</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+export const JobTable = ({
+  jobs,
+  loading,
+  onDelete,
+  pagination,
+  onTableChange,
+}: Props) => {
+  const columns: ColumnsType<JobListItem> = [
+    {
+      title: "Tiêu đề",
+      dataIndex: "title",
+      key: "title",
+      render: (text, record) => (
+        <Link
+          to={ROUTES.JOB_DETAILS(record.id)}
+          className="font-medium hover:underline"
+        >
+          {text}
+        </Link>
+      ),
+      sorter: true,
+    },
+    {
+      title: "Địa điểm",
+      dataIndex: "location",
+      key: "location",
+      sorter: true,
+    },
+    {
+      title: "Hình thức",
+      dataIndex: "employmentType",
+      key: "employmentType",
+      filters: [
+        { text: "Full-time", value: "Full-time" },
+        { text: "Part-time", value: "Part-time" },
+        { text: "Remote", value: "Remote" },
+        { text: "Hybrid", value: "Hybrid" },
+        { text: "Contract", value: "Contract" },
+        { text: "Internship", value: "Internship" },
+      ],
+      filterMultiple: false,
+      render: (text) => <Tag color="blue">{text}</Tag>,
+    },
+    {
+      title: "Lương",
+      key: "salary",
+      render: (_, record) => {
+        const fmt = (n: number) => `${(n / 1_000_000).toFixed(0)}M`;
+        if (record.salaryMin && record.salaryMax)
+          return `${fmt(record.salaryMin)} – ${fmt(record.salaryMax)} VND`;
+        return "Thỏa thuận";
+      },
+    },
+    {
+      title: "Ứng viên",
+      key: "applicants",
+      render: (_, record) => (
+        <Link to={ROUTES.RECRUITER.APPLICANTS(record.id)}>
+          <Button icon={<UsergroupAddOutlined />} size="small">
+            Xem
+          </Button>
+        </Link>
+      ),
+    },
+    {
+      title: "Thao tác",
+      key: "actions",
+      render: (_, record) => (
+        <Space>
+          <Link to={ROUTES.RECRUITER.JOB_EDIT(record.id)}>
+            <Button icon={<EditOutlined />} size="small" />
+          </Link>
+          <Button
+            icon={<DeleteOutlined />}
+            size="small"
+            danger
+            onClick={() => onDelete?.(record.id)}
+          />
+        </Space>
+      ),
+    },
+  ];
 
-      <tbody>
-        {jobs.map((job) => (
-          <tr key={job.id} className="border-t">
-            <td className="p-4">{job.title}</td>
-            <td>{job.location}</td>
-            <td>{job.employmentType}</td>
-            <td>{formatSalary(job.salaryMin, job.salaryMax)}</td>
-            <td className="flex gap-2">
-              <Link to={ROUTES.RECRUITER.JOB_EDIT(job.id)}>Sửa</Link>
-              <button disabled={isDeleting} onClick={() => onDelete?.(job.id)}>
-                Xóa
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+  return (
+    <Table
+      columns={columns}
+      dataSource={jobs}
+      rowKey="id"
+      loading={loading}
+      pagination={pagination}
+      onChange={onTableChange}
+      scroll={{ x: 1000 }}
+    />
   );
 };

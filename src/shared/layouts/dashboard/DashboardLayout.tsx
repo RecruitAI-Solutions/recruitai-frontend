@@ -1,36 +1,37 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
-import { TopBar } from "./TopBar";
 import type { NavConfig } from "@/shared/types/NavConfig";
+import { Menu } from "lucide-react";
 
 interface DashboardLayoutProps {
-  navConfig: NavConfig; // ← THÊM PROP
+  navConfig: NavConfig;
 }
 
 export const DashboardLayout = ({ navConfig }: DashboardLayoutProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
+    <div className="flex min-h-screen">
+      {/* Sidebar cố định bên trái */}
       <Sidebar open={open} setOpen={setOpen} navConfig={navConfig} />
 
-      {/* Main content */}
+      {/* Main content — đẩy sang phải bằng ml-64 trên desktop */}
       <div className="flex-1 flex flex-col md:ml-64">
-        {/* Mobile menu button */}
+        {/* Mobile top bar */}
         <div className="md:hidden h-14 flex items-center px-4 border-b bg-surface">
-          <button onClick={() => setOpen(true)}>☰</button>
-          <span className="ml-4 font-semibold">{navConfig.roleDisplay}</span>
+          <button
+            onClick={() => setOpen(true)}
+            className="p-1 rounded hover:bg-gray-100"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <span className="ml-3 font-semibold text-sm">
+            {navConfig.roleDisplay}
+          </span>
         </div>
 
-        {/* TopBar (desktop) */}
-        <div className="hidden md:block">
-          <TopBar />
-        </div>
-
-        {/* Content - NO Container here, pages will use it */}
-        <main className="flex-1">
+        <main className="flex-1 p-4 md:p-6 bg-background">
           <Outlet />
         </main>
       </div>

@@ -1,76 +1,197 @@
+import { Table, Tag, Button, Space, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import type {
+  ApplicationStatusLabel,
+  ApplicationStatusValue,
+  JobApplicationItem,
+  JobApplicationsParams,
+} from "../types/application.type";
 import { StatusBadge } from "./StatusBadge";
-import { Button } from "@/shared/components/ui/Button";
-import { Download } from "lucide-react";
-import type { JobApplicationItem } from "../types/application.type";
+import type { TablePaginationConfig } from "antd";
+import type { FilterValue, SorterResult } from "antd/es/table/interface";
+import Select from "antd/es/select";
+import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
 
-type Props = { applications: JobApplicationItem[]; jobId: string };
+const { Text } = Typography;
+const { Option } = Select;
 
-export const ApplicationTable = ({ applications }: Props) => {
+type Props = {
+  applications: JobApplicationItem[];
+  loading?: boolean;
+  pagination: {
+    current: number;
+    pageSize: number;
+    total: number;
+    onChange: (page: number, pageSize: number) => void;
+  };
+  onFilterChange: (filters: Partial<JobApplicationsParams>) => void;
+};
+
+export const ApplicationTable = ({
+  applications,
+  loading,
+  pagination,
+  onFilterChange,
+}: Props) => {
+  const { mutate: updateStatus, isPending: isUpdating } =
+    useUpdateApplicationStatus();
+
+  const handleStatusChange = (
+    applicationId: string,
+    statusValue: ApplicationStatusValue,
+  ) => {
+    updateStatus({ applicationId, data: { status: statusValue } });
+  };
+
+  const columns: ColumnsType<JobApplicationItem> = [
+    {
+      title: "Ứng viên",
+      dataIndex: "candidateName",
+      key: "candidateName",
+      render: (_, record) => (
+        <Link to={`/recruiter/applications/${record.applicationId}`}>
+          <Text strong>{record.candidateName}</Text>
+          <br />
+          <Text type="secondary">{record.candidateEmail}</Text>
+        </Link>
+      ),
+      sorter: true,
+    },
+    {
+      title: "Match",
+      key: "match",
+      render: (_, record) => (
+        <span>
+          <Text strong>{record.matchPercentage}%</Text>
+          <Text type="secondary" className="ml-1">
+            ({record.matchedSkillCount}/{record.requiredSkillCount})
+          </Text>
+        </span>
+      ),
+      sorter: true,
+    },
+    {
+      title: "Kỹ năng",
+      key: "skills",
+      render: (_, record) => (
+        <div style={{ maxWidth: 250 }}>
+          <div>
+            {record.matchedSkills.slice(0, 3).map((s) => (
+              <Tag color="green" key={s}>
+                {s}
+              </Tag>
+            ))}
+            {record.matchedSkills.length > 3 && (
+              <Tag>+{record.matchedSkills.length - 3}</Tag>
+            )}
+          </div>
+          {record.missingSkills.length > 0 && (
+            <div className="mt-1">
+              {record.missingSkills.slice(0, 3).map((s) => (
+                <Tag color="red" key={s}>
+                  {s}
+                </Tag>
+              ))}
+              {record.missingSkills.length > 3 && (
+                <Tag>+{record.missingSkills.length - 3}</Tag>
+              )}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        { text: "Chờ duyệt", value: 1 },
+        { text: "Đã xem", value: 2 },
+        { text: "Đạt", value: 3 },
+        { text: "Từ chối", value: 4 },
+      ],
+      filterMultiple: false,
+      render: (status: ApplicationStatusValue, record) => (
+        <Space>
+          <StatusBadge status={status} />
+          <Select
+            size="small"
+            style={{ width: 120 }}
+            placeholder="Cập nhật"
+            value={undefined}
+            onChange={(value: ApplicationStatusValue) =>
+              handleStatusChange(record.applicationId, value)
+            }
+            disabled={isUpdating}
+          >
+            <Option value={1}>Chờ duyệt</Option>
+            <Option value={2}>Đã xem</Option>
+            <Option value={3}>Đạt</Option>
+            <Option value={4}>Từ chối</Option>
+          </Select>
+        </Space>
+      ),
+    },
+    {
+      title: "Ngày ứng tuyển",
+      dataIndex: "appliedAt",
+      key: "appliedAt",
+      render: (date) => new Date(date).toLocaleDateString("vi-VN"),
+      sorter: true,
+    },
+    {
+      title: "",
+      key: "actions",
+      render: (_, record) => (
+        <Space>
+          <a href={record.cvDownloadUrl} download>
+            <Button icon={<DownloadOutlined />} size="small" />
+          </a>
+          <Link to={`/recruiter/applications/${record.applicationId}`}>
+            <Button icon={<EyeOutlined />} size="small" />
+          </Link>
+        </Space>
+      ),
+    },
+  ];
+
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter:
+      | SorterResult<JobApplicationItem>
+      | SorterResult<JobApplicationItem>[],
+  ) => {
+    const s = Array.isArray(sorter) ? sorter[0] : sorter;
+    const rawStatus = filters.status?.[0];
+
+    onFilterChange({
+      page: pagination.current,
+      pageSize: pagination.pageSize,
+      status:
+        rawStatus !== undefined
+          ? (Number(rawStatus) as ApplicationStatusValue)
+          : undefined,
+      sortBy: s?.field === "match" ? "matchPercentage" : "appliedAt",
+      sortOrder: s?.order === "ascend" ? "asc" : "desc",
+    });
+  };
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b text-left text-sm text-text-secondary">
-            <th className="pb-3">Ứng viên</th>
-            <th className="pb-3">Match</th>
-            <th className="pb-3">Kỹ năng</th>
-            <th className="pb-3">Trạng thái</th>
-            <th className="pb-3">Ngày ứng tuyển</th>
-            <th className="pb-3"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((app) => (
-            <tr key={app.applicationId} className="border-b">
-              <td className="py-3">
-                <Link
-                  to={`/recruiter/applications/${app.applicationId}`}
-                  className="hover:underline"
-                >
-                  <p className="font-medium">{app.candidateName}</p>
-                  <p className="text-sm text-text-secondary">
-                    {app.candidateEmail}
-                  </p>
-                </Link>
-              </td>
-              <td className="py-3">
-                <span className="font-semibold text-primary">
-                  {app.matchPercentage}%
-                </span>
-                <span className="text-xs text-text-secondary ml-1">
-                  ({app.matchedSkillCount}/{app.requiredSkillCount})
-                </span>
-              </td>
-              <td className="py-3">
-                <div className="max-w-xs">
-                  <p className="text-xs text-green-600 truncate">
-                    {app.matchedSkills.join(", ")}
-                  </p>
-                  {app.missingSkills.length > 0 && (
-                    <p className="text-xs text-red-600 truncate">
-                      {app.missingSkills.join(", ")}
-                    </p>
-                  )}
-                </div>
-              </td>
-              <td className="py-3">
-                <StatusBadge status={app.status} />
-              </td>
-              <td className="py-3 text-sm">
-                {new Date(app.appliedAt).toLocaleDateString("vi-VN")}
-              </td>
-              <td className="py-3">
-                <a href={app.cvDownloadUrl} download>
-                  <Button variant="outline">
-                    <Download className="w-3 h-3" />
-                  </Button>
-                </a>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table
+      columns={columns}
+      dataSource={applications}
+      rowKey="applicationId"
+      loading={loading}
+      pagination={{
+        ...pagination,
+        showSizeChanger: true,
+        pageSizeOptions: ["5", "10", "20"],
+      }}
+      onChange={handleTableChange}
+      scroll={{ x: 1000 }}
+    />
   );
 };

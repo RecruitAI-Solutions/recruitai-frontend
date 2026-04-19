@@ -12,7 +12,9 @@ type Props = { jobId: string };
 
 export const ApplySection = ({ jobId }: Props) => {
   const { filter } = useCVFilter();
-  const { data: cvData } = useGetMyCVs({ ...filter, pageSize: 100 });
+  const { data: cvData } = useGetMyCVs({
+    filters: { ...filter, pageSize: 100 },
+  });
   const analyzedCVs =
     cvData?.data?.filter((cv) => cv.status === CV_STATUS.ANALYZED) ?? [];
   const [selectedCVId, setSelectedCVId] = useState<string>(

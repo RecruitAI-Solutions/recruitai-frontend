@@ -148,41 +148,60 @@ export type JobApplicationsParams = {
 
 //UPDATE STATUS
 export type UpdateStatusRequest = {
-  status: ApplicationStatusLabel;
+  status: ApplicationStatusValue;
   notes?: string;
 };
 
 export type UpdateStatusResponse = {
   applicationId: string;
-  status: ApplicationStatusLabel;
+  status: ApplicationStatusValue;
   notes: string | null;
   updatedAt: string;
 };
 
 //DETAILS RESPONSE
+
 export type ApplicationDetailResponse = {
   id: string;
-  jobId: string;
-  jobTitle: string;
-  jobDescription: string;
-  jobRequirements: string;
-  jobLocation: string;
-  jobSalaryMin: number | null;
-  jobSalaryMax: number | null;
-  cvId: string;
-  cvName: string;
-  candidateId: string;
-  candidateName: string;
-  candidateEmail: string;
-  candidatePhone: string;
-  matchPercentage: number;
-  matchedSkillCount: number;
-  requiredSkillCount: number;
-  matchedSkills: MatchedSkill[];
-  missingSkills: MatchedSkill[];
+  job: {
+    id: string;
+    title: string;
+    description: string;
+    requirements: string;
+    location: string;
+    salaryMin: number | null;
+    salaryMax: number | null;
+    currency: number;
+    employmentType: number;
+    experienceLevel: number;
+    department: string;
+    benefits: string;
+    expirationDate: string;
+  };
+  cv: {
+    id: string;
+    fileName: string;
+    fileSize: number;
+    uploadedAt: string;
+    downloadUrl: string;
+  };
+  candidate: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    avatarUrl: string | null;
+  };
+  matchResult: {
+    matchPercentage: number;
+    matchedSkillCount: number;
+    requiredSkillCount: number;
+    matchedSkills: MatchedSkill[];
+    missingSkills: MatchedSkill[];
+    calculatedAt: string;
+  };
   status: ApplicationStatusValue;
   appliedAt: string;
   reviewedAt: string | null;
   notes: string | null;
-  cvDownloadUrl: string;
 };

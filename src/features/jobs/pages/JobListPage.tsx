@@ -10,7 +10,10 @@ import { Select } from "@/shared/components/ui/Select";
 import { JobSearch } from "../components/JobSearch";
 import JobFilterSidebar from "../components/JobFilterSidebar";
 import { useAppSelector } from "@/app/hooks";
-import { selectUserRole } from "@/features/auth/slices/authSlice";
+import {
+  selectIsAuthenticated,
+  selectUserRole,
+} from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
 import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
 import { useMemo } from "react";
@@ -18,16 +21,20 @@ import { useCallback } from "react";
 
 export const JobListPage = () => {
   const userRole = useAppSelector(selectUserRole);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isCandidate = userRole === "candidate";
 
   const { filter, updateFilter } = useFilter();
   const { data, isLoading, isFetching } = useGetJobs(filter);
 
   const { data: cvData } = useGetMyCVs({
-    pageSize: 1,
-    status: [3],
-    sortBy: "uploadedAt",
-    sortOrder: "desc",
+    filters: {
+      pageSize: 1,
+      status: [3],
+      sortBy: "uploadedAt",
+      sortOrder: "desc",
+    },
+    enabled: isAuthenticated,
   });
   const primaryCvId = isCandidate ? (cvData?.data[0]?.id ?? "") : "";
 

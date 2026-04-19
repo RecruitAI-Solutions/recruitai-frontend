@@ -5,8 +5,7 @@ export const CandidateLayout = () => {
   return (
     <div className="min-h-screen bg-background">
       <CandidateHeader />
-
-      <main className=" py-6">
+      <main className="py-6 md:p-6">
         <Outlet />
       </main>
     </div>

@@ -2,13 +2,13 @@ import { type RouteObject } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { RoleBasedRoute } from "../RoleBasedRoute";
 import { DashboardLayout } from "@/shared/layouts/dashboard/DashboardLayout";
-import { recruiterNavConfig } from "@/shared/layouts/configs";
 import RecruiterDashboard from "@/features/jobs/pages/RecruiterDashboard";
 import { MyJobsPage } from "@/features/jobs/pages/MyJobPage";
 import { CreateJobPage } from "@/features/jobs/pages/CreateJobPage";
 import { EditJobPage } from "@/features/jobs/pages/EditJobPage";
 import { JobApplicationsPage } from "@/features/applications/pages/JobApplicationsPage";
 import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
+import { recruiterNavConfig } from "@/shared/layouts/configs";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
