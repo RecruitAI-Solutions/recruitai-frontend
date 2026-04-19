@@ -1,4 +1,4 @@
-const SKILL_BASE = "/api/v1/skills";
+const SKILL_BASE = "/v1/skills";
 
 export const SKILL_ENDPOINTS = {
   LIST: SKILL_BASE,

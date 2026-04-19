@@ -1,4 +1,4 @@
-const APP_BASE = "/api/v1/Applications";
+const APP_BASE = "/v1/Applications";
 
 export const APPLICATION_ENDPOINTS = {
   APPLY: (jobId: string) => `${APP_BASE}/jobs/${jobId}/apply`,

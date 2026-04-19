@@ -1,4 +1,4 @@
-const AUTH_BASE = "/api/v1/auth";
+const AUTH_BASE = "/v1/auth";
 
 export const AUTH_ENDPOINTS = {
   LOGIN: `${AUTH_BASE}/login`,

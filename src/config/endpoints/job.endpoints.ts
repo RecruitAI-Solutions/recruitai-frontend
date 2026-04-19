@@ -1,4 +1,4 @@
-const JOB_BASE = "/api/v1/jobs";
+const JOB_BASE = "/v1/jobs";
 
 export const JOB_ENDPOINTS = {
   LIST: JOB_BASE,
