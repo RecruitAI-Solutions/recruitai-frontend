@@ -18,8 +18,8 @@ export const jobApi = {
     const params = {
       title: filters?.title,
       location: filters?.location,
-      salaryMin: filters?.minSalary,
-      salaryMax: filters?.maxSalary,
+      minSalary: filters?.minSalary,
+      maxSalary: filters?.maxSalary,
       employmentType: filters?.employmentType,
       experienceLevel: filters?.experienceLevel,
       skill: filters?.skill,
@@ -59,8 +59,8 @@ export const jobApi = {
     const params = {
       title: filters?.title,
       location: filters?.location,
-      salaryMin: filters?.minSalary,
-      salaryMax: filters?.maxSalary,
+      minSalary: filters?.minSalary,
+      maxSalary: filters?.maxSalary,
       employmentType: filters?.employmentType,
       experienceLevel: filters?.experienceLevel,
       skill: filters?.skill,

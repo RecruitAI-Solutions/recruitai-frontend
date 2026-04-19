@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { authApi, type RegisterRequest } from "../services/authApi";
 import { useAppDispatch } from "@/app/hooks";
 import { setCredentials } from "../slices/authSlice";
-import type { AxiosError } from "axios";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -29,11 +28,12 @@ export const useRegister = () => {
       navigate("/login", { replace: true });
     },
 
-    onError: (error: AxiosError) => {
+    onError: (error) => {
       const message = error.message || "Đăng ký thất bật";
       toast.error(message || "Đăng ký thất bại", {
         duration: 3000,
       });
+      console.log(error.response?.data.message);
     },
   });
 };
