@@ -1,4 +1,4 @@
-const CV_BASE = "/api/v1/CV";
+const CV_BASE = "/v1/CV";
 
 export const CV_ENDPOINTS = {
   UPLOAD: `${CV_BASE}/upload`,

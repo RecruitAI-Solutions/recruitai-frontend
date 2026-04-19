@@ -90,7 +90,8 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
   return (
     <aside
       className={cn(
-        "w-full md:w-72 bg-surface p-5 rounded-xl border border-border h-fit",
+        "w-full md:w-72 bg-surface p-5 rounded-xl border border-border",
+        "sticky top-[16px] max-h-[calc(100vh-100px)] overflow-auto will-change-transform transition-transform duration-200 ease-out",
         className,
       )}
     >

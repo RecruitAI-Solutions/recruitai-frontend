@@ -14,11 +14,11 @@ export const LogoutButton = ({ variant = "full", className = "" }) => {
       <button
         onClick={handleLogout}
         disabled={isPending}
-        className={`p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 ${className}`}
+        className={`flex items-center gap-1 text-error p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 ${className}`}
         title="Đăng xuất"
       >
         <svg
-          className="w-5 h-5 text-gray-700"
+          className="w-5 h-5 text-error"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -30,6 +30,7 @@ export const LogoutButton = ({ variant = "full", className = "" }) => {
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
           />
         </svg>
+        <span>Đăng xuất</span>
       </button>
     );
   }

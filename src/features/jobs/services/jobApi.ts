@@ -52,9 +52,24 @@ export const jobApi = {
       totalPages,
     };
   },
+
   getMyJobs: async (
-    params?: Record<string, unknown>,
+    filters?: JobFilters,
   ): Promise<{ data: JobListItem[]; total: number }> => {
+    const params = {
+      title: filters?.title,
+      location: filters?.location,
+      salaryMin: filters?.minSalary,
+      salaryMax: filters?.maxSalary,
+      employmentType: filters?.employmentType,
+      experienceLevel: filters?.experienceLevel,
+      skill: filters?.skill,
+      sortBy: filters?.sortBy,
+      sortOrder: filters?.sortOrder,
+      page: filters?.page,
+      pageSize: filters?.pageSize,
+    };
+
     const response = await axiosInstance.get<JobListPaginatedResponse>(
       JOB_ENDPOINTS.MY_JOBS,
       { params },

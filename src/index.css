@@ -44,6 +44,7 @@
     @apply font-sans;
     background-color: var(--color-background);
     color: var(--color-text-primary);
+    scroll-behavior: smooth;
   }
 
   h1 {

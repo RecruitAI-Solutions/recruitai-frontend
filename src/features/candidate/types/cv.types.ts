@@ -1,10 +1,11 @@
 import { formatFileSize } from "@/lib/utils";
 
-// CV Status — từ DB Schema: 1=Pending, 2=Processing, 3=Completed, 4=Failed
 export const CV_STATUS = {
   PENDING: "Pending",
+  UPLOADED: "Uploaded",
   PROCESSING: "Processing",
   COMPLETED: "Completed",
+  ANALYZED: "Analyzed",
   FAILED: "Failed",
 } as const;
 
@@ -23,7 +24,6 @@ export const normalizeStatus = (
     if (matched) return matched;
   }
   if (typeof status === "string") {
-    // Tìm trong danh sách values của CV_STATUS (không phân biệt hoa thường)
     const matched = Object.values(CV_STATUS).find(
       (v) => v.toLowerCase() === status.toLowerCase(),
     );
@@ -33,9 +33,11 @@ export const normalizeStatus = (
 
   const map: Record<number, CVStatus> = {
     1: CV_STATUS.PENDING,
-    2: CV_STATUS.PROCESSING,
-    3: CV_STATUS.COMPLETED,
-    4: CV_STATUS.FAILED,
+    2: CV_STATUS.UPLOADED,
+    3: CV_STATUS.PROCESSING,
+    4: CV_STATUS.COMPLETED,
+    5: CV_STATUS.ANALYZED,
+    6: CV_STATUS.FAILED,
   };
 
   return map[status] ?? CV_STATUS.PENDING;

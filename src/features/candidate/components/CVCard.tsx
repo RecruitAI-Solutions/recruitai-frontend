@@ -19,9 +19,10 @@ export const CVCard = ({ cv }: Props) => {
   const { mutate: analyze, isPending: isAnalyzing } = useAnalyzeCV();
   const { data: analysis } = useAnalysisResult(
     cv.id,
-    cv.status === CV_STATUS.COMPLETED,
+    cv.status === CV_STATUS.COMPLETED || cv.status === CV_STATUS.ANALYZED,
   );
 
+  console.log(cv);
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString("vi-VN");
 
   const handleAnalyze = (e: React.MouseEvent) => {

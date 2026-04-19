@@ -1,8 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import type { NavConfig } from "@/shared/types/NavConfig";
-import { usePermission } from "@/lib/usePermission";
+import { SidebarNav } from "@/shared/components/navigation/SidebarNav";
 import { UserMenu } from "@/shared/components/ui/UserMenu";
 
 type SidebarProps = {
@@ -11,21 +10,12 @@ type SidebarProps = {
   navConfig: NavConfig;
 };
 
+const accentColors = {
+  green: { dot: "bg-green-500", label: "text-green-600" },
+  purple: { dot: "bg-purple-500", label: "text-purple-600" },
+};
+
 export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
-  const location = useLocation();
-  const { canAny } = usePermission();
-
-  const accentColors = {
-    green: {
-      dot: "bg-green-500",
-      active: "bg-green-50 text-green-700",
-    },
-    purple: {
-      dot: "bg-purple-500",
-      active: "bg-purple-50 text-purple-700",
-    },
-  };
-
   const colors = accentColors[navConfig.accentColor];
 
   return (
@@ -40,47 +30,41 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
 
       <aside
         className={cn(
-          "fixed flex flex-col h-screen z-100 top-0 left-0 w-64 bg-white border-r transition-transform",
+          "fixed flex flex-col h-screen z-50 top-0 left-0 w-64 bg-white border-r transition-transform",
           open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
-        {/* Logo */}
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-bold text-[var(--color-primary)]">RecruitAI</h2>
-
-          {/* Role Badge */}
-          <div className="flex items-center gap-2 mt-2">
-            <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
+        {/* Logo + Role Badge */}
+        <div className="px-6 py-4 border-b shrink-0">
+          <h2 className="font-bold text-primary">JobPortal</h2>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className={cn("w-2 h-2 rounded-full", colors.dot)} />
             <p className="text-sm text-gray-500">{navConfig.roleDisplay}</p>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-1 text-md flex-1 overflow-y-auto">
-          {navConfig.navItems.map((item) => {
-            // Check permission before rendering
+        {/* Navigation — đọc từ NAV_CONFIG qua SidebarNav */}
+        <div className="flex-1 overflow-y-auto">
+          <SidebarNav />
+        </div>
 
-            if (item.permissions && !canAny(item.permissions)) return null;
-            const isActive = location.pathname === item.path;
+        {/* Access Level (admin) */}
+        {navConfig.role === "admin" && (
+          <div className="px-4 py-3 border-t">
+            <p className="text-xs font-semibold text-gray-400 mb-1">
+              Access Level
+            </p>
+            <p className={cn("text-sm font-semibold", colors.label)}>
+              Full Administrator
+            </p>
+            <div className="mt-1.5 h-1.5 rounded-full bg-purple-200">
+              <div className="h-full w-full rounded-full bg-purple-500" />
+            </div>
+          </div>
+        )}
 
-            return (
-              <Link key={item.path} to={item.path}>
-                <div
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition",
-                    isActive
-                      ? colors.active
-                      : "hover:bg-gray-100 text-gray-700",
-                  )}
-                >
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </div>
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="p-4">
+        {/* User Menu */}
+        <div className="px-4 py-4 border-t shrink-0">
           <UserMenu />
         </div>
       </aside>

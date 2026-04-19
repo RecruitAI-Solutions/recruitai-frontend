@@ -9,6 +9,7 @@ import { useDownloadCV } from "../hooks/useDownloadCV";
 import { useAnalyzeCV } from "@/features/ai/hooks/useAnalyzeCV";
 import { useAnalysisResult } from "@/features/ai/hooks/useAnalysisResult";
 import { ChevronLeft, Download, RefreshCw, Loader2 } from "lucide-react";
+import { CV_STATUS } from "../types/cv.types";
 
 export const CVDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -87,10 +88,12 @@ export const CVDetailPage = () => {
               <Download className="w-4 h-4 mr-2" />
               Tải xuống
             </Button>
-            <Button onClick={handleAnalyze} isLoading={isAnalyzing}>
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Phân tích CV
-            </Button>
+            {cv.status === CV_STATUS.COMPLETED && (
+              <Button onClick={handleAnalyze} isLoading={isAnalyzing}>
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Phân tích CV
+              </Button>
+            )}
           </div>
 
           {/* Kết quả phân tích AI */}

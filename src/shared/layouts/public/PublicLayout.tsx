@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { PublicHeader } from "./PublicHeader";
+import { AppHeader } from "./AppHeader";
 
 export const PublicLayout = () => {
   return (
     <div className="min-h-screen bg-background">
-      <PublicHeader />
-
-      <main className="py-8">
+      <AppHeader variant="public" />
+      <main>
         <Outlet />
       </main>
     </div>

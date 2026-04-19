@@ -17,9 +17,11 @@ export const ROUTES = {
     PROFILE: "/candidate/profile",
     JOBS: "/candidate/jobs",
     JOB_DETAIL: (id: string) => `/candidate/jobs/${id}`,
-    APPLICATION: "/candidate/application",
-    APPLICATION_DETAIL: (id: string) => `/candidate/application/${id}`,
+    APPLICATIONS: "/candidate/applications",
+    APPLICATION_DETAIL: (id: string) => `/candidate/applications/${id}`,
     CV_MANAGEMENT: "/candidate/cv",
+    CV_DETAIL: (id: string) => `/candidate/cv/${id}`,
+    CV_MATCHING_JOBS: (cvId: string) => `/candidate/cv/${cvId}/matching-jobs`,
     SETTINGS: "/candidate/settings",
   },
 
@@ -31,8 +33,8 @@ export const ROUTES = {
     JOB_EDIT: (id: string) => `/recruiter/jobs/${id}/edit`,
     JOB_DETAIL: (id: string) => `/recruiter/jobs/${id}`,
     APPLICANTS: (jobId: string) => `/recruiter/jobs/${jobId}/applicants`,
-    APPLICANT_DETAIL: (jobId: string, applicantId: string) =>
-      `/recruiter/jobs/${jobId}/applicants/${applicantId}`,
+    APPLICATION_DETAIL: (applicationId: string) =>
+      `/recruiter/applications/${applicationId}`,
     COMPANY_PROFILE: "/recruiter/company",
     SETTINGS: "/recruiter/settings",
   },

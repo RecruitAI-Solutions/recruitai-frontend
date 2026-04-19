@@ -2,13 +2,21 @@ import { Input } from "@/shared/components/ui/Input";
 import { Select } from "@/shared/components/ui/Select";
 import { Button } from "@/shared/components/ui/Button";
 import { useCVFilter } from "../hooks/useCVFilter";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/lib/useDebounce";
 
 export const CVFilterBar = () => {
   const { filter, updateFilter, resetFilter } = useCVFilter();
+  const [fileNameInput, setFileNameInput] = useState(filter.fileName || "");
 
-  const handleFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateFilter({ fileName: e.target.value || undefined });
-  };
+  // Debounce giá trị nhập
+  const debouncedFileName = useDebounce(fileNameInput, 300);
+
+  useEffect(() => {
+    if (debouncedFileName !== filter.fileName) {
+      updateFilter({ fileName: debouncedFileName || undefined });
+    }
+  }, [debouncedFileName, filter.fileName, updateFilter]);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
@@ -28,9 +36,10 @@ export const CVFilterBar = () => {
       <div className="flex-1 min-w-[200px]">
         <label className="block text-sm font-medium mb-1">Tên file</label>
         <Input
+          key={filter.fileName}
           placeholder="Tìm theo tên file..."
-          value={filter.fileName || ""}
-          onChange={handleFileNameChange}
+          defaultValue={filter.fileName || ""}
+          onChange={(e) => setFileNameInput(e.target.value)}
         />
       </div>
       <div className="w-40">

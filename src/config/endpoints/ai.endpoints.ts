@@ -1,4 +1,4 @@
-const AI_BASE = "/api/v1/AI";
+const AI_BASE = "/v1/AI";
 
 export const AI_ENDPOINTS = {
   ANALYZE_CV: `${AI_BASE}/analyze-cv`,
