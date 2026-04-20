@@ -28,9 +28,24 @@ export const useRegister = () => {
       navigate("/login", { replace: true });
     },
 
-    onError: (error) => {
-      const message = error.message || "Đăng ký thất bật";
-      toast.error(message || "Đăng ký thất bại", {
+    onError: (error: AxiosError<{ message: string; errors?: Record<string, string[]> }>) => {
+      console.log("Register error:", error);
+
+      // Cách 1: Lấy message từ response
+      const message = error?.response?.data?.message
+        || error?.message
+        || "Đăng ký thất bại";
+
+      // Cách 2: Lấy chi tiết lỗi từ validation
+      const errors = error?.response?.data?.errors;
+      if (errors) {
+        const firstError = Object.values(errors)[0]?.[0];
+        toast.error(firstError || message);
+      } else {
+        toast.error(message);
+      }
+
+      toast.error(message, {
         duration: 3000,
       });
       console.log(error.response?.data.message);
