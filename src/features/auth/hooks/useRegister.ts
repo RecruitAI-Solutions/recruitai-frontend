@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { authApi, type RegisterRequest } from "../services/authApi";
 import { useAppDispatch } from "@/app/hooks";
 import { setCredentials } from "../slices/authSlice";
+import type { AxiosError } from "axios";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -31,24 +32,20 @@ export const useRegister = () => {
     onError: (error: AxiosError<{ message: string; errors?: Record<string, string[]> }>) => {
       console.log("Register error:", error);
 
-      // Cách 1: Lấy message từ response
-      const message = error?.response?.data?.message
-        || error?.message
-        || "Đăng ký thất bại";
+      let message = error?.response?.data?.message || error?.message || "Đăng ký thất bại";
 
-      // Cách 2: Lấy chi tiết lỗi từ validation
       const errors = error?.response?.data?.errors;
       if (errors) {
-        const firstError = Object.values(errors)[0]?.[0];
-        toast.error(firstError || message);
-      } else {
-        toast.error(message);
+        const firstKey = Object.keys(errors)[0];
+        if (firstKey) {
+          const firstError = errors[firstKey]?.[0];
+          if (firstError) {
+            message = firstError;
+          }
+        }
       }
 
-      toast.error(message, {
-        duration: 3000,
-      });
-      console.log(error.response?.data.message);
+      toast.error(message, { duration: 3000 });
     },
   });
 };
