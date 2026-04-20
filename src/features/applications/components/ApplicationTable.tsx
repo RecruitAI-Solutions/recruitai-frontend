@@ -3,7 +3,6 @@ import type { ColumnsType } from "antd/es/table";
 import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import type {
-  ApplicationStatusLabel,
   ApplicationStatusValue,
   JobApplicationItem,
   JobApplicationsParams,

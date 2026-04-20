@@ -44,10 +44,9 @@ export const ROUTES = {
     USERS: "/admin/users",
     USER_DETAIL: (id: string) => `/admin/users/${id}`,
     JOBS: "/admin/jobs",
-    CATEGORIES: "/admin/categories",
-    REPORTS: "/admin/reports",
-    SETTINGS: "/admin/settings",
-    ANALYTICS: "/admin/analytics",
+    APPLICATIONS: "/admin/applications",
+    SKILLS: "/admin/skills",
+    AUDIT_LOGS: "/admin/audit-logs",
   },
 
   NOTFOUND: "/404",
