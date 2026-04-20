@@ -8,8 +8,6 @@ import {
   Plus,
   Users,
   BarChart,
-  Settings,
-  Key,
   FolderOpen,
 } from "lucide-react";
 import { ROUTES } from "./routes.config";
@@ -124,7 +122,7 @@ export const NAV_CONFIG: NavGroup[] = [
   },
   // ADMIN SIDEBAR
   {
-    title: "MANAGEMENT",
+    title: "ADMIN",
     roles: ["admin"],
     layout: "sidebar",
     items: [
@@ -134,30 +132,29 @@ export const NAV_CONFIG: NavGroup[] = [
         icon: <LayoutDashboard className="w-4 h-4" />,
       },
       {
-        label: "Users",
+        label: "Người dùng",
         to: ROUTES.ADMIN.USERS,
         icon: <Users className="w-4 h-4" />,
       },
-      { label: "Roles", to: "/admin/roles", icon: <Key className="w-4 h-4" /> },
       {
-        label: "Jobs",
+        label: "Việc làm",
         to: ROUTES.ADMIN.JOBS,
         icon: <Briefcase className="w-4 h-4" />,
       },
+      // {
+      //   label: "Đơn ứng tuyển",
+      //   to: "/admin/applications",
+      //   icon: <FileUser className="w-4 h-4" />,
+      // },
       {
-        label: "CV",
-        to: "/admin/cv",
+        label: "Kỹ năng",
+        to: "/admin/skills",
         icon: <FolderOpen className="w-4 h-4" />,
       },
       {
-        label: "Analytics",
-        to: ROUTES.ADMIN.ANALYTICS,
+        label: "Audit Logs",
+        to: "/admin/audit-logs",
         icon: <BarChart className="w-4 h-4" />,
-      },
-      {
-        label: "Settings",
-        to: ROUTES.ADMIN.SETTINGS,
-        icon: <Settings className="w-4 h-4" />,
       },
     ],
   },
