@@ -12,8 +12,8 @@ export type EmploymentTypeValue =
   (typeof EMPLOYMENT_TYPE)[keyof typeof EMPLOYMENT_TYPE];
 
 export type EmploymentTypeLabel =
-  | "Full-time"
-  | "Part-time"
+  | "FullTime"
+  | "PartTime"
   | "Remote"
   | "Hybrid"
   | "Contract"
@@ -23,8 +23,8 @@ export const employmentTypeMap: Record<
   EmploymentTypeValue,
   EmploymentTypeLabel
 > = {
-  1: "Full-time",
-  2: "Part-time",
+  1: "FullTime",
+  2: "PartTime",
   3: "Remote",
   4: "Hybrid",
   5: "Contract",
@@ -76,13 +76,12 @@ export const normalizeExperienceLevel = (
   return ExperienceLevelMap[value as ExperienceLevelValue] ?? "Entry";
 };
 
-// Thêm vào job.types.ts:
 export const EMPLOYMENT_TYPE_TO_VALUE: Record<
   EmploymentTypeLabel,
   EmploymentTypeValue
 > = {
-  "Full-time": 1,
-  "Part-time": 2,
+  FullTime: 1,
+  PartTime: 2,
   Remote: 3,
   Hybrid: 4,
   Contract: 5,
@@ -128,9 +127,12 @@ export type JobListItemResponse = {
   salaryMin: number | null;
   salaryMax: number | null;
   currency: number;
+  currencyName?: string;
   skillIds?: number[];
   employmentType: EmploymentTypeValue;
+  employmentTypeName?: string;
   experienceLevel: ExperienceLevelValue;
+  experienceLevelName?: string;
   recruiterName: string;
   createdAt: string;
   expirationDate: string;
@@ -220,7 +222,7 @@ export type JobListItem = {
   createdAt: string;
   expirationDate: string;
   isActive: boolean;
-  skillNames: string[];
+  skillNames?: string[];
 };
 
 export type Job = {
@@ -258,8 +260,12 @@ export const transformJobListItem = (
   location: data.location,
   salaryMin: data.salaryMin,
   salaryMax: data.salaryMax,
-  employmentType: normalizeEmploymentType(data.employmentType),
-  experienceLevel: normalizeExperienceLevel(data.experienceLevel),
+  employmentType:
+    (data.employmentTypeName as EmploymentTypeLabel) ||
+    normalizeEmploymentType(data.employmentType),
+  experienceLevel:
+    (data.experienceLevelName as ExperienceLevelLabel) ||
+    normalizeExperienceLevel(data.experienceLevel),
   recruiterName: data.recruiterName,
   createdAt: data.createdAt,
   expirationDate: data.expirationDate,
@@ -303,7 +309,9 @@ export type JobFilters = {
   maxSalary?: number;
   employmentType?: string;
   experienceLevel?: string;
+  skills?: string[];
   skill?: string;
+  matchAllSkills?: boolean;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   page?: number;
