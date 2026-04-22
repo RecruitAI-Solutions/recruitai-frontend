@@ -3,7 +3,7 @@ import {
   type CV,
   type CVUploadResponse,
   transformCVUpload,
-  type CVListPaginatedResponse,
+  type CVListResponse as CVListPaginatedResponse,
   transformCVItem,
   type CVDetailResponse,
 } from "../types/cv.types";
@@ -24,13 +24,13 @@ export const cvApi = {
       },
     );
 
-    console.log(response.data);
+    // console.log(response.data);
     return transformCVUpload(response.data);
   },
   getMyCVs: async (params?: {
     page?: number;
     pageSize?: number;
-    status?: number[];
+    status?: number;
     fileName?: string;
     fromDate?: string;
     toDate?: string;

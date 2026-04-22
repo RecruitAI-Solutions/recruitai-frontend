@@ -8,7 +8,7 @@ import { PERMISSIONS } from "@/config/permissions.constants";
 export const CVList = () => {
   const { can } = usePermission();
   const { filter, updateFilter } = useCVFilter();
-  const { data: response, isLoading, isError } = useGetMyCVs(filter);
+  const { data: response, isLoading, isError } = useGetMyCVs({ filters: filter });
 
   if (!can(PERMISSIONS.VIEW_OWN_CVS)) return null;
 

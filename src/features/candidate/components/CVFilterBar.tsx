@@ -2,25 +2,41 @@ import { Input } from "@/shared/components/ui/Input";
 import { Select } from "@/shared/components/ui/Select";
 import { Button } from "@/shared/components/ui/Button";
 import { useCVFilter } from "../hooks/useCVFilter";
-import { useEffect, useState } from "react";
-import { useDebounce } from "@/lib/useDebounce";
+import { useState, useRef, useEffect } from "react";
 
 export const CVFilterBar = () => {
   const { filter, updateFilter, resetFilter } = useCVFilter();
   const [fileNameInput, setFileNameInput] = useState(filter.fileName || "");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Debounce giá trị nhập
-  const debouncedFileName = useDebounce(fileNameInput, 300);
+  // Handle debounce manually
+  const handleFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFileNameInput(value);
 
-  useEffect(() => {
-    if (debouncedFileName !== filter.fileName) {
-      updateFilter({ fileName: debouncedFileName || undefined });
+    // Clear previous timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
-  }, [debouncedFileName, filter.fileName, updateFilter]);
+
+    // Set new timeout
+    timeoutRef.current = setTimeout(() => {
+      updateFilter({ fileName: value || undefined });
+    }, 300);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
-    updateFilter({ status: val ? [Number(val)] : undefined });
+    updateFilter({ status: val ? Number(val) : undefined }); // Chỉ gửi 1 số
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,55 +47,69 @@ export const CVFilterBar = () => {
     updateFilter({ sortOrder: e.target.value as "asc" | "desc" });
   };
 
+  const handleReset = () => {
+    setFileNameInput("");
+    resetFilter();
+  };
+
   return (
-    <div className="flex flex-wrap gap-4 items-end bg-surface p-4 rounded-xl border border-border">
+    <div className="flex flex-wrap items-end bg-surface p-4 rounded-xl border border-border gap-4">
       <div className="flex-1 min-w-[200px]">
         <label className="block text-sm font-medium mb-1">Tên file</label>
         <Input
-          key={filter.fileName}
           placeholder="Tìm theo tên file..."
-          defaultValue={filter.fileName || ""}
-          onChange={(e) => setFileNameInput(e.target.value)}
+          value={fileNameInput}
+          onChange={handleFileNameChange}
         />
       </div>
-      <div className="w-40">
+
+      <div className="w-48">
         <label className="block text-sm font-medium mb-1">Trạng thái</label>
         <Select
-          value={filter.status?.[0]?.toString() || ""}
+          value={filter.status?.toString() || ""}
           onChange={handleStatusChange}
           options={[
             { value: "", label: "Tất cả" },
-            { value: "1", label: "Chờ xử lý" },
-            { value: "2", label: "Đang xử lý" },
-            { value: "3", label: "Hoàn thành" },
-            { value: "4", label: "Thất bại" },
+            { value: "1", label: "Chờ upload" },
+            { value: "2", label: "Đã upload" },
+            { value: "3", label: "Đang xử lý" },
+            { value: "4", label: "Đã xử lý nội dung" },
+            { value: "5", label: "Đã phân tích kỹ năng" },
+            { value: "6", label: "Thất bại" },
           ]}
         />
       </div>
-      <div className="w-40">
-        <label className="block text-sm font-medium mb-1">Sắp xếp theo</label>
-        <Select
-          value={filter.sortBy || "uploadedAt"}
-          onChange={handleSortChange}
-          options={[
-            { value: "uploadedAt", label: "Ngày upload" },
-            { value: "fileName", label: "Tên file" },
-            { value: "status", label: "Trạng thái" },
-          ]}
-        />
+
+      {/* Nhóm Sắp xếp và Thứ tự lại với nhau */}
+      <div className="flex gap-2">
+        <div className="w-36">
+          <label className="block text-sm font-medium mb-1">Sắp xếp theo</label>
+          <Select
+            value={filter.sortBy || "uploadedAt"}
+            onChange={handleSortChange}
+            options={[
+              { value: "uploadedAt", label: "Ngày upload" },
+              { value: "fileName", label: "Tên file" },
+              { value: "fileSize", label: "Kích thước file" },
+              { value: "status", label: "Trạng thái" },
+            ]}
+          />
+        </div>
+
+        <div className="w-28">
+          <label className="block text-sm font-medium mb-1">Thứ tự</label>
+          <Select
+            value={filter.sortOrder || "desc"}
+            onChange={handleSortOrderChange}
+            options={[
+              { value: "desc", label: "Giảm dần" },
+              { value: "asc", label: "Tăng dần" },
+            ]}
+          />
+        </div>
       </div>
-      <div className="w-32">
-        <label className="block text-sm font-medium mb-1">Thứ tự</label>
-        <Select
-          value={filter.sortOrder || "desc"}
-          onChange={handleSortOrderChange}
-          options={[
-            { value: "desc", label: "Giảm dần" },
-            { value: "asc", label: "Tăng dần" },
-          ]}
-        />
-      </div>
-      <Button variant="outline" onClick={resetFilter}>
+
+      <Button variant="outline" onClick={handleReset}>
         Xóa lọc
       </Button>
     </div>
