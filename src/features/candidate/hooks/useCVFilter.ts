@@ -5,7 +5,7 @@ import { useDebounce } from "@/lib/useDebounce";
 export type CVFilters = {
   page?: number;
   pageSize?: number;
-  status?: number[];
+  status?: number;
   fileName?: string;
   fromDate?: string;
   toDate?: string;
@@ -27,7 +27,7 @@ export const useCVFilter = () => {
       pageSize: searchParams.get("pageSize")
         ? Number(searchParams.get("pageSize"))
         : DEFAULT_PAGE_SIZE,
-      status: statusParam ? statusParam.split(",").map(Number) : undefined,
+      status: statusParam ? Number(statusParam) : undefined,
       fileName: searchParams.get("fileName") || undefined,
       fromDate: searchParams.get("fromDate") || undefined,
       toDate: searchParams.get("toDate") || undefined,
@@ -59,8 +59,6 @@ export const useCVFilter = () => {
         Object.entries(newValues).forEach(([key, value]) => {
           if (value === undefined || value === null || value === "") {
             updated.delete(key);
-          } else if (key === "status" && Array.isArray(value)) {
-            updated.set(key, value.join(","));
           } else {
             updated.set(key, String(value));
           }

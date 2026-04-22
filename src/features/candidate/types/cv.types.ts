@@ -1,12 +1,12 @@
 import { formatFileSize } from "@/lib/utils";
 
 export const CV_STATUS = {
-  PENDING: "Pending",
-  UPLOADED: "Uploaded",
-  PROCESSING: "Processing",
-  COMPLETED: "Completed",
-  ANALYZED: "Analyzed",
-  FAILED: "Failed",
+  PENDING: "pending",
+  UPLOADED: "uploaded",
+  PROCESSING: "processing",
+  COMPLETED: "completed",
+  ANALYZED: "analyzed",
+  FAILED: "failed",
 } as const;
 
 export type CVStatus = (typeof CV_STATUS)[keyof typeof CV_STATUS];
@@ -17,12 +17,15 @@ export const normalizeStatus = (
   status: RawStatus,
   statusName?: string,
 ): CVStatus => {
+  // Ưu tiên dùng statusName nếu có
   if (statusName) {
     const matched = Object.values(CV_STATUS).find(
       (v) => v.toLowerCase() === statusName.toLowerCase(),
     );
     if (matched) return matched;
   }
+
+  // Xử lý string status
   if (typeof status === "string") {
     const matched = Object.values(CV_STATUS).find(
       (v) => v.toLowerCase() === status.toLowerCase(),
@@ -31,6 +34,7 @@ export const normalizeStatus = (
     return CV_STATUS.PENDING;
   }
 
+  // Xử lý number status (enum từ backend)
   const map: Record<number, CVStatus> = {
     1: CV_STATUS.PENDING,
     2: CV_STATUS.UPLOADED,
@@ -43,29 +47,23 @@ export const normalizeStatus = (
   return map[status] ?? CV_STATUS.PENDING;
 };
 
-// ---- RAW RESPONSE từ backend ----
+// ============ RAW RESPONSE TYPES ============
+
+// POST /api/v1/CV/upload
 export type CVUploadResponse = {
-  cvId: string; // ← chỉ endpoint này dùng cvId
+  cvId: string;
   fileName: string;
   filePath: string;
   fileSize: number;
   uploadedAt: string;
   status: RawStatus;
+  statusName?: string;
   downloadUrl: string | null;
 };
 
-export type CVListItemResponse = {
-  id: string; // ← id, không phải cvId
-  fileName: string;
-  fileSize: number;
-  formattedFileSize: string;
-  uploadedAt: string;
-  status: RawStatus;
-  statusName: string;
-};
-
-export type CVListPaginatedResponse = {
-  data: CVListItemResponse[]; // ← array nằm trong .data
+// GET /api/v1/CV/my-cvs (paginated)
+export type CVListResponse = {
+  data: CVListItemResponse[];
   total: number;
   page: number;
   pageSize: number;
@@ -74,6 +72,17 @@ export type CVListPaginatedResponse = {
   hasNext: boolean;
 };
 
+export type CVListItemResponse = {
+  id: string;
+  fileName: string;
+  fileSize: number;
+  uploadedAt: string;
+  status: RawStatus;
+  statusName: string;
+  totalSkills?: number; // Thêm totalSkills từ API mới
+};
+
+// GET /api/v1/CV/{id}
 export type CVDetailResponse = {
   id: string;
   fileName: string;
@@ -81,18 +90,15 @@ export type CVDetailResponse = {
   fileSize: number;
   contentType: string;
   uploadedAt: string;
-  processedAt: string;
+  processedAt: string | null;
   status: RawStatus;
-  errorMessage: string;
-  downloadUrl: string;
-  formattedFileSize: string;
   statusName: string;
+  errorMessage: string | null;
+  downloadUrl: string;
+  totalSkills?: number; // Thêm totalSkills
 };
 
-// GET /api/v1/CV/my-cvs trả về array
-export type CVListResponse = CVUploadResponse[];
-
-// ---- TRANSFORMED TYPE dùng trong component ----
+// ============ TRANSFORMED TYPE (dùng trong component) ============
 export type CV = {
   id: string;
   fileName: string;
@@ -100,11 +106,13 @@ export type CV = {
   fileSize: number;
   formattedFileSize: string;
   uploadedAt: string;
-  status: CVStatus;
-  statusName: string;
+  status: number;
+  statusName: CVStatus;
+  totalSkills: number; // Luôn có, default = 0
 };
 
-// ---- TRANSFORM FUNCTION ----
+// ============ TRANSFORM FUNCTIONS ============
+
 const baseTransform = (data: {
   id: string;
   fileName: string;
@@ -112,29 +120,53 @@ const baseTransform = (data: {
   uploadedAt: string;
   status: RawStatus;
   filePath?: string;
-  formattedFileSize?: string;
   statusName?: string;
+  totalSkills?: number;
 }): CV => ({
   id: data.id,
   fileName: data.fileName,
   filePath: data.filePath ?? "",
   fileSize: data.fileSize,
-  formattedFileSize: data.formattedFileSize ?? formatFileSize(data.fileSize),
+  formattedFileSize: formatFileSize(data.fileSize),
   uploadedAt: data.uploadedAt,
-  status: data.statusName
-    ? normalizeStatus(data.statusName)
-    : normalizeStatus(data.status),
-  statusName: data.statusName ?? normalizeStatus(data.status),
+  status: typeof data.status === "number" ? data.status : 0,
+  statusName: normalizeStatus(data.status, data.statusName),
+  totalSkills: data.totalSkills ?? 0,
 });
 
 // Transform từ upload response (có cvId)
 export const transformCVUpload = (data: CVUploadResponse): CV =>
   baseTransform({
     id: data.cvId,
-    ...data,
+    fileName: data.fileName,
+    filePath: data.filePath,
+    fileSize: data.fileSize,
+    uploadedAt: data.uploadedAt,
+    status: data.status,
+    statusName: data.statusName,
   });
 
-// Transform từ list/detail response (có id)
-export const transformCVItem = (
-  data: CVListItemResponse | CVDetailResponse,
-): CV => baseTransform(data);
+// Transform từ list item response
+export const transformCVItem = (data: CVListItemResponse): CV =>
+  baseTransform({
+    id: data.id,
+    fileName: data.fileName,
+    fileSize: data.fileSize,
+    uploadedAt: data.uploadedAt,
+    status: data.status,
+    statusName: data.statusName,
+    totalSkills: data.totalSkills,
+  });
+
+// Transform từ detail response
+export const transformCVDetail = (data: CVDetailResponse): CV =>
+  baseTransform({
+    id: data.id,
+    fileName: data.fileName,
+    filePath: data.filePath,
+    fileSize: data.fileSize,
+    uploadedAt: data.uploadedAt,
+    status: data.status,
+    statusName: data.statusName,
+    totalSkills: data.totalSkills,
+  });

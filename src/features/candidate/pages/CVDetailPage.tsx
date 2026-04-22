@@ -79,7 +79,7 @@ export const CVDetailPage = () => {
                 </p>
               </div>
             </div>
-            <CVStatusBadge status={cv.status} />
+            <CVStatusBadge status={cv.statusName} />
           </div>
 
           {/* Actions */}
@@ -88,7 +88,7 @@ export const CVDetailPage = () => {
               <Download className="w-4 h-4 mr-2" />
               Tải xuống
             </Button>
-            {cv.status === CV_STATUS.COMPLETED && (
+            {cv.statusName === CV_STATUS.COMPLETED && (
               <Button onClick={handleAnalyze} isLoading={isAnalyzing}>
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Phân tích CV
@@ -97,14 +97,14 @@ export const CVDetailPage = () => {
           </div>
 
           {/* Kết quả phân tích AI */}
-          {analysis?.status === "processing" && (
+          {(analysis?.status === 3 || analysis?.statusName === CV_STATUS.PROCESSING) && (
             <div className="flex items-center gap-2 text-blue-600">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Đang phân tích CV...</span>
             </div>
           )}
 
-          {analysis?.status === "analyzed" && (
+          {(analysis?.statusName === CV_STATUS.ANALYZED || analysis?.status === 5) && (
             <>
               <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="font-medium text-blue-900">
@@ -146,7 +146,7 @@ export const CVDetailPage = () => {
             </>
           )}
 
-          {analysis?.status === "failed" && (
+          {(analysis?.status === 6 || analysis?.statusName === CV_STATUS.FAILED) && (
             <p className="text-error">Phân tích thất bại. Vui lòng thử lại.</p>
           )}
         </div>
