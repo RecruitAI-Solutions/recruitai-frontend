@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { cvApi } from "../services/cvApi";
 import type { CVFilters } from "./useCVFilter";
 import { CV_QUERY_KEYS } from "./CVQueryKeys";
+import { CV_STATUS } from "../types/cv.types";
 type UseGetMyCVsOptions = {
   filters: CVFilters;
   enabled?: boolean;
@@ -21,7 +22,7 @@ export const useGetMyCVs = ({
       const data = query.state.data;
       if (!data) return false;
       const hasProcessing = data.data.some(
-        (cv) => cv.status === "Processing" || cv.status === "Uploaded",
+        (cv) => cv.statusName === CV_STATUS.PROCESSING || cv.statusName === CV_STATUS.UPLOADED,
       );
       return hasProcessing ? 5000 : false;
     },

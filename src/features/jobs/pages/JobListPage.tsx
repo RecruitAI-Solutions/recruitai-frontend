@@ -15,7 +15,7 @@ import {
   selectUserRole,
 } from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
-import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
+import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
 import { useMemo } from "react";
 import { useCallback } from "react";
 
@@ -30,7 +30,7 @@ export const JobListPage = () => {
   const { data: cvData } = useGetMyCVs({
     filters: {
       pageSize: 1,
-      status: [3],
+      status: 5, // Lọc CV đã được phân tích để lấy primary CV
       sortBy: "uploadedAt",
       sortOrder: "desc",
     },
@@ -38,7 +38,7 @@ export const JobListPage = () => {
   });
   const primaryCvId = isCandidate ? (cvData?.data[0]?.id ?? "") : "";
 
-  const { data: matchData } = useMatchingJobsForCV(
+  const { data: matchData } = useMatchingJobsCVHistory(
     primaryCvId,
     { pageSize: 100 }, // lấy nhiều để cover hết jobs đang hiển thị
     isCandidate && !!primaryCvId,
@@ -112,7 +112,7 @@ export const JobListPage = () => {
                   <>
                     Hiển thị{" "}
                     <span className="font-medium text-text-primary">
-                      {jobs.length}
+                      {jobs?.length ?? 0}
                     </span>{" "}
                     / {total} việc làm
                   </>

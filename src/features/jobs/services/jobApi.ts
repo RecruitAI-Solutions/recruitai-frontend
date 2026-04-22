@@ -12,6 +12,7 @@ import {
   type JobFilters,
 } from "../types/job.types";
 import { JOB_ENDPOINTS } from "@/config/endpoints/job.endpoints";
+import type { MatchCVJobsParams, MatchCVJobsResponse } from "@/features/ai/types/ai.types";
 
 export const jobApi = {
   getJobs: async (filters?: JobFilters) => {
@@ -114,5 +115,17 @@ export const jobApi = {
       },
     );
     return response.data.data.map(transformJobListItem);
-  }
+  },
+
+  // Danh sách jobs phù hợp với CV
+  getMatchingJobsForCV: async (
+    cvId: string,
+    params?: MatchCVJobsParams,
+  ): Promise<MatchCVJobsResponse> => {
+    const response = await axiosInstance.get<MatchCVJobsResponse>(
+      JOB_ENDPOINTS.MATCH_CV_JOBS(cvId),
+      { params },
+    );
+    return response.data;
+  },
 };

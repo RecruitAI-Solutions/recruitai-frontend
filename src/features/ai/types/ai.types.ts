@@ -102,12 +102,18 @@ export type MatchCVJobsParams = {
   sortOrder?: "asc" | "desc";
 };
 
-export type MatchedJobItem = {
-  jobId: string;
-  jobTitle: string;
-  company: string;
+// Type cơ bản bắt buộc phải có
+type MatchedJobItemBase = {
+  jobId?: string;
+  jobTitle?: string;
+  company?: string;
   matchPercentage: number;
-  calculatedAt: string;
+  calculatedAt?: string;
+};
+
+// Type mở rộng, cho phép thêm bất kỳ field nào khác
+export type MatchedJobItem = MatchedJobItemBase & {
+  [key: string]: any; // Cho phép thêm bất kỳ field nào
 };
 
 export type MatchCVJobsResponse = {

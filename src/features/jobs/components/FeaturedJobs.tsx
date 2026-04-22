@@ -1,11 +1,11 @@
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
-import { useGetJobs } from "@/features/jobs/hooks/useGetJobs";
 import { JobCard } from "./JobCard";
 import { JobSkeleton } from "./JobSkeleton";
+import { useFeatureJobs } from "../hooks/useGetFeatureJobs";
 
 export const FeaturedJobs = () => {
-  const { data, isLoading } = useGetJobs({});
+  const { data, isLoading } = useFeatureJobs({});
 
   if (isLoading)
     return (

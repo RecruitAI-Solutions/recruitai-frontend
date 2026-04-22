@@ -113,13 +113,24 @@ export const CVDetailPage = () => {
                 <p className="text-sm text-blue-700 mt-1">
                   Tìm việc làm phù hợp nhất với CV này
                 </p>
-                <Button
-                  className="mt-3 !text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-colors"
-                  onClick={() => navigate(`/candidate/cv/${cv.id}/matching-jobs`)}
-                >
-                  Xem việc làm phù hợp
-                  <span className="ml-1">→</span>
-                </Button>
+
+                <div className="flex flex-wrap gap-3 mt-3">
+                  <Button
+                    className="!text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-colors"
+                    onClick={() => navigate(`/candidate/cv/${cv.id}/matching-jobs/history`)}
+                  >
+                    Lịch sử ghép nối
+                    <span className="ml-1">→</span>
+                  </Button>
+
+                  <Button
+                    className="!text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-colors"
+                    onClick={() => navigate(`/candidate/cv/${cv.id}/matching-jobs/suggestions`)}
+                  >
+                    Đề xuất việc làm phù hợp
+                    <span className="ml-1">→</span>
+                  </Button>
+                </div>
               </div>
 
               <div className="mt-6">
