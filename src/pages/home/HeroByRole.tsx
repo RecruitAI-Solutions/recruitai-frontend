@@ -172,17 +172,17 @@ export const HeroByRole = () => {
   return (
     <HeroSection
       badge="#1 Job Portal"
-      title="Your Dream Career Starts Here"
-      subtitle="Connect with thousands of companies."
+      title="Hành Trình Sự Nghiệp Mơ Ước Bắt Đầu Tại Đây"
+      subtitle="Kết nối với hàng ngàn doanh nghiệp."
       gradient="from-gray-900 to-gray-700"
       primaryAction={
         <Link to={ROUTES.JOB}>
-          <Button>Browse Jobs</Button>
+          <Button>Tìm việc làm</Button>
         </Link>
       }
       secondaryAction={
         <Link to={ROUTES.LOGIN}>
-          <Button variant="outline">Post Job</Button>
+          <Button variant="outline">Đăng tin tuyển dụng</Button>
         </Link>
       }
     />

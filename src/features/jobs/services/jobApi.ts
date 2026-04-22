@@ -103,4 +103,16 @@ export const jobApi = {
   deleteJob: async (id: string): Promise<void> => {
     await axiosInstance.delete(JOB_ENDPOINTS.DELETE(id));
   },
+  getFeatureJobs: async (): Promise<JobListItem[]> => {
+    const response = await axiosInstance.get<JobListPaginatedResponse>(
+      JOB_ENDPOINTS.FEATURED,
+      {
+        params: {
+          page: 1,
+          pageSize: 6,
+        },
+      },
+    );
+    return response.data.data.map(transformJobListItem);
+  }
 };
