@@ -18,6 +18,8 @@ import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
 import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
 import { useMemo } from "react";
 import { useCallback } from "react";
+import { useState, useEffect } from "react";
+import { useDebounce } from "@/lib/useDebounce";
 
 export const JobListPage = () => {
   const userRole = useAppSelector(selectUserRole);
@@ -25,6 +27,16 @@ export const JobListPage = () => {
   const isCandidate = userRole === "candidate";
 
   const { filter, updateFilter } = useFilter();
+
+  // Local state cho search input
+  const [searchTitle, setSearchTitle] = useState<string>(filter.title || "");
+  const debouncedSearchTitle = useDebounce(searchTitle, 300);
+
+  // Khi debouncedSearchTitle thay đổi, mới update filter
+  useEffect(() => {
+    updateFilter({ title: debouncedSearchTitle || undefined, page: 1 });
+  }, [debouncedSearchTitle, updateFilter]);
+
   const { data, isLoading, isFetching } = useGetJobs(filter);
 
   const { data: cvData } = useGetMyCVs({
@@ -56,9 +68,13 @@ export const JobListPage = () => {
 
   // useCallback để ổn định reference — tránh trigger effect trong child components
   const handleTitleChange = useCallback(
-    (value: string) => updateFilter({ title: value || undefined }),
-    [updateFilter],
+    (value: string) => setSearchTitle(value),
+    [],
   );
+
+  const handleResetFilters = useCallback(() => {
+    setSearchTitle("");
+  }, []);
 
   const handleSortByChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -87,7 +103,7 @@ export const JobListPage = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
-          <JobSearch value={filter.title || ""} onChange={handleTitleChange} />
+          <JobSearch value={searchTitle} onChange={handleTitleChange} />
         </div>
 
         {/* Mobile Filter Button */}
@@ -98,7 +114,7 @@ export const JobListPage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="hidden md:block">
-            <JobFilterSidebar />
+            <JobFilterSidebar onReset={handleResetFilters} />
           </div>
 
           {/* Main Content */}
