@@ -6,15 +6,17 @@ import { employmentTypeMap, ExperienceLevelMap } from "../types/job.types";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, useEffect } from "react";
 import { SkillInput } from "@/features/skills/components/SkillInput";
 import type { SelectedSkill } from "@/features/skills/types/skill.types";
+import styles from "./JobFilterSidebar.module.css";
 
 type JobFilterSidebarProps = {
   className?: string;
+  onReset?: () => void;
 };
 
-const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
+const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
   const { filter, updateFilter, resetFilter } = useFilter();
   const [skillInputKey, setSkillInputKey] = useState(0);
 
@@ -29,6 +31,11 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
       name,
     }));
   }, [skillNames]);
+
+  // Re-mount SkillInput khi defaultSkills thay đổi (bao gồm cả khi reset)
+  useEffect(() => {
+    setSkillInputKey((pre) => pre + 1);
+  }, [defaultSkills]);
 
   const selectedEmploymentTypes = useMemo(
     () => filter.employmentType?.split(",").filter(Boolean) || [],
@@ -84,16 +91,20 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
 
   const handleReset = useCallback(() => {
     resetFilter();
-    setSkillInputKey((pre) => pre + 1);
-  }, [resetFilter]);
+    onReset?.();
+  }, [resetFilter, onReset]);
 
   return (
     <aside
       className={cn(
         "w-full md:w-72 bg-surface p-5 rounded-xl border border-border",
-        "sticky top-[16px] max-h-[calc(100vh-100px)] overflow-auto will-change-transform transition-transform duration-200 ease-out",
+        "sticky top-[16px] overflow-y-auto will-change-transform transition-transform duration-200 ease-out",
+        styles.sidebar,
         className,
       )}
+      style={{
+        maxHeight: "calc(100vh - 100px)",
+      }}
     >
       <div className="space-y-5">
         <div className="flex items-center justify-between">
