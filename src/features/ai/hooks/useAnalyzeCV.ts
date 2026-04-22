@@ -16,40 +16,40 @@ export const useAnalyzeCV = () => {
   >({
     mutationFn: (cvId: string) => aiApi.analyzeCV(cvId),
     onSuccess: (data, cvId) => {
-      if (data.status === "completed") {
+      console.log("Analyze CV response:", data);
+      if (data.statusName?.toLowerCase() === "analyzed" || data.status === 5) {
         toast.success(
           `Phân tích hoàn tất! Tìm thấy ${data.totalSkills} kỹ năng.`,
+          { id: `analyze-${cvId}` }
         );
-        queryClient.invalidateQueries({
-          queryKey: AI_QUERY_KEYS.analysis(cvId),
-        });
-        queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.myCVs });
-        queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.detail(cvId) });
-      } else {
-        toast.success("CV đang được phân tích, vui lòng đợi...");
       }
+
+      queryClient.invalidateQueries({
+        queryKey: AI_QUERY_KEYS.analysis(cvId),
+      });
+      queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.myCVs });
+      queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.detail(cvId) });
     },
 
-    onError: (error: AxiosError<{ message: string; errorCode?: number }>) => {
+    onError: (error: AxiosError<{ message: string; errorCode?: number }>, cvId) => {
       const errorCode = error.response?.data?.errorCode;
       let message = "Phân tích CV thất bại. Vui lòng thử lại.";
 
       switch (errorCode) {
-        case 7001: // CV not found
+        case 7001:
           message = "Không tìm thấy CV.";
           break;
-        case 400: // Validation error
-          message =
-            error.response?.data?.message || "CV chưa sẵn sàng để phân tích.";
+        case 400:
+          message = error.response?.data?.message || "CV chưa sẵn sàng để phân tích.";
           break;
-        case 5001: // AI service error
+        case 5001:
           message = "Dịch vụ AI đang bận, thử lại sau.";
           break;
         default:
           message = error.response?.data?.message || message;
       }
 
-      toast.error(message);
+      toast.error(message, { id: `analyze-${cvId}` });
     },
   });
 };

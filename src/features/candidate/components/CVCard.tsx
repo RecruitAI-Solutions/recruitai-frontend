@@ -4,7 +4,7 @@ import { CVStatusBadge } from "./CVStatusBadge";
 import { Button } from "@/shared/components/ui/Button";
 import { useDownloadCV } from "../hooks/useDownloadCV";
 import { useAnalyzeCV } from "@/features/ai/hooks/useAnalyzeCV";
-import { useAnalysisResult } from "@/features/ai/hooks/useAnalysisResult";
+// import { useAnalysisResult } from "@/features/ai/hooks/useAnalysisResult";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";
 import { FileText, Download, RefreshCw, Trash2 } from "lucide-react";
@@ -17,12 +17,12 @@ export const CVCard = ({ cv }: Props) => {
   const { mutate: download, isPending: isDownloading } = useDownloadCV();
   const { mutate: deleteCV, isPending: isDeleting } = useDeleteCV();
   const { mutate: analyze, isPending: isAnalyzing } = useAnalyzeCV();
-  const { data: analysis } = useAnalysisResult(
-    cv.id,
-    cv.status === CV_STATUS.COMPLETED || cv.status === CV_STATUS.ANALYZED,
-  );
+  // const { data: analysis } = useAnalysisResult(
+  //   cv.id,
+  //   cv.status === CV_STATUS.ANALYZED
+  // );
 
-  console.log(cv);
+  // console.log(cv);
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString("vi-VN");
 
   const handleAnalyze = (e: React.MouseEvent) => {
@@ -59,34 +59,33 @@ export const CVCard = ({ cv }: Props) => {
           <p className="text-xs text-gray-500 mt-0.5">
             {cv.formattedFileSize} · Uploaded {formatDate(cv.uploadedAt)}
           </p>
-          {analysis?.status === "analyzed" && (
+          {(cv?.status === 5 || cv?.statusName === CV_STATUS.ANALYZED) && (
             <p className="text-xs text-green-600 mt-1">
-              {analysis.totalSkills} kỹ năng · AI enhanced
+              {cv.totalSkills} kỹ năng · AI enhanced
             </p>
           )}
         </div>
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <CVStatusBadge status={cv.status} />
+        <CVStatusBadge status={cv.statusName} />
 
-        {cv.status === CV_STATUS.COMPLETED &&
-          analysis?.status !== "analyzed" && (
-            <Button
-              variant="outline"
-              isLoading={isAnalyzing}
-              onClick={handleAnalyze}
-            >
-              <RefreshCw className="w-3 h-3 mr-1" />
-              Phân tích
-            </Button>
-          )}
+        {cv.statusName === CV_STATUS.COMPLETED && (
+          <Button
+            variant="outline"
+            isLoading={isAnalyzing}
+            onClick={handleAnalyze}
+          >
+            <RefreshCw className="w-3 h-3 mr-1" />
+            Phân tích
+          </Button>
+        )}
 
         {can(PERMISSIONS.DOWNLOAD_OWN_CV) && (
           <Button
             variant="outline"
             isLoading={isDownloading}
-            disabled={cv.status !== CV_STATUS.COMPLETED}
+            disabled={cv.statusName !== CV_STATUS.COMPLETED}
             onClick={handleDownload}
           >
             <Download className="w-3 h-3" />

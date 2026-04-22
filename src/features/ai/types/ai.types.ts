@@ -18,18 +18,28 @@ export type AIAnalysisInfo = {
 
 export type AnalyzeCVSuccessResponse = {
   cvId: string;
-  status: "completed";
+  status?: 5;
+  statusName?: "analyzed";
   skills: MatchedSkill[];
   totalSkills: number;
   processedAt: string;
   aiAnalysis?: AIAnalysisInfo;
+  // Thêm optional từ ProcessingResponse
+  message?: string;
+  estimatedTime?: number;
 };
 
 export type AnalyzeCVProcessingResponse = {
   cvId: string;
-  status: "processing";
+  status?: 3;
+  statusName?: "processing";
   message: string;
   estimatedTime: number;
+  // Thêm optional từ SuccessResponse
+  skills?: MatchedSkill[];
+  totalSkills?: number;
+  processedAt?: string;
+  aiAnalysis?: AIAnalysisInfo;
 };
 
 export type AnalyzeCVResponse =
@@ -39,7 +49,8 @@ export type AnalyzeCVResponse =
 export type AnalysisResultResponse = {
   cvId: string;
   fileName: string;
-  status: "pending" | "processing" | "analyzed" | "failed";
+  status: number;
+  statusName: "pending" | "processing" | "analyzed" | "failed";
   message?: string;
   uploadedAt?: string;
   analyzedAt?: string;

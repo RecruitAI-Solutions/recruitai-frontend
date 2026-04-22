@@ -10,6 +10,7 @@ export const useGetMyCVs = ({
   filters,
   enabled = true,
 }: UseGetMyCVsOptions) => {
+  // console.log("Fetching CVs with filters:", filters);
   return useQuery({
     queryKey: [...CV_QUERY_KEYS.myCVs, filters],
     queryFn: () => cvApi.getMyCVs(filters),
