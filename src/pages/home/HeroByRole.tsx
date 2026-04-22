@@ -26,7 +26,10 @@ export const HeroByRole = () => {
         gradient="from-blue-500 to-blue-600"
         primaryAction={
           <Link to={ROUTES.CANDIDATE.DASHBOARD}>
-            <Button className="bg-white text-blue-600 hover:bg-gray-100">
+            <Button
+              // className="text-blue-500 hover:bg-gray-100"
+              variant="secondary"
+            >
               Vào Dashboard
             </Button>
           </Link>
@@ -35,7 +38,7 @@ export const HeroByRole = () => {
           <Link to={ROUTES.JOB}>
             <Button
               variant="outline"
-              className="bg-white/10 border-white/30 text-white"
+              className="bg-transparent border-white text-white hover:bg-white/10"
             >
               Tìm việc làm
             </Button>
