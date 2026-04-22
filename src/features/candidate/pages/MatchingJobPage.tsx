@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
@@ -10,8 +10,7 @@ import { useGetCV } from "../hooks/useGetCV";
 import type { MatchedJobItem } from "@/features/ai/types/ai.types";
 import type { JobListItem, EmploymentTypeLabel, ExperienceLevelLabel } from "@/features/jobs/types/job.types";
 import { EMPLOYMENT_TYPE, EXPERIENCE_LEVEL } from "@/features/jobs/types/job.types";
-import { useMemo, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 // Định nghĩa type cho filter riêng
 type HistoryFilter = {
@@ -94,25 +93,8 @@ export const MatchingJobsPage = () => {
   return (
     <Section>
       <Container>
-        {/* Hero Section - Sticky với background thụt vào */}
-        <div className="sticky top-0 z-10">
-          <div className="flex justify-center">
-            <div className="w-full shadow-md">
-              <div className="py-4">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-                  Quay lại chi tiết
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-6 mt-6">
-          <h1 className="text-2xl font-bold text-gray-900">Việc làm phù hợp với CV</h1>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold">Việc làm phù hợp với CV</h1>
           {cv && (
             <p className="text-text-secondary mt-1">
               Dựa trên phân tích AI từ "{cv.fileName}"
@@ -131,6 +113,14 @@ export const MatchingJobsPage = () => {
               { value: "90", label: "≥ 90%" },
             ]}
           />
+          {/* <Select
+            value={filter.sortBy}
+            onChange={(e) => updateFilter({ sortBy: e.target.value, page: 1 })}
+            options={[
+              { value: "matchPercentage", label: "Độ phù hợp" },
+              { value: "createdAt", label: "Ngày đăng" },
+            ]}
+          /> */}
         </div>
 
         {isLoading ? (
@@ -140,23 +130,19 @@ export const MatchingJobsPage = () => {
             ))}
           </div>
         ) : !data?.data?.length ? (
-          <div className="text-center py-16">
-            <p className="text-text-secondary">
-              Không tìm thấy việc làm phù hợp.
-            </p>
-          </div>
+          <p className="text-center py-16 text-text-secondary">
+            Không tìm thấy việc làm phù hợp.
+          </p>
         ) : (
           <>
             <div className="grid md:grid-cols-3 gap-6">
-              {
-                uniqueJobs.map((job, index) => (
-                  <JobCard
-                    key={`${job.jobId}-${index}`}
-                    job={adaptJob(job)}
-                    matchPercentage={job.matchPercentage}
-                  />
-                ))
-              };
+              {data.data.map((job) => (
+                <JobCard
+                  key={job.jobId}
+                  job={adaptJob(job)}
+                  matchPercentage={job.matchPercentage}
+                />
+              ))}
             </div>
             {data.totalPages > 1 && (
               <div className="mt-8">

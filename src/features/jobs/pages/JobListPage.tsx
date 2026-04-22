@@ -15,10 +15,9 @@ import {
   selectUserRole,
 } from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
-import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
+import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
 import { useEffect, useMemo, useState } from "react";
 import { useCallback } from "react";
-import { useDebounce } from "@/lib/useDebounce";
 
 export const JobListPage = () => {
   const userRole = useAppSelector(selectUserRole);
@@ -26,27 +25,7 @@ export const JobListPage = () => {
   const isCandidate = userRole === "candidate";
 
   const { filter, updateFilter } = useFilter();
-
-  // Local state cho search input
-  const [searchTitle, setSearchTitle] = useState<string>(filter.title || "");
-  const debouncedSearchTitle = useDebounce(searchTitle, 300);
-
-  // Khi debouncedSearchTitle thay đổi, mới update filter
-  useEffect(() => {
-    updateFilter({ title: debouncedSearchTitle || undefined, page: 1 });
-  }, [debouncedSearchTitle, updateFilter]);
-
   const { data, isLoading, isFetching } = useGetJobs(filter);
-
-  const [search, setSearch] = useState(filter.title || "");
-  const debouncedSearch = useDebounce(search, 300);
-
-  useEffect(() => {
-    updateFilter({
-      title: debouncedSearch || undefined,
-      page: 1,
-    });
-  }, [debouncedSearch]);
 
   const { data: cvData } = useGetMyCVs({
     filters: {

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { Pagination } from "@/shared/components/ui/Pagination";
@@ -8,7 +8,6 @@ import { useGetCV } from "../hooks/useGetCV";
 import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
 import { MatchedJobCard } from "@/features/jobs/components/MatchedJobCard";
 import { useState } from "react";
-import { ChevronLeft } from "lucide-react";
 
 // Định nghĩa type cho filter
 type SuggestFilter = {
@@ -23,7 +22,6 @@ type SuggestFilter = {
 export const JobSuggestPage = () => {
   const { cvId } = useParams<{ cvId: string }>();
   const { data: cv } = useGetCV(cvId || "");
-  const navigate = useNavigate();
 
   // State riêng cho page này
   const [filter, setFilter] = useState<SuggestFilter>({
@@ -57,23 +55,7 @@ export const JobSuggestPage = () => {
   return (
     <Section>
       <Container>
-        {/* Hero Section - Sticky với background thụt vào */}
-        <div className="sticky top-0 z-10">
-          <div className="flex justify-center ">
-            <div className="w-full shadow-md">
-              <div className="py-4">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-                  Quay lại chi tiết
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mb-6 mt-4">
+        <div className="mb-6">
           <h1 className="text-2xl font-bold">Đề xuất việc làm phù hợp</h1>
           {cv && (
             <p className="text-text-secondary mt-1">
