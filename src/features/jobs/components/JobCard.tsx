@@ -22,11 +22,11 @@ export const JobCard = React.memo(
         to={ROUTES.JOB_DETAILS(job.id)}
         onClick={onClick}
         className="
-bg-surface border border-border rounded-xl p-5
-transition-all duration-200 cursor-pointer
-hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5
-active:scale-[0.98]
-"
+        bg-surface border border-border rounded-xl p-5
+        transition-all duration-200 cursor-pointer
+        hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5
+        active:scale-[0.98]
+        "
       >
         <div className="flex justify-between items-start gap-2">
           <h3 className="font-semibold text-text-primary line-clamp-2">
@@ -45,7 +45,7 @@ active:scale-[0.98]
         </p>
 
         <div className="flex flex-wrap gap-2 mt-3">
-          {job.skillNames.map((s) => (
+          {job.skillNames?.map((s) => (
             <span
               key={s}
               className="text-sm px-2 py-1 rounded-md bg-primary/10 text-primary"

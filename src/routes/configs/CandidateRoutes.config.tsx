@@ -8,6 +8,7 @@ import { MatchingJobsPage } from "@/features/candidate/pages/MatchingJobPage";
 import { MyApplicationsPage } from "@/features/applications/pages/MyApplicationsPage";
 import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
 import CandidateDashboard from "@/features/candidate/pages/CandidateDashboard";
+import { JobSuggestPage } from "@/features/candidate/pages/JobsSuggestPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -38,10 +39,15 @@ export const createCandidateRoutes = (
           element: <CVDetailPage />,
         },
         {
-          path: "/candidate/cv/:cvId/matching-jobs",
+          path: "/candidate/cv/:cvId/matching-jobs/history",
           element: <MatchingJobsPage />,
         },
         {
+          path: "/candidate/cv/:cvId/matching-jobs/suggestions",
+          element: <JobSuggestPage />,
+        },
+        {
+
           path: ROUTES.CANDIDATE.APPLICATIONS,
           element: <MyApplicationsPage />,
         },

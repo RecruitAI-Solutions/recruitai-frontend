@@ -16,7 +16,7 @@ export const ApplySection = ({ jobId }: Props) => {
     filters: { ...filter, pageSize: 100 },
   });
   const analyzedCVs =
-    cvData?.data?.filter((cv) => cv.status === CV_STATUS.ANALYZED) ?? [];
+    cvData?.data?.filter((cv) => cv.statusName === CV_STATUS.ANALYZED) ?? [];
   const [selectedCVId, setSelectedCVId] = useState<string>(
     analyzedCVs[0]?.id ?? "",
   );
