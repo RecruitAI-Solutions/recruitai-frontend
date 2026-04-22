@@ -59,7 +59,7 @@ export const LoginForm = () => {
 
       {/* Submit Button */}
       <Button
-        className="cursor-pointer"
+        className="cursor-pointer !text-white"
         type="submit"
         isLoading={isPending}
         fullWidth
@@ -68,7 +68,7 @@ export const LoginForm = () => {
       </Button>
       <Link
         to={ROUTES.FORGOT_PASSWORD}
-        className="text-text-primary underline text-right"
+        className="text-text-primary underline text-right mt-5 block"
       >
         Quên mật khẩu?
       </Link>
