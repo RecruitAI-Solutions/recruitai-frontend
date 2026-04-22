@@ -4,12 +4,14 @@ type Props = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  className?: string;
 };
 
 export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  className,
 }: Props) => {
   if (totalPages <= 1) return null;
 
@@ -44,7 +46,7 @@ export const Pagination = ({
   const pages = createPages();
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className={cn("flex items-center justify-center gap-2", className)}>
       {/* Prev */}
       <button
         disabled={currentPage === 1}
