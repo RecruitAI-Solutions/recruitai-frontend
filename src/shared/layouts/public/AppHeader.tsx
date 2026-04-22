@@ -29,7 +29,7 @@ export const AppHeader = ({
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link to="/jobs">Find Jobs</Link>
+            {/* <Link to="/jobs">Find Jobs</Link> */}
             {isReady ? (
               <UserMenu />
             ) : (
@@ -37,7 +37,7 @@ export const AppHeader = ({
                 to={ROUTES.LOGIN}
                 className="px-4 py-2 rounded-lg bg-primary text-primary-foreground"
               >
-                Sign In
+                Đăng nhập
               </Link>
             )}
           </nav>
@@ -51,14 +51,14 @@ export const AppHeader = ({
         {/* Mobile Menu */}
         {open && (
           <div className="md:hidden py-4 space-y-3 border-t">
-            <Link to="/jobs" className="block">
+            {/* <Link to="/jobs" className="block">
               Find Jobs
-            </Link>
+            </Link> */}
             <Link
               to={ROUTES.LOGIN}
               className="block px-4 py-2 bg-primary text-primary-foreground rounded"
             >
-              Sign In
+              Đăng nhập
             </Link>
           </div>
         )}

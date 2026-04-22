@@ -65,23 +65,23 @@ export const NAV_CONFIG: NavGroup[] = [
         to: ROUTES.CANDIDATE.DASHBOARD,
         icon: <LayoutDashboard className="w-4 h-4" />,
       },
+      // {
+      //   label: "Find Jobs",
+      //   to: ROUTES.JOB,
+      //   icon: <Briefcase className="w-4 h-4" />,
+      // },
       {
-        label: "Find Jobs",
-        to: ROUTES.JOB,
-        icon: <Briefcase className="w-4 h-4" />,
-      },
-      {
-        label: "My CV",
+        label: "CV của tôi",
         to: ROUTES.CANDIDATE.CV_MANAGEMENT,
         icon: <Upload className="w-4 h-4" />,
       },
       {
-        label: "Applications",
+        label: "Đơn ứng tuyển",
         to: ROUTES.CANDIDATE.APPLICATIONS,
         icon: <FileText className="w-4 h-4" />,
       },
       {
-        label: "Profile",
+        label: "Tài khoản",
         to: ROUTES.CANDIDATE.PROFILE,
         icon: <User className="w-4 h-4" />,
       },
