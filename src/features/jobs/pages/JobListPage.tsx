@@ -15,10 +15,9 @@ import {
   selectUserRole,
 } from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
-import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
-import { useMemo } from "react";
+import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
+import { useEffect, useMemo, useState } from "react";
 import { useCallback } from "react";
-import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/useDebounce";
 
 export const JobListPage = () => {
@@ -27,22 +26,22 @@ export const JobListPage = () => {
   const isCandidate = userRole === "candidate";
 
   const { filter, updateFilter } = useFilter();
-
-  // Local state cho search input
-  const [searchTitle, setSearchTitle] = useState<string>(filter.title || "");
-  const debouncedSearchTitle = useDebounce(searchTitle, 300);
-
-  // Khi debouncedSearchTitle thay đổi, mới update filter
-  useEffect(() => {
-    updateFilter({ title: debouncedSearchTitle || undefined, page: 1 });
-  }, [debouncedSearchTitle, updateFilter]);
-
   const { data, isLoading, isFetching } = useGetJobs(filter);
+
+  const [search, setSearch] = useState(filter.title || "");
+  const debouncedSearch = useDebounce(search, 300);
+
+  useEffect(() => {
+    updateFilter({
+      title: debouncedSearch || undefined,
+      page: 1,
+    });
+  }, [debouncedSearch]);
 
   const { data: cvData } = useGetMyCVs({
     filters: {
       pageSize: 1,
-      status: 5, // Lọc CV đã được phân tích để lấy primary CV
+      status: 5,  // chỉ lấy CV đã hoàn thiện để match
       sortBy: "uploadedAt",
       sortOrder: "desc",
     },
@@ -50,7 +49,7 @@ export const JobListPage = () => {
   });
   const primaryCvId = isCandidate ? (cvData?.data[0]?.id ?? "") : "";
 
-  const { data: matchData } = useMatchingJobsCVHistory(
+  const { data: matchData } = useMatchingJobsForCV(
     primaryCvId,
     { pageSize: 100 }, // lấy nhiều để cover hết jobs đang hiển thị
     isCandidate && !!primaryCvId,
@@ -66,15 +65,9 @@ export const JobListPage = () => {
   const currentPage = filter.page ?? 1;
   const totalPages = data?.totalPages ?? 0;
 
-  // useCallback để ổn định reference — tránh trigger effect trong child components
-  const handleTitleChange = useCallback(
-    (value: string) => setSearchTitle(value),
-    [],
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setSearchTitle("");
-  }, []);
+  const handleJobSearch = (value: string) => {
+    setSearch(value);
+  };
 
   const handleSortByChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -103,7 +96,7 @@ export const JobListPage = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
-          <JobSearch value={searchTitle} onChange={handleTitleChange} />
+          <JobSearch value={search} onChange={handleJobSearch} />
         </div>
 
         {/* Mobile Filter Button */}
@@ -114,7 +107,7 @@ export const JobListPage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="hidden md:block">
-            <JobFilterSidebar onReset={handleResetFilters} />
+            <JobFilterSidebar />
           </div>
 
           {/* Main Content */}
@@ -128,7 +121,7 @@ export const JobListPage = () => {
                   <>
                     Hiển thị{" "}
                     <span className="font-medium text-text-primary">
-                      {jobs?.length ?? 0}
+                      {jobs.length}
                     </span>{" "}
                     / {total} việc làm
                   </>

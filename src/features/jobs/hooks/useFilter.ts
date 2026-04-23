@@ -5,69 +5,67 @@ import type { JobFilters } from "../types/job.types";
 const DEFAULT_SORT_BY = "createdAt";
 const DEFAULT_SORT_ORDER = "desc";
 const DEFAULT_PAGE_SIZE = 6;
+const DEFAULT_MATCH_ALL = true;
 
-export const useFilter = (): {
-  filter: JobFilters;
-  updateFilter: (newValues: Partial<JobFilters>) => void;
-  resetFilter: () => void;
-} => {
+export const useFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const filter: JobFilters = useMemo(
-    () => ({
-      title: searchParams.get("title") || undefined,
-      location: searchParams.get("location") || undefined,
-      minSalary: searchParams.get("minSalary")
-        ? Number(searchParams.get("minSalary"))
-        : undefined,
-      maxSalary: searchParams.get("maxSalary")
-        ? Number(searchParams.get("maxSalary"))
-        : undefined,
-      employmentType: searchParams.get("employmentType") || undefined,
-      experienceLevel: searchParams.get("experienceLevel") || undefined,
-      skill: searchParams.get("skill") || undefined,
-      sortBy: searchParams.get("sortBy") || DEFAULT_SORT_BY,
-      sortOrder:
-        (searchParams.get("sortOrder") as "asc" | "desc") || DEFAULT_SORT_ORDER,
-      page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
-      pageSize: searchParams.get("pageSize")
-        ? Number(searchParams.get("pageSize"))
-        : DEFAULT_PAGE_SIZE,
-    }),
-    [searchParams],
-  );
+  const filter: JobFilters = useMemo(() => {
+    const params = Object.fromEntries(searchParams.entries());
+
+    return {
+      title: params.title || undefined,
+      location: params.location || undefined,
+      minSalary: params.minSalary ? Number(params.minSalary) : undefined,
+      maxSalary: params.maxSalary ? Number(params.maxSalary) : undefined,
+      employmentType: searchParams.getAll("employmentType").map(Number),
+      experienceLevel: searchParams.getAll("experienceLevel").map(Number),
+      skills: searchParams.getAll("skills"),
+      matchAllSkills:
+        params.matchAllSkills === "false" ? false : DEFAULT_MATCH_ALL,
+      sortBy: params.sortBy || DEFAULT_SORT_BY,
+      sortOrder: (params.sortOrder as "asc" | "desc") || DEFAULT_SORT_ORDER,
+      page: params.page ? Number(params.page) : 1,
+      pageSize: params.pageSize ? Number(params.pageSize) : DEFAULT_PAGE_SIZE,
+    };
+  }, [searchParams]);
 
   const updateFilter = useCallback(
     (newValues: Partial<JobFilters>) => {
-      setSearchParams((prevParams) => {
-        const updated = new URLSearchParams(prevParams);
-
-        Object.entries(newValues).forEach(([key, value]) => {
-          if (value === undefined || value === null || value === "") {
+      setSearchParams(
+        (prev) => {
+          const updated = new URLSearchParams(prev);
+          Object.entries(newValues).forEach(([key, value]) => {
             updated.delete(key);
-          } else {
-            updated.set(key, String(value));
+            if (value === undefined || value === null) return;
+            if (Array.isArray(value)) {
+              value.forEach((v) => updated.append(key, String(v)));
+            } else {
+              updated.set(key, String(value));
+            }
+          });
+
+          const filterKeys = [
+            "title",
+            "location",
+            "minSalary",
+            "maxSalary",
+            "employmentType",
+            "experienceLevel",
+            "skills",
+            "matchAllSkills",
+          ];
+          const isCriteriaChanged = Object.keys(newValues).some((k) =>
+            filterKeys.includes(k),
+          );
+          if (isCriteriaChanged && !("page" in newValues)) {
+            updated.delete("page");
           }
-        });
-        const filterKeys = [
-          "title",
-          "location",
-          "minSalary",
-          "maxSalary",
-          "employmentType",
-          "experienceLevel",
-          "skill",
-        ];
-        const isCriteriaChanging = Object.keys(newValues).some((key) =>
-          filterKeys.includes(key),
-        );
 
-        if (isCriteriaChanging && !("page" in newValues)) {
-          updated.delete("page");
-        }
-
-        return updated;
-      });
+          return updated;
+        },
+        { replace: true },
+      );
     },
     [setSearchParams],
   );
@@ -76,9 +74,5 @@ export const useFilter = (): {
     setSearchParams({}, { replace: true });
   }, [setSearchParams]);
 
-  return {
-    filter,
-    updateFilter,
-    resetFilter,
-  };
+  return { filter, updateFilter, resetFilter };
 };

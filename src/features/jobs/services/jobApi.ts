@@ -1,7 +1,6 @@
 import { axiosInstance } from "@/services/api/axiosInstance";
 import qs from "qs";
 import {
-  type JobListItem,
   transformJobListItem,
   type JobListPaginatedResponse,
   type JobDetailResponse,
@@ -10,74 +9,65 @@ import {
   type CreateJobRequest,
   type UpdateJobRequest,
   type JobFilters,
+  type JobListItem,
 } from "../types/job.types";
 import { JOB_ENDPOINTS } from "@/config/endpoints/job.endpoints";
 import type { MatchCVJobsParams, MatchCVJobsResponse } from "@/features/ai/types/ai.types";
 
 export const jobApi = {
   getJobs: async (filters?: JobFilters) => {
-    const params = {
-      title: filters?.title,
-      location: filters?.location,
-      minSalary: filters?.minSalary,
-      maxSalary: filters?.maxSalary,
-      employmentType: filters?.employmentType,
-      experienceLevel: filters?.experienceLevel,
-      skill: filters?.skill,
-      sortBy: filters?.sortBy,
-      sortOrder: filters?.sortOrder,
-      page: filters?.page,
-      pageSize: filters?.pageSize,
-    };
-
     const response = await axiosInstance.get<JobListPaginatedResponse>(
       JOB_ENDPOINTS.LIST,
       {
         params: {
-          ...params,
-          employmentType: filters?.employmentType?.split(",").map(Number),
-          experienceLevel: filters?.experienceLevel?.split(",").map(Number),
+          title: filters?.title,
+          location: filters?.location,
+          minSalary: filters?.minSalary,
+          maxSalary: filters?.maxSalary,
+          employmentType: filters?.employmentType,
+          experienceLevel: filters?.experienceLevel,
+          skills: filters?.skills,
+          matchAllSkills: filters?.matchAllSkills ?? true,
+          sortBy: filters?.sortBy,
+          sortOrder: filters?.sortOrder,
+          page: filters?.page,
+          pageSize: filters?.pageSize,
         },
         paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
       },
     );
-
-    const pageSize = filters?.pageSize || 6;
-    const totalPages =
-      response.data.totalPages ||
-      Math.ceil((response.data.total || 0) / pageSize);
-
     return {
       data: response.data.data.map(transformJobListItem),
       total: response.data.total,
-      totalPages,
+      totalPages: response.data.totalPages,
     };
   },
 
-  getMyJobs: async (
-    filters?: JobFilters,
-  ): Promise<{ data: JobListItem[]; total: number }> => {
-    const params = {
-      title: filters?.title,
-      location: filters?.location,
-      minSalary: filters?.minSalary,
-      maxSalary: filters?.maxSalary,
-      employmentType: filters?.employmentType,
-      experienceLevel: filters?.experienceLevel,
-      skill: filters?.skill,
-      sortBy: filters?.sortBy,
-      sortOrder: filters?.sortOrder,
-      page: filters?.page,
-      pageSize: filters?.pageSize,
-    };
-
+  getMyJobs: async (filters?: JobFilters) => {
     const response = await axiosInstance.get<JobListPaginatedResponse>(
       JOB_ENDPOINTS.MY_JOBS,
-      { params },
+      {
+        params: {
+          title: filters?.title,
+          location: filters?.location,
+          minSalary: filters?.minSalary,
+          maxSalary: filters?.maxSalary,
+          employmentType: filters?.employmentType,
+          experienceLevel: filters?.experienceLevel,
+          skills: filters?.skills,
+          matchAllSkills: filters?.matchAllSkills,
+          sortBy: filters?.sortBy,
+          sortOrder: filters?.sortOrder,
+          page: filters?.page,
+          pageSize: filters?.pageSize,
+        },
+        paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
+      },
     );
     return {
       data: response.data.data.map(transformJobListItem),
       total: response.data.total,
+      totalPages: response.data.totalPages,
     };
   },
   getJob: async (id: string): Promise<Job> => {
@@ -115,6 +105,13 @@ export const jobApi = {
       },
     );
     return response.data.data.map(transformJobListItem);
+  },
+
+  getSimilarJobs: async (id: string): Promise<{ data: JobListItem[] }> => {
+    const response = await axiosInstance.get<JobListPaginatedResponse>(
+      JOB_ENDPOINTS.SIMILAR(id),
+    );
+    return { data: response.data.data.map(transformJobListItem) };
   },
 
   // Danh sách jobs phù hợp với CV

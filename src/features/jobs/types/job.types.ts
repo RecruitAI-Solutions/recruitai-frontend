@@ -335,10 +335,10 @@ export type JobFilters = {
   location?: string;
   minSalary?: number;
   maxSalary?: number;
-  employmentType?: string;
-  experienceLevel?: string;
-  skills?: string[];
+  employmentType?: number[];
+  experienceLevel?: number[];
   skill?: string;
+  skills?: string[];
   matchAllSkills?: boolean;
   sortBy?: string;
   sortOrder?: "asc" | "desc";

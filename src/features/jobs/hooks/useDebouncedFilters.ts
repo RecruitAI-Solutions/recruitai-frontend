@@ -13,6 +13,8 @@ export const useDebouncedFilters = (filters: JobFilters): JobFilters => {
     employmentType: filters.employmentType,
     experienceLevel: filters.experienceLevel,
     skill: filters.skill,
+    skills: filters.skills,
+    matchAllSkills: filters.matchAllSkills ?? true,
     sortBy: filters.sortBy,
     sortOrder: filters.sortOrder,
     page: filters.page,

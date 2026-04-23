@@ -9,5 +9,7 @@ export const JOB_ENDPOINTS = {
   DETAIL: (id: string) => `${JOB_BASE}/${id}`,
   UPDATE: (id: string) => `${JOB_BASE}/${id}`,
   DELETE: (id: string) => `${JOB_BASE}/${id}`,
+  FEATURED: `${JOB_BASE}/featured`,
+  SIMILAR: (id: string) => `${JOB_BASE}/similar/${id}`,
   MATCH_CV_JOBS: (cvId: string) => `${JOB_BASE}/suggestions/by-cv/${cvId}`,
 } as const;

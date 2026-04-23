@@ -42,6 +42,7 @@ export const SkillTable = ({
         text: cat,
         value: cat,
       })),
+      filterMultiple: false,
       render: (cat) => <Tag color="blue">{cat}</Tag>,
     },
     {
@@ -52,6 +53,7 @@ export const SkillTable = ({
         { text: "Hoạt động", value: true },
         { text: "Không hoạt động", value: false },
       ],
+      filterMultiple: false,
       render: (active: boolean) => (
         <Tag color={active ? "green" : "default"}>
           {active ? "Active" : "Inactive"}
