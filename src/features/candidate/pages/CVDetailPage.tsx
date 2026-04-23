@@ -54,13 +54,22 @@ export const CVDetailPage = () => {
   return (
     <Section>
       <Container>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-sm text-text-secondary hover:text-primary mb-6 cursor-pointer"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Quay lại danh sách
-        </button>
+        {/* Hero Section - Sticky với background thụt vào */}
+        <div className="sticky top-0 z-10">
+          <div className="flex justify-center">
+            <div className="w-full shadow-md">
+              <div className="py-4">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
+                  Quay lại danh sách
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="bg-surface rounded-xl border border-border p-6 mt-3 shadow-sm transition-all hover:shadow-md">
           {/* Header */}
