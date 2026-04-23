@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
+import { Section } from "@/shared/layouts/Section";
+import { Container } from "@/shared/layouts/Container";
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full space-y-8">
+    <Section>
+      <Container>
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">Quên mật khẩu?</h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -22,7 +24,7 @@ export default function ForgotPasswordPage() {
         <div className="bg-white py-8 px-6 shadow-lg rounded-lg">
           <ForgotPasswordForm />
         </div>
-      </div>
-    </div>
+      </Container>
+    </Section>
   );
 }

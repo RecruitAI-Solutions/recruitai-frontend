@@ -8,7 +8,7 @@ import {
 import { API_BASE_URL, AUTH_ENDPOINTS } from "@/config/api.config";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -35,7 +35,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/login")
+    ) {
       originalRequest._retry = true;
       try {
         const refreshToken = getRefreshToken();

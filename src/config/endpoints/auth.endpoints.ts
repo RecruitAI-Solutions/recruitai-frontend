@@ -1,4 +1,4 @@
-const AUTH_BASE = "/api/v1/auth";
+const AUTH_BASE = "/v1/auth";
 
 export const AUTH_ENDPOINTS = {
   LOGIN: `${AUTH_BASE}/login`,
@@ -20,6 +20,9 @@ export const AUTH_ENDPOINTS = {
 
   EXTERNAL_LOGIN: (provider: string) => `${AUTH_BASE}/login/${provider}`,
   EXTERNAL_LOGIN_CALLBACK: `${AUTH_BASE}/external-login-callback`,
+  UPDATE_PROFILE: `${AUTH_BASE}/profile`,
+  UPLOAD_AVATAR: "/v1/users/avatar",
+  DELETE_AVATAR: "/v1/users/avatar",
 } as const;
 
 export const {
@@ -37,4 +40,7 @@ export const {
   USER_PERMISSIONS,
   EXTERNAL_LOGIN,
   EXTERNAL_LOGIN_CALLBACK,
+  UPDATE_PROFILE,
+  UPLOAD_AVATAR,
+  DELETE_AVATAR,
 } = AUTH_ENDPOINTS;

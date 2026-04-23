@@ -6,6 +6,7 @@ import { logout as logoutAction } from "../slices/authSlice";
 import { authApi } from "../services/authApi";
 import { getRefreshToken } from "@/services/storage/localStorage";
 import { ROUTES } from "@/config/routes.config";
+import { queryClient } from "@/services/api/QueryClient";
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ export const useLogout = () => {
     onSuccess: () => {
       dispatch(logoutAction());
 
+      queryClient.removeQueries({ queryKey: ["me"] });
       toast.success("Đăng xuất thành công!", {
         duration: 2000,
       });

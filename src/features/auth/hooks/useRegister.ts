@@ -29,11 +29,23 @@ export const useRegister = () => {
       navigate("/login", { replace: true });
     },
 
-    onError: (error: AxiosError) => {
-      const message = error.message || "Đăng ký thất bật";
-      toast.error(message || "Đăng ký thất bại", {
-        duration: 3000,
-      });
+    onError: (error: AxiosError<{ message: string; errors?: Record<string, string[]> }>) => {
+      console.log("Register error:", error);
+
+      let message = error?.response?.data?.message || error?.message || "Đăng ký thất bại";
+
+      const errors = error?.response?.data?.errors;
+      if (errors) {
+        const firstKey = Object.keys(errors)[0];
+        if (firstKey) {
+          const firstError = errors[firstKey]?.[0];
+          if (firstError) {
+            message = firstError;
+          }
+        }
+      }
+
+      toast.error(message, { duration: 3000 });
     },
   });
 };

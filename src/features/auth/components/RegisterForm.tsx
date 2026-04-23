@@ -84,27 +84,34 @@ export const RegisterForm = () => {
         disabled={isPending}
       />
 
-      {/* Role Select */}
-      <select {...formRegister("role", { valueAsNumber: true })}>
-        <option value={UserRoleNumber.CANDIDATE}>Ứng viên</option>
-        <option value={UserRoleNumber.RECRUITER}>Nhà tuyển dụng</option>
-        <option value={UserRoleNumber.ADMIN}>Quản trị viên</option>
-      </select>
+      <div className="flex flex-col gap-4">
+        {/* Role Select */}
+        <select
+          {...formRegister("role", { valueAsNumber: true })}
+          className="w-full px-4 py-2 rounded-lg border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+        >
+          <option value={UserRoleNumber.CANDIDATE}>Ứng viên</option>
+          <option value={UserRoleNumber.RECRUITER}>Nhà tuyển dụng</option>
+        </select>
 
-      {/* Gender Select */}
-      <select {...formRegister("gender", { valueAsNumber: true })}>
-        <option value={0}>Không xác định</option>
-        <option value={1}>Nam</option>
-        <option value={2}>Nữ</option>
-        <option value={3}>Khác</option>
-      </select>
+        {/* Gender Select */}
+        <select
+          {...formRegister("gender", { valueAsNumber: true })}
+          className="w-full px-4 py-2 rounded-lg border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+        >
+          <option value={0}>Không xác định</option>
+          <option value={1}>Nam</option>
+          <option value={2}>Nữ</option>
+          <option value={3}>Khác</option>
+        </select>
 
-      <Input
-        label="Số điện thoại"
-        {...formRegister("phoneNumber")}
-        error={errors.phoneNumber?.message}
-        disabled={isPending}
-      />
+        <Input
+          label="Số điện thoại"
+          {...formRegister("phoneNumber")}
+          error={errors.phoneNumber?.message}
+          disabled={isPending}
+        />
+      </div>
 
       <Input
         label="Ngày sinh"
@@ -114,7 +121,12 @@ export const RegisterForm = () => {
         disabled={isPending}
       />
 
-      <Button type="submit" isLoading={isPending} fullWidth>
+      <Button
+        type="submit"
+        isLoading={isPending}
+        fullWidth
+        style={{ color: "white" }}
+      >
         Đăng ký
       </Button>
     </form>

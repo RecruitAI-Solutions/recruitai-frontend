@@ -5,7 +5,6 @@ import { authApi, type LoginRequest } from "../services/authApi";
 import { setCredentials } from "../slices/authSlice";
 import { useAppDispatch } from "@/app/hooks";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
-import type { AxiosError } from "axios";
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -30,12 +29,16 @@ export const useLogin = () => {
       navigate(redirectPath, { replace: true });
     },
 
-    onError: (error: AxiosError) => {
-      console.error("Login error: ", error);
-      const message = error.message;
-      toast.error(message, {
-        duration: 3000,
-      });
+    onError: (error) => {
+      const data = error.response?.data;
+
+      console.log(error);
+
+      if (status === 403 && message.includes("Email")) {
+        return;
+      }
+
+      toast.error(data.message || "Đăng nhập thất bại");
     },
   });
 };

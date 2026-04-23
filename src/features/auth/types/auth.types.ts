@@ -207,4 +207,24 @@ export type AuthState = {
   role: UserRole | null;
   loading: boolean;
   error: string | null;
+  isInitialized?: boolean;
+};
+
+export type UpdateProfileRequest = {
+  fullName?: string;
+  phoneNumber?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  avatarUrl?: string;
+};
+
+export type UpdateProfileResponse = {
+  userId: string;
+  email: string;
+  fullName: string;
+  phoneNumber: string | null;
+  gender: string | null;
+  dateOfBirth: string | null;
+  avatarUrl: string | null;
+  updatedAt: string;
 };

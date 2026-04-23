@@ -1,7 +1,14 @@
 import { type RouteObject } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { RoleBasedRoute } from "../RoleBasedRoute";
-import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { DashboardLayout } from "@/shared/layouts/dashboard/DashboardLayout";
+import RecruiterDashboard from "@/features/jobs/pages/RecruiterDashboard";
+import { MyJobsPage } from "@/features/jobs/pages/MyJobPage";
+import { CreateJobPage } from "@/features/jobs/pages/CreateJobPage";
+import { EditJobPage } from "@/features/jobs/pages/EditJobPage";
+import { JobApplicationsPage } from "@/features/applications/pages/JobApplicationsPage";
+import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
+import { recruiterNavConfig } from "@/shared/layouts/configs";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -17,12 +24,33 @@ export const createRecuiterRoutes = (
   ),
   children: [
     {
-      path: ROUTES.RECRUITER.DASHBOARD,
-      element: (
-        <>
-          RECRUITER DASHBOARD <LogoutButton />
-        </>
-      ),
+      element: <DashboardLayout navConfig={recruiterNavConfig} />,
+      children: [
+        {
+          path: ROUTES.RECRUITER.DASHBOARD,
+          element: <RecruiterDashboard />,
+        },
+        {
+          path: ROUTES.RECRUITER.JOBS,
+          element: <MyJobsPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.JOB_CREATE,
+          element: <CreateJobPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.JOB_EDIT(":id"),
+          element: <EditJobPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.APPLICANTS(":jobId"),
+          element: <JobApplicationsPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.APPLICATION_DETAIL(":applicationId"),
+          element: <ApplicationDetailPage />,
+        },
+      ],
     },
   ],
 });
