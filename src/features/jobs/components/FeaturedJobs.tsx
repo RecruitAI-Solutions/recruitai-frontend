@@ -1,12 +1,12 @@
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
-import { useGetJobs } from "@/features/jobs/hooks/useGetJobs";
 import { JobCard } from "./JobCard";
 import { JobSkeleton } from "./JobSkeleton";
+import { useGetFeaturedJobs } from "../hooks/useGetFeaturedJobs";
 
 export const FeaturedJobs = () => {
-  const { data, isLoading } = useGetJobs({});
-
+  const { data, isLoading } = useGetFeaturedJobs();
+  const jobs = data?.data ?? [];
   if (isLoading)
     return (
       <div className="grid md:grid-cols-3 gap-6">
@@ -15,8 +15,6 @@ export const FeaturedJobs = () => {
         ))}
       </div>
     );
-
-  const jobs = data?.data.slice(0, 6) || [];
 
   return (
     <Section>

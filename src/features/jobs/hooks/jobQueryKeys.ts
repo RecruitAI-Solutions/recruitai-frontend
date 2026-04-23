@@ -11,4 +11,6 @@ export const JOB_QUERY_KEYS = {
   },
   myJobs: ["jobs", "my-jobs"] as const, // <-- Sửa thành array trực tiếp, không cần hàm
   detail: (id: string) => [...JOB_QUERY_KEYS.all, "detail", id] as const,
+  featured: () => [...JOB_QUERY_KEYS.all, "featured"] as const,
+  similar: (id: string) => [...JOB_QUERY_KEYS.all, "similar", id] as const,
 };

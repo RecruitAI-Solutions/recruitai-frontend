@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useAdminJobFilters } from "../hooks/useAdminJobFilters";
 import { useAdminJobs } from "../hooks/useAdminJobs";
 import { useDeleteJob } from "@/features/jobs/hooks/useDeleteJob";
 import { AdminJobTable } from "../components/AdminJobTable";
@@ -12,67 +11,94 @@ import type { TablePaginationConfig } from "antd/es/table";
 import type { JobFilters, JobListItem } from "@/features/jobs/types/job.types";
 import { useDebounce } from "@/lib/useDebounce";
 
-export const JobsManagementPage = () => {
-  const { filter, updateFilter } = useAdminJobFilters();
-  const [keyword, setKeyword] = useState(filter.title || "");
-  const debouncedKeyword = useDebounce(keyword, 300);
+const DEFAULT_FILTERS: JobFilters = {
+  page: 1,
+  pageSize: 10,
+  sortBy: "createdAt",
+  sortOrder: "desc",
+  employmentType: [],
+  experienceLevel: [],
+  skills: [],
+  matchAllSkills: true,
+};
 
-  useEffect(() => {
-    updateFilter({ title: debouncedKeyword || undefined });
-  }, [debouncedKeyword, updateFilter]);
+export const JobsManagementPage = () => {
+  const [filter, setFilter] = useState<JobFilters>(DEFAULT_FILTERS);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearch = useDebounce(searchTerm, 300);
 
   const { data, isLoading } = useAdminJobs(filter);
   const { mutate: deleteJob } = useDeleteJob();
+
+  useEffect(() => {
+    const nextTitle = debouncedSearch || undefined;
+    if (nextTitle !== filter.title) {
+      setFilter((prev) => ({
+        ...prev,
+        title: nextTitle,
+        page: 1,
+      }));
+    }
+  }, [debouncedSearch, filter.title]);
+
+  const updateFilter = useCallback((newValues: Partial<JobFilters>) => {
+    setFilter((prev) => ({ ...prev, ...newValues }));
+  }, []);
 
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
     sorter: SorterResult<JobListItem> | SorterResult<JobListItem>[],
   ) => {
+    const s = Array.isArray(sorter) ? sorter[0] : sorter;
+
     const newFilter: Partial<JobFilters> = {
       page: pagination.current ?? 1,
       pageSize: pagination.pageSize ?? 10,
+      sortBy: s.field ? (s.field as string) : undefined,
+      sortOrder: s.order === "ascend" ? "asc" : "desc",
     };
 
-    const s = Array.isArray(sorter) ? sorter[0] : sorter;
-    if (s?.field) {
-      newFilter.sortBy = s.field as string;
-      newFilter.sortOrder = s.order === "ascend" ? "asc" : "desc";
+    if (Object.prototype.hasOwnProperty.call(filters, "employmentType")) {
+      newFilter.employmentType = filters.employmentType?.length
+        ? filters.employmentType.map(Number)
+        : [];
     }
 
-    if (filters.employmentType?.[0]) {
-      newFilter.employmentType = filters.employmentType[0] as string;
-    }
     updateFilter(newFilter);
   };
 
   return (
     <Section>
       <Container size="full">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Quản lý công việc</h1>
-          <Input
-            placeholder="Tìm kiếm..."
-            prefix={<SearchOutlined />}
-            style={{ width: 300 }}
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            allowClear
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h1 className="text-2xl font-bold text-text-primary">
+            Quản lý công việc
+          </h1>
+          <div className="w-full sm:w-64">
+            <Input
+              placeholder="Tìm kiếm..."
+              prefix={<SearchOutlined />}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              allowClear
+            />
+          </div>
+        </div>
+        <div className="w-full overflow-x-auto rounded-lg border border-border">
+          <AdminJobTable
+            jobs={data?.data || []}
+            loading={isLoading}
+            onDelete={deleteJob}
+            pagination={{
+              current: filter.page || 1,
+              pageSize: filter.pageSize || 10,
+              total: data?.total || 0,
+              showSizeChanger: true,
+            }}
+            onTableChange={handleTableChange}
           />
         </div>
-
-        <AdminJobTable
-          jobs={data?.data || []}
-          loading={isLoading}
-          onDelete={deleteJob}
-          pagination={{
-            current: filter.page || 1,
-            pageSize: filter.pageSize || 10,
-            total: data?.total || 0,
-            showSizeChanger: true,
-          }}
-          onTableChange={handleTableChange}
-        />
       </Container>
     </Section>
   );

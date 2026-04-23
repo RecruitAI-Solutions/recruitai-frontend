@@ -18,7 +18,7 @@ type Props = {
 export const TrendChart = ({ data }: Props) => {
   if (
     !data ||
-    !data.cvsLast7Days ||
+    !data.cVsLast7Days ||
     !data.jobsLast7Days ||
     !data.applicationsLast7Days
   ) {
@@ -30,9 +30,9 @@ export const TrendChart = ({ data }: Props) => {
       </Card>
     );
   }
-  const chartData = data.cvsLast7Days.map((_, index) => ({
+  const chartData = data.cVsLast7Days.map((_, index) => ({
     day: `Ngày ${index + 1}`,
-    CV: data.cvsLast7Days[index],
+    CV: data.cVsLast7Days[index],
     "Công việc": data.jobsLast7Days[index],
     "Ứng tuyển": data.applicationsLast7Days[index],
   }));

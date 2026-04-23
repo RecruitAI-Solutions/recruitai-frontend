@@ -3,7 +3,10 @@ import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
-import type { JobListItem } from "@/features/jobs/types/job.types";
+import {
+  employmentTypeMap,
+  type JobListItem,
+} from "@/features/jobs/types/job.types";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import dayjs from "dayjs";
 
@@ -47,34 +50,17 @@ export const AdminJobTable = ({
       title: "Địa điểm",
       dataIndex: "location",
       key: "location",
+      sorter: true,
     },
     {
       title: "Hình thức",
-      dataIndex: "employmentType",
+      dataIndex: "employmentTypeValue",
       key: "employmentType",
-      filters: [
-        { text: "Full-time", value: "Full-time" },
-        { text: "Part-time", value: "Part-time" },
-        { text: "Remote", value: "Remote" },
-        { text: "Hybrid", value: "Hybrid" },
-        { text: "Contract", value: "Contract" },
-        { text: "Internship", value: "Internship" },
-      ],
-      render: (text) => <Tag color="blue">{text}</Tag>,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "isActive",
-      key: "isActive",
-      filters: [
-        { text: "Đang hiển thị", value: true },
-        { text: "Ẩn", value: false },
-      ],
-      render: (active: boolean) => (
-        <Tag color={active ? "green" : "default"}>
-          {active ? "Active" : "Inactive"}
-        </Tag>
-      ),
+      filters: Object.entries(employmentTypeMap).map(([value, label]) => ({
+        text: label,
+        value: Number(value), // 👈 sửa thành số
+      })),
+      render: (_, record) => <Tag color="blue">{record.employmentType}</Tag>,
     },
     {
       title: "Ngày tạo",
