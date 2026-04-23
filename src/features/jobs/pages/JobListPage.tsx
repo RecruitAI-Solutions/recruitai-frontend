@@ -16,7 +16,7 @@ import {
 } from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
 import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useCallback } from "react";
 
 export const JobListPage = () => {
@@ -54,9 +54,11 @@ export const JobListPage = () => {
   const currentPage = filter.page ?? 1;
   const totalPages = data?.totalPages ?? 0;
 
-  const handleJobSearch = (value: string) => {
-    setSearch(value);
-  };
+  // useCallback để ổn định reference — tránh trigger effect trong child components
+  const handleTitleChange = useCallback(
+    (value: string) => updateFilter({ title: value || undefined }),
+    [updateFilter],
+  );
 
   const handleSortByChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -85,7 +87,7 @@ export const JobListPage = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
-          <JobSearch value={search} onChange={handleJobSearch} />
+          <JobSearch value={filter.title || ""} onChange={handleTitleChange} />
         </div>
 
         {/* Mobile Filter Button */}
@@ -96,7 +98,7 @@ export const JobListPage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="hidden md:block">
-            <JobFilterSidebar/>
+            <JobFilterSidebar />
           </div>
 
           {/* Main Content */}
