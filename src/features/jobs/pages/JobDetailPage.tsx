@@ -32,6 +32,8 @@ import { Container } from "@/shared/layouts/Container";
 import { ROUTES } from "@/config/routes.config";
 import { MatchCVButton } from "@/features/ai/components/MatchCVButton";
 import { ApplySection } from "@/features/applications/components/ApplySection";
+import { useGetSimilarJobs } from "../hooks/useGetSimilarJobs";
+import { JobCard } from "../components/JobCard";
 
 const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +41,9 @@ const JobDetailPage = () => {
   const { data: job, isLoading, error } = useGetJob(id || "");
   const user = useAppSelector(selectCurrentUser);
   const userRole = useAppSelector(selectUserRole);
+
+  const { data: similarData } = useGetSimilarJobs(id ?? "", !!id);
+  const similarJobs = similarData?.data ?? [];
 
   if (isLoading) {
     return (
@@ -365,8 +370,25 @@ const JobDetailPage = () => {
               )}
             </div>
           </div>
-        </div>
-      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+      {similarJobs.length > 0 && (
+        <Section padding="md">
+          <Container>
+            <h2 className="text-xl font-bold mb-6">Việc làm tương tự</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {similarJobs.map((job) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
     </div>
   );
 };

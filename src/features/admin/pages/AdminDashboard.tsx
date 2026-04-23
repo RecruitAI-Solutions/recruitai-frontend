@@ -23,6 +23,10 @@ export const AdminDashboard = () => {
     setToDate(to);
   };
 
+  const handleRefresh = () => {
+    refetch();
+  };
+
   return (
     <Section>
       <Container size="full">
@@ -32,7 +36,7 @@ export const AdminDashboard = () => {
           fromDate={fromDate}
           toDate={toDate}
           onDateChange={handleDateChange}
-          onRefresh={refetch}
+          onRefresh={handleRefresh}
           isLoading={isLoading}
         />
 
@@ -42,7 +46,6 @@ export const AdminDashboard = () => {
           </div>
         ) : data ? (
           <>
-            {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <StatCard
                 label="Tổng CV"
@@ -66,10 +69,8 @@ export const AdminDashboard = () => {
               />
             </div>
 
-            {/* Trend Chart */}
             <TrendChart data={data.recentTrend} />
 
-            {/* Row 2: Pie Users + Bar Applications */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <PieChartCard
                 data={data.usersByRole}
@@ -82,7 +83,6 @@ export const AdminDashboard = () => {
               />
             </div>
 
-            {/* Row 3: Bar Jobs Status */}
             <BarChartCard
               data={data.jobsByStatus}
               title="Trạng thái công việc"

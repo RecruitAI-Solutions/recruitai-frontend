@@ -43,42 +43,50 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
   );
 
   const selectedExperienceLevels = useMemo(
-    () => filter.experienceLevel?.split(",").filter(Boolean) || [],
+    () => filter.experienceLevel ?? [],
     [filter.experienceLevel],
   );
 
-  const handleSkillChange = useCallback(
-    (ids: number[], skills: SelectedSkill[]) => {
-      const names = skills.map((s) => s.name);
-      updateFilter({
-        skill: names.length ? names.join(",") : undefined,
-      });
-    },
-    [updateFilter],
+  const selectedEmploymentTypes = useMemo(
+    () => filter.employmentType ?? [],
+    [filter.employmentType],
   );
 
+  const selectedSkills = useMemo(() => filter.skills ?? [], [filter.skills]);
+
+  const defaultSkills: SelectedSkill[] = useMemo(() => {
+    return selectedSkills.map((name, index) => ({
+      id: -index - 1,
+      name,
+    }));
+  }, [selectedSkills]);
+
   const handleEmploymentTypeChange = useCallback(
-    (value: string, checked: boolean) => {
+    (value: number, checked: boolean) => {
       const next = checked
         ? [...selectedEmploymentTypes, value]
         : selectedEmploymentTypes.filter((v) => v !== value);
-      updateFilter({
-        employmentType: next.length ? next.join(",") : undefined,
-      });
+      updateFilter({ employmentType: next.length ? next : [] });
     },
     [selectedEmploymentTypes, updateFilter],
   );
 
   const handleExperienceLevelChange = useCallback(
-    (value: string, checked: boolean) => {
+    (value: number, checked: boolean) => {
       const next = checked
         ? [...selectedExperienceLevels, value]
         : selectedExperienceLevels.filter((v) => v !== value);
-      updateFilter({
-        experienceLevel: next.length ? next.join(",") : undefined,
-      });
+      updateFilter({ experienceLevel: next.length ? next : [] });
     },
     [selectedExperienceLevels, updateFilter],
+  );
+
+  const handleSkillChange = useCallback(
+    (ids: number[], skills: SelectedSkill[]) => {
+      const names = skills.map((s) => s.name);
+      updateFilter({ skills: names.length ? names : [] });
+    },
+    [updateFilter],
   );
 
   const handleSalaryChange = useCallback(
@@ -91,15 +99,14 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
 
   const handleReset = useCallback(() => {
     resetFilter();
-    onReset?.();
-  }, [resetFilter, onReset]);
+    setSkillInputKey((prev) => prev + 1);
+  }, [resetFilter]);
 
   return (
     <aside
       className={cn(
         "w-full md:w-72 bg-surface p-5 rounded-xl border border-border",
-        "sticky top-[16px] overflow-y-auto will-change-transform transition-transform duration-200 ease-out",
-        styles.sidebar,
+        "sticky top-[16px] max-h-[calc(100vh-100px)] overflow-auto",
         className,
       )}
       style={{
@@ -138,9 +145,9 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
               >
                 <Checkbox.Root
                   className="w-5 h-5 rounded border border-border flex items-center justify-center data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                  checked={selectedEmploymentTypes.includes(value)}
+                  checked={selectedEmploymentTypes.includes(Number(value))}
                   onCheckedChange={(checked) =>
-                    handleEmploymentTypeChange(value, checked === true)
+                    handleEmploymentTypeChange(Number(value), checked === true)
                   }
                 >
                   <Checkbox.Indicator>
@@ -212,9 +219,9 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
               >
                 <Checkbox.Root
                   className="w-5 h-5 rounded border border-border flex items-center justify-center data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                  checked={selectedExperienceLevels.includes(value)}
+                  checked={selectedExperienceLevels.includes(Number(value))}
                   onCheckedChange={(checked) =>
-                    handleExperienceLevelChange(value, checked === true)
+                    handleExperienceLevelChange(Number(value), checked === true)
                   }
                 >
                   <Checkbox.Indicator>

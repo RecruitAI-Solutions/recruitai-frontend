@@ -15,10 +15,9 @@ import {
   selectUserRole,
 } from "@/features/auth/slices/authSlice";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
-import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
-import { useMemo } from "react";
+import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
+import { useEffect, useMemo, useState } from "react";
 import { useCallback } from "react";
-import { useState, useEffect } from "react";
 import { useDebounce } from "@/lib/useDebounce";
 
 export const JobListPage = () => {
@@ -38,6 +37,16 @@ export const JobListPage = () => {
   }, [debouncedSearchTitle, updateFilter]);
 
   const { data, isLoading, isFetching } = useGetJobs(filter);
+
+  const [search, setSearch] = useState(filter.title || "");
+  const debouncedSearch = useDebounce(search, 300);
+
+  useEffect(() => {
+    updateFilter({
+      title: debouncedSearch || undefined,
+      page: 1,
+    });
+  }, [debouncedSearch]);
 
   const { data: cvData } = useGetMyCVs({
     filters: {
@@ -66,15 +75,9 @@ export const JobListPage = () => {
   const currentPage = filter.page ?? 1;
   const totalPages = data?.totalPages ?? 0;
 
-  // useCallback để ổn định reference — tránh trigger effect trong child components
-  const handleTitleChange = useCallback(
-    (value: string) => setSearchTitle(value),
-    [],
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setSearchTitle("");
-  }, []);
+  const handleJobSearch = (value: string) => {
+    setSearch(value);
+  };
 
   const handleSortByChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -103,7 +106,7 @@ export const JobListPage = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
-          <JobSearch value={searchTitle} onChange={handleTitleChange} />
+          <JobSearch value={search} onChange={handleJobSearch} />
         </div>
 
         {/* Mobile Filter Button */}

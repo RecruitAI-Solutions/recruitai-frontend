@@ -34,6 +34,10 @@ export const useLogin = () => {
 
       console.log(error);
 
+      if (status === 403 && message.includes("Email")) {
+        return;
+      }
+
       toast.error(data.message || "Đăng nhập thất bại");
     },
   });

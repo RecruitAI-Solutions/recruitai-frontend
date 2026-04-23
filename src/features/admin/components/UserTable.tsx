@@ -67,6 +67,7 @@ export const UserTable = ({
         text: label,
         value,
       })),
+      filterMultiple: false,
       render: (role: UserRoleValue) => USER_ROLE_LABEL[role],
     },
     {
@@ -77,6 +78,7 @@ export const UserTable = ({
         text: label,
         value: Number(value),
       })),
+      filterMultiple: false,
       render: (status: UserStatusValue) => {
         const colorMap: Record<UserStatusValue, string> = {
           [USER_STATUS.ACTIVE]: "green",

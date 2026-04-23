@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
-import type { JobListItem } from "../types/job.types";
+import { employmentTypeMap, type JobListItem } from "../types/job.types";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 
 type Props = {
@@ -43,27 +43,25 @@ export const JobTable = ({
         </Link>
       ),
       sorter: true,
+      width: "20%",
     },
     {
       title: "Địa điểm",
       dataIndex: "location",
       key: "location",
-      sorter: true,
+      width: "20%",
     },
     {
       title: "Hình thức",
-      dataIndex: "employmentType",
+      dataIndex: "employmentTypeValue",
       key: "employmentType",
-      filters: [
-        { text: "Full-time", value: "Full-time" },
-        { text: "Part-time", value: "Part-time" },
-        { text: "Remote", value: "Remote" },
-        { text: "Hybrid", value: "Hybrid" },
-        { text: "Contract", value: "Contract" },
-        { text: "Internship", value: "Internship" },
-      ],
-      filterMultiple: false,
-      render: (text) => <Tag color="blue">{text}</Tag>,
+      filters: Object.entries(employmentTypeMap).map(([value, label]) => ({
+        text: label,
+        value: Number(value),
+      })),
+      render: (_, record) => <Tag color="blue">{record.employmentType}</Tag>,
+      sorter: true,
+      width: "8.3%",
     },
     {
       title: "Lương",
@@ -74,6 +72,16 @@ export const JobTable = ({
           return `${fmt(record.salaryMin)} – ${fmt(record.salaryMax)} VND`;
         return "Thỏa thuận";
       },
+      sorter: true,
+      width: "20%",
+    },
+    {
+      title: "Ngày đăng",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (value) => new Date(value).toLocaleDateString("vi-VN"),
+      sorter: true,
+      width: "20%",
     },
     {
       title: "Ứng viên",
@@ -85,6 +93,7 @@ export const JobTable = ({
           </Button>
         </Link>
       ),
+      width: "8.3%",
     },
     {
       title: "Thao tác",
@@ -102,6 +111,7 @@ export const JobTable = ({
           />
         </Space>
       ),
+      width: "8.3%",
     },
   ];
 
@@ -113,7 +123,8 @@ export const JobTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
-      scroll={{ x: "max-content" }}
+      style={{ maxWidth: "100%" }}
+      scroll={{ x: true }}
     />
   );
 };

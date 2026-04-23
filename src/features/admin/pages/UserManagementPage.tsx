@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+// src/features/admin/pages/UserManagementPage.tsx
+import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { Input, Modal, Form, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useUserFilters } from "../hooks/useUserFilters";
 import {
   useAdminUsers,
   useDeleteUser,
@@ -23,14 +23,17 @@ import { useDebounce } from "@/lib/useDebounce";
 
 const { Option } = Select;
 
-export const UserManagementPage = () => {
-  const { filter, updateFilter } = useUserFilters();
-  const [keyword, setKeyword] = useState(filter.keyword || "");
-  const debouncedKeyword = useDebounce(keyword, 300);
+const DEFAULT_FILTERS: AdminUsersParams = {
+  page: 1,
+  pageSize: 10,
+  sortBy: "createdAt",
+  sortOrder: "desc",
+};
 
-  useEffect(() => {
-    updateFilter({ keyword: debouncedKeyword || undefined });
-  }, [debouncedKeyword, updateFilter]);
+export const UserManagementPage = () => {
+  const [filter, setFilter] = useState<AdminUsersParams>(DEFAULT_FILTERS);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearch = useDebounce(searchTerm, 300);
 
   const { data, isLoading } = useAdminUsers(filter);
   const { mutate: deleteUser } = useDeleteUser();
@@ -45,27 +48,46 @@ export const UserManagementPage = () => {
   const [statusForm] = Form.useForm();
   const [roleForm] = Form.useForm();
 
+  useEffect(() => {
+    const nextKeyword = debouncedSearch || undefined;
+    if (nextKeyword !== filter.keyword) {
+      setFilter((prev) => ({
+        ...prev,
+        keyword: nextKeyword,
+        page: 1,
+      }));
+    }
+  }, [debouncedSearch, filter.keyword]);
+
+  const updateFilter = useCallback((newValues: Partial<AdminUsersParams>) => {
+    setFilter((prev) => ({ ...prev, ...newValues }));
+  }, []);
+
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
     sorter: SorterResult<AdminUserSummary> | SorterResult<AdminUserSummary>[],
   ) => {
+    const s = Array.isArray(sorter) ? sorter[0] : sorter;
+
     const newFilter: Partial<AdminUsersParams> = {
       page: pagination.current ?? 1,
       pageSize: pagination.pageSize ?? 10,
+      sortBy: s.field
+        ? (s.field as "createdAt" | "fullName" | "email")
+        : undefined,
+      sortOrder: s.order === "ascend" ? "asc" : "desc",
     };
 
-    if (!Array.isArray(sorter) && sorter.field) {
-      newFilter.sortBy = sorter.field as "createdAt" | "fullName" | "email";
-      newFilter.sortOrder = sorter.order === "ascend" ? "asc" : "desc";
-    } else {
-      newFilter.sortBy = undefined;
-      newFilter.sortOrder = undefined;
+    if (Object.prototype.hasOwnProperty.call(filters, "role")) {
+      newFilter.role = (filters.role?.[0] as string) || undefined;
     }
 
-    if (filters.role?.[0]) newFilter.role = filters.role[0] as string;
-    if (filters.status?.[0])
-      newFilter.status = filters.status[0] as UserStatusValue;
+    if (Object.prototype.hasOwnProperty.call(filters, "status")) {
+      newFilter.status = filters.status?.length
+        ? (Number(filters.status[0]) as UserStatusValue)
+        : undefined;
+    }
 
     updateFilter(newFilter);
   };
@@ -101,32 +123,36 @@ export const UserManagementPage = () => {
   return (
     <Section>
       <Container size="full">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Quản lý người dùng</h1>
-          <Input
-            placeholder="Tìm kiếm..."
-            prefix={<SearchOutlined />}
-            style={{ width: 300 }}
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            allowClear
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h1 className="text-2xl font-bold text-text-primary">
+            Quản lý người dùng
+          </h1>
+          <div className="w-full sm:w-64">
+            <Input
+              placeholder="Tìm kiếm..."
+              prefix={<SearchOutlined />}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              allowClear
+            />
+          </div>
+        </div>
+        <div className="w-full overflow-x-auto rounded-lg border border-border">
+          <UserTable
+            users={data?.data || []}
+            loading={isLoading}
+            onDelete={deleteUser}
+            onUpdateStatus={openStatusModal}
+            onUpdateRole={openRoleModal}
+            pagination={{
+              current: filter.page || 1,
+              pageSize: filter.pageSize || 10,
+              total: data?.total || 0,
+              showSizeChanger: true,
+            }}
+            onTableChange={handleTableChange}
           />
         </div>
-
-        <UserTable
-          users={data?.data || []}
-          loading={isLoading}
-          onDelete={deleteUser}
-          onUpdateStatus={openStatusModal}
-          onUpdateRole={openRoleModal}
-          pagination={{
-            current: filter.page || 1,
-            pageSize: filter.pageSize || 10,
-            total: data?.total || 0,
-            showSizeChanger: true,
-          }}
-          onTableChange={handleTableChange}
-        />
 
         {/* Modals giữ nguyên */}
         <Modal
@@ -151,7 +177,6 @@ export const UserManagementPage = () => {
             </Form.Item>
           </Form>
         </Modal>
-
         <Modal
           title="Cập nhật vai trò"
           open={isRoleModalOpen}
