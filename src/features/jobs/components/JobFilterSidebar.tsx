@@ -25,22 +25,17 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
     [filter.skill],
   );
 
-  const defaultSkills: SelectedSkill[] = useMemo(() => {
-    return skillNames.map((name, index) => ({
-      id: -index - 1,
-      name,
-    }));
-  }, [skillNames]);
+  // const defaultSkills: SelectedSkill[] = useMemo(() => {
+  //   return skillNames.map((name, index) => ({
+  //     id: -index - 1,
+  //     name,
+  //   }));
+  // }, [skillNames]);
 
-  // Re-mount SkillInput khi defaultSkills thay đổi (bao gồm cả khi reset)
-  useEffect(() => {
-    setSkillInputKey((pre) => pre + 1);
-  }, [defaultSkills]);
-
-  const selectedEmploymentTypes = useMemo(
-    () => filter.employmentType?.split(",").filter(Boolean) || [],
-    [filter.employmentType],
-  );
+  // // Re-mount SkillInput khi defaultSkills thay đổi (bao gồm cả khi reset)
+  // useEffect(() => {
+  //   setSkillInputKey((pre) => pre + 1);
+  // }, [defaultSkills]);
 
   const selectedExperienceLevels = useMemo(
     () => filter.experienceLevel ?? [],

@@ -96,7 +96,7 @@ export const JobListPage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="hidden md:block">
-            <JobFilterSidebar onReset={handleResetFilters} />
+            <JobFilterSidebar/>
           </div>
 
           {/* Main Content */}
