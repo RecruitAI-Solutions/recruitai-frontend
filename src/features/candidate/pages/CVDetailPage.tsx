@@ -8,8 +8,9 @@ import { useGetCV } from "../hooks/useGetCV";
 import { useDownloadCV } from "../hooks/useDownloadCV";
 import { useAnalyzeCV } from "@/features/ai/hooks/useAnalyzeCV";
 import { useAnalysisResult } from "@/features/ai/hooks/useAnalysisResult";
-import { ChevronLeft, Download, RefreshCw, Loader2 } from "lucide-react";
+import { Download, RefreshCw, Loader2 } from "lucide-react";
 import { CV_STATUS } from "../types/cv.types";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 export const CVDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,8 +45,7 @@ export const CVDetailPage = () => {
     return (
       <Section>
         <Container className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Không tìm thấy CV</h2>
-          <Button onClick={() => navigate(-1)}>Quay lại</Button>
+          <ButtonBack animation="bounce">Quay lại</ButtonBack>
         </Container>
       </Section>
     );
@@ -54,22 +54,7 @@ export const CVDetailPage = () => {
   return (
     <Section>
       <Container>
-        {/* Hero Section - Sticky với background thụt vào */}
-        <div className="sticky top-0 z-10">
-          <div className="flex justify-center">
-            <div className="w-full shadow-md">
-              <div className="py-4">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-                  Quay lại danh sách
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ButtonBack>Quay lại danh sách</ButtonBack>
 
         <div className="bg-surface rounded-xl border border-border p-6 mt-3 shadow-sm transition-all hover:shadow-md">
           {/* Header */}

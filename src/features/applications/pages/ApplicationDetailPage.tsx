@@ -15,6 +15,7 @@ import type {
   ApplicationStatusLabel,
   ApplicationStatusValue,
 } from "../types/application.type";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 export const ApplicationDetailPage = () => {
   const { applicationId } = useParams<{ applicationId: string }>();
@@ -57,12 +58,7 @@ export const ApplicationDetailPage = () => {
   return (
     <Section>
       <Container>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-sm text-text-secondary hover:text-primary mb-6"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" /> Quay lại
-        </button>
+        <ButtonBack className="!mb-5">Quay lại danh sách</ButtonBack>
 
         <div className="bg-surface rounded-xl border p-6 space-y-6">
           {/* Header */}
