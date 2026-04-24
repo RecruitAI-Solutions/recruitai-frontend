@@ -11,6 +11,7 @@ export const ROUTES = {
   CONTACT: "/contact",
   JOB: "/jobs",
   JOB_DETAILS: (id: string) => `/jobs/${id}`,
+  PROFILE: "",
 
   CANDIDATE: {
     DASHBOARD: "/candidate/dashboard",
@@ -23,6 +24,7 @@ export const ROUTES = {
     CV_DETAIL: (id: string) => `/candidate/cv/${id}`,
     CV_MATCHING_JOBS: (cvId: string) => `/candidate/cv/${cvId}/matching-jobs`,
     SETTINGS: "/candidate/settings",
+    SAVED_JOBS: "",
   },
 
   RECRUITER: {
