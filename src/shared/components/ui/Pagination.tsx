@@ -4,20 +4,21 @@ type Props = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  className?: string;
 };
 
 export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  className,
 }: Props) => {
   if (totalPages <= 1) return null;
 
   const createPages = () => {
     const pages: (number | "...")[] = [];
 
-    const delta = 1; // số trang xung quanh current
-
+    const delta = 1;
     const rangeStart = Math.max(2, currentPage - delta);
     const rangeEnd = Math.min(totalPages - 1, currentPage + delta);
 
@@ -45,16 +46,16 @@ export const Pagination = ({
   const pages = createPages();
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className={cn("flex items-center justify-center gap-2", className)}>
       {/* Prev */}
       <button
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
         className={cn(
-          "px-3 py-1 rounded border cursor-pointer",
+          "px-3 py-1 rounded-md border transition-all duration-200",
           currentPage === 1
-            ? "text-gray-400 border-gray-200 cursor-not-allowed"
-            : "hover:bg-gray-100",
+            ? "text-text-disabled border-border cursor-not-allowed"
+            : "text-text-secondary border-border hover:border-primary/30 hover:bg-primary/5 cursor-pointer"
         )}
       >
         ←
@@ -63,23 +64,23 @@ export const Pagination = ({
       {/* Page numbers */}
       {pages.map((p, index) =>
         p === "..." ? (
-          <span key={index} className="px-2 text-gray-400">
+          <span key={index} className="px-2 text-text-disabled !text-white">
             ...
           </span>
         ) : (
           <button
             key={p}
-            onClick={() => onPageChange(p)}
+            onClick={() => onPageChange(p as number)}
             className={cn(
-              "px-3 py-1 rounded border cursor-pointer",
+              "px-3 py-1 rounded-md border transition-all duration-200",
               currentPage === p
-                ? "bg-primary text-white border-primary"
-                : "hover:bg-gray-100",
+                ? "bg-primary text-white border-primary cursor-pointer !text-white"
+                : "text-text-secondary border-border hover:border-primary/30 hover:bg-primary/5 cursor-pointer"
             )}
           >
             {p}
           </button>
-        ),
+        )
       )}
 
       {/* Next */}
@@ -87,10 +88,10 @@ export const Pagination = ({
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
         className={cn(
-          "px-3 py-1 rounded border cursor-pointer",
+          "px-3 py-1 rounded-md border transition-all duration-200",
           currentPage === totalPages
-            ? "text-gray-400 border-gray-200 cursor-not-allowed"
-            : "hover:bg-gray-100",
+            ? "text-text-disabled border-border cursor-not-allowed"
+            : "text-text-secondary border-border hover:border-primary/30 hover:bg-primary/5 cursor-pointer"
         )}
       >
         →

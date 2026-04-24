@@ -6,7 +6,16 @@ import {
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/config/routes.config";
 import { Button } from "@/shared/components/ui/Button";
-import { Briefcase, FileText, Upload, Users, PlusCircle } from "lucide-react";
+import {
+  Briefcase,
+  FileText,
+  Upload,
+  Users,
+  PlusCircle,
+  LayoutDashboard,
+  Search,
+  Settings,
+} from "lucide-react";
 import { HeroSection } from "./HeroSection";
 
 export const HeroByRole = () => {
@@ -21,26 +30,20 @@ export const HeroByRole = () => {
           email: user?.email || "",
         }}
         badge="Ứng viên"
-        title={`Chào mừng trở lại, ${user?.fullName}! 👋`}
+        title={`Chào mừng trở lại, ${user?.fullName || "User"}! 👋`}
         subtitle="Khám phá cơ hội việc làm phù hợp với bạn."
-        gradient="from-blue-500 to-blue-600"
+        gradient="from-primary to-primary/80"
         primaryAction={
           <Link to={ROUTES.CANDIDATE.DASHBOARD}>
-            <Button
-              // className="text-blue-500 hover:bg-gray-100"
-              variant="secondary"
-            >
-              Vào Dashboard
+            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+              Dashboard
             </Button>
           </Link>
         }
         secondaryAction={
           <Link to={ROUTES.JOB}>
-            <Button
-              variant="outline"
-              className="bg-transparent border-white text-white hover:bg-white/10"
-            >
-              Tìm việc làm
+            <Button variant="outline" className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20">
+              Tìm việc ngay
             </Button>
           </Link>
         }
@@ -48,30 +51,30 @@ export const HeroByRole = () => {
           {
             to: ROUTES.CANDIDATE.DASHBOARD,
             label: "Dashboard",
-            icon: <Briefcase className="w-4 h-4 text-blue-600" />,
+            icon: <LayoutDashboard className="w-4 h-4 text-black" />,
             bg: "bg-white",
-            color: "text-blue-600",
+            color: "text-black",
           },
           {
             to: ROUTES.JOB,
-            label: "Tìm việc làm",
-            icon: <Briefcase className="w-4 h-4 text-green-600" />,
+            label: "Tìm việc",
+            icon: <Search className="w-4 h-4 text-black" />,
             bg: "bg-white",
-            color: "text-green-600",
+            color: "text-black",
           },
           {
             to: ROUTES.CANDIDATE.APPLICATIONS,
             label: "Đơn ứng tuyển",
-            icon: <FileText className="w-4 h-4 text-purple-600" />,
+            icon: <FileText className="w-4 h-4 text-black" />,
             bg: "bg-white",
-            color: "text-purple-600",
+            color: "text-black",
           },
           {
             to: ROUTES.CANDIDATE.CV_MANAGEMENT,
-            label: "Hồ sơ CV",
-            icon: <Upload className="w-4 h-4 text-orange-600" />,
+            label: "Quản lý CV",
+            icon: <Upload className="w-4 h-4 text-black" />,
             bg: "bg-white",
-            color: "text-orange-600",
+            color: "text-black",
           },
         ]}
       />
@@ -86,18 +89,20 @@ export const HeroByRole = () => {
           email: user?.email || "",
         }}
         badge="Nhà tuyển dụng"
-        title={`Chào mừng trở lại, ${user?.fullName}! 🎯`}
+        title={`Chào mừng trở lại, ${user?.fullName?.split(" ")[0] || "User"}! 🎯`}
         subtitle="Quản lý tuyển dụng và tìm kiếm ứng viên."
-        gradient="from-green-500 to-green-600"
+        gradient="from-success to-success/80"
         primaryAction={
           <Link to={ROUTES.RECRUITER.DASHBOARD}>
-            <Button className="bg-white text-green-600">Vào Dashboard</Button>
+            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+              Dashboard
+            </Button>
           </Link>
         }
         secondaryAction={
           <Link to={ROUTES.JOB}>
-            <Button className="bg-white/10 border-white/30 text-white">
-              Tìm việc làm
+            <Button variant="outline" className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20">
+              Tìm việc
             </Button>
           </Link>
         }
@@ -105,30 +110,30 @@ export const HeroByRole = () => {
           {
             to: ROUTES.RECRUITER.DASHBOARD,
             label: "Dashboard",
-            icon: <Briefcase className="w-4 h-4 text-green-600" />,
+            icon: <LayoutDashboard className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-green-600",
+            color: "text-gray-800",
           },
           {
             to: ROUTES.RECRUITER.JOB_CREATE,
             label: "Đăng tin",
-            icon: <PlusCircle className="w-4 h-4 text-blue-600" />,
+            icon: <PlusCircle className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-blue-600",
+            color: "text-gray-800",
           },
           {
             to: ROUTES.RECRUITER.JOBS,
             label: "Tin đăng",
-            icon: <FileText className="w-4 h-4 text-purple-600" />,
+            icon: <Briefcase className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-purple-600",
+            color: "text-gray-800",
           },
           {
             to: "/recruiter/applications",
             label: "Ứng viên",
-            icon: <Users className="w-4 h-4 text-orange-600" />,
+            icon: <Users className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-orange-600",
+            color: "text-gray-800",
           },
         ]}
       />
@@ -148,23 +153,32 @@ export const HeroByRole = () => {
         gradient="from-purple-500 to-purple-600"
         primaryAction={
           <Link to={ROUTES.ADMIN.DASHBOARD}>
-            <Button className="bg-white text-purple-600">Vào Dashboard</Button>
+            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+              Dashboard
+            </Button>
           </Link>
         }
         quickActions={[
           {
             to: ROUTES.ADMIN.USERS,
-            label: "Users",
-            icon: <Users className="w-4 h-4 text-blue-600" />,
+            label: "Người dùng",
+            icon: <Users className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-blue-600",
+            color: "text-gray-800",
           },
           {
             to: ROUTES.ADMIN.JOBS,
-            label: "Jobs",
-            icon: <Briefcase className="w-4 h-4 text-green-600" />,
+            label: "Việc làm",
+            icon: <Briefcase className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
-            color: "text-green-600",
+            color: "text-gray-800",
+          },
+          {
+            to: ROUTES.ADMIN.SETTINGS,
+            label: "Cài đặt",
+            icon: <Settings className="w-4 h-4 text-gray-700" />,
+            bg: "bg-white",
+            color: "text-gray-800",
           },
         ]}
       />
@@ -180,12 +194,16 @@ export const HeroByRole = () => {
       gradient="from-gray-900 to-gray-700"
       primaryAction={
         <Link to={ROUTES.JOB}>
-          <Button>Tìm việc làm</Button>
+          <Button variant="outline" className="!bg-white !text-gray-900 hover:!bg-gray-100">
+            Tìm việc làm
+          </Button>
         </Link>
       }
       secondaryAction={
         <Link to={ROUTES.LOGIN}>
-          <Button variant="outline">Đăng tin tuyển dụng</Button>
+          <Button variant="outline" className="!border-white/50 !text-white hover:!bg-white/10">
+            Đăng nhập
+          </Button>
         </Link>
       }
     />

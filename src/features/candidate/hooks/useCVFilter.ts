@@ -13,6 +13,18 @@ export type CVFilters = {
   sortOrder?: "asc" | "desc";
 };
 
+export type CVFiltersJobsView = {
+  page?: number;
+  pageSize?: number;
+  status?: number[];
+  fileName?: string;
+  fromDate?: string;
+  toDate?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+};
+
+
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_SORT_BY = "uploadedAt";
 const DEFAULT_SORT_ORDER = "desc";

@@ -18,6 +18,8 @@ import {
   type UserMeResponse,
   type UserPermissionsResponse,
   type VerifyEmailRequest,
+  type UpdateProfileRequest,
+  type UpdateProfileResponse,
 } from "../types/auth.types";
 import { AUTH_ENDPOINTS } from "@/config/api.config";
 
@@ -162,6 +164,40 @@ export const authApi = {
       AUTH_ENDPOINTS.VERIFY_EMAIL,
       credentials,
     );
+    return response.data;
+  },
+
+  updateProfile: async (
+    data: UpdateProfileRequest,
+  ): Promise<UpdateProfileResponse> => {
+    const response = await axiosInstance.put<UpdateProfileResponse>(
+      AUTH_ENDPOINTS.UPDATE_PROFILE,
+      data,
+    );
+    return response.data;
+  },
+
+  uploadAvatar: async (
+    file: File,
+  ): Promise<{
+    avatarUrl: string;
+    thumbnailUrl: string;
+    updatedAt: string;
+  }> => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.UPLOAD_AVATAR,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      },
+    );
+    return response.data;
+  },
+
+  deleteAvatar: async (): Promise<{ message: string; avatarUrl: string }> => {
+    const response = await axiosInstance.delete(AUTH_ENDPOINTS.DELETE_AVATAR);
     return response.data;
   },
 };

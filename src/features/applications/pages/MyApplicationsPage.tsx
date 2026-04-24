@@ -62,6 +62,7 @@ export const MyApplicationsPage = () => {
             </div>
             {data && data.totalPages > 1 && (
               <Pagination
+                className="mt-3"
                 currentPage={data.page}
                 totalPages={data.totalPages}
                 onPageChange={handlePageChange}

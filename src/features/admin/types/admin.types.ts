@@ -271,7 +271,7 @@ export type AdminStatsResponse = {
   jobsByStatus: Record<string, number>;
   applicationsByStatus: Record<string, number>;
   recentTrend: {
-    cvsLast7Days: number[];
+    cVsLast7Days: number[];
     jobsLast7Days: number[];
     applicationsLast7Days: number[];
   };

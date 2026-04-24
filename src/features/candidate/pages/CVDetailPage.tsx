@@ -54,15 +54,24 @@ export const CVDetailPage = () => {
   return (
     <Section>
       <Container>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-sm text-text-secondary hover:text-primary mb-6"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Quay lại danh sách
-        </button>
+        {/* Hero Section - Sticky với background thụt vào */}
+        <div className="sticky top-0 z-10">
+          <div className="flex justify-center">
+            <div className="w-full shadow-md">
+              <div className="py-4">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
+                  Quay lại danh sách
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div className="bg-surface rounded-xl border border-border p-6">
+        <div className="bg-surface rounded-xl border border-border p-6 mt-3 shadow-sm transition-all hover:shadow-md">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-4">
@@ -89,7 +98,7 @@ export const CVDetailPage = () => {
               Tải xuống
             </Button>
             {cv.statusName === CV_STATUS.COMPLETED && (
-              <Button onClick={handleAnalyze} isLoading={isAnalyzing}>
+              <Button onClick={handleAnalyze} isLoading={isAnalyzing} className="!text-white">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Phân tích CV
               </Button>
@@ -113,14 +122,24 @@ export const CVDetailPage = () => {
                 <p className="text-sm text-blue-700 mt-1">
                   Tìm việc làm phù hợp nhất với CV này
                 </p>
-                <Button
-                  className="mt-3"
-                  onClick={() =>
-                    navigate(`/candidate/cv/${cv.id}/matching-jobs`)
-                  }
-                >
-                  Xem việc làm phù hợp →
-                </Button>
+
+                <div className="flex flex-wrap gap-3 mt-3">
+                  <Button
+                    className="!text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-colors"
+                    onClick={() => navigate(`/candidate/cv/${cv.id}/matching-jobs/history`)}
+                  >
+                    Lịch sử ghép nối
+                    <span className="ml-1">→</span>
+                  </Button>
+
+                  <Button
+                    className="!text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-colors"
+                    onClick={() => navigate(`/candidate/cv/${cv.id}/matching-jobs/suggestions`)}
+                  >
+                    Đề xuất việc làm phù hợp
+                    <span className="ml-1">→</span>
+                  </Button>
+                </div>
               </div>
 
               <div className="mt-6">

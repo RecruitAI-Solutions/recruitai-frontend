@@ -49,8 +49,8 @@ export const aiApi = {
     return response.data;
   },
 
-  // Danh sách jobs phù hợp với CV
-  getMatchingJobsForCV: async (
+  // Danh sách lich sử match CV với Jobs
+  useMatchingJobsCVHistory: async (
     cvId: string,
     params?: MatchCVJobsParams,
   ): Promise<MatchCVJobsResponse> => {
@@ -59,5 +59,5 @@ export const aiApi = {
       { params },
     );
     return response.data;
-  },
+  }
 };

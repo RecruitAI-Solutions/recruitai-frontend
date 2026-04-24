@@ -206,6 +206,27 @@ export type CreateJobRequest = {
 //UPDATE JOB
 export type UpdateJobRequest = Partial<CreateJobRequest>;
 
+export type JobCardData = {
+  id: string;
+  title: string;
+  companyName?: string;
+  recruiterName?: string;
+  location?: string | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryDisplay?: string;
+  employmentType?: string;
+  employmentTypeValue?: number;
+  experienceLevel?: string;
+  skillNames?: string[];
+  matchedSkills?: string[];
+  missingSkills?: string[];
+  matchPercentage?: number;
+  views?: number;
+  applications?: number;
+  createdAt?: string;
+};
+
 //TRANSFORM JOB IN COMPONENT
 export type JobListItem = {
   id: string;
@@ -223,6 +244,13 @@ export type JobListItem = {
   expirationDate: string;
   isActive: boolean;
   skillNames?: string[];
+  companyName?: string;
+  salaryDisplay?: string;
+  matchPercentage?: number;
+  matchedSkills?: string[];
+  missingSkills?: string[];
+  views?: number;
+  applications?: number;
 };
 
 export type Job = {
@@ -307,10 +335,10 @@ export type JobFilters = {
   location?: string;
   minSalary?: number;
   maxSalary?: number;
-  employmentType?: string;
-  experienceLevel?: string;
-  skills?: string[];
+  employmentType?: number[];
+  experienceLevel?: number[];
   skill?: string;
+  skills?: string[];
   matchAllSkills?: boolean;
   sortBy?: string;
   sortOrder?: "asc" | "desc";

@@ -81,19 +81,17 @@ export const HeroSection = ({
                   <Link
                     key={action.to}
                     to={action.to}
-                    className="group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
+                    className="group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] block"
                   >
                     <div
                       className={`w-9 h-9 rounded-lg ${action.bg} flex items-center justify-center mb-3`}
                     >
                       {action.icon}
                     </div>
-
-                    <p className="text-white text-sm leading-snug">
-                      {action.label}
-                    </p>
-
-                    <ChevronRight className="w-3.5 h-3.5 text-white/40 group-hover:text-white/80 mt-1 transition-colors" />
+                    <div className="flex items-center justify-between gap-1">
+                      <p className="text-white text-sm leading-snug flex-1">{action.label}</p>
+                      <ChevronRight className="w-8 h-8 text-white/40 group-hover:text-white/80 transition-colors shrink-0" />
+                    </div>
                   </Link>
                 ))}
               </div>

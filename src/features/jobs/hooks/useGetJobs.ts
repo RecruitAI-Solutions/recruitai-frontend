@@ -9,7 +9,7 @@ export const useGetJobs = (filters: JobFilters) => {
 
   return useQuery({
     queryKey: JOB_QUERY_KEYS.list(debouncedFilters),
-    queryFn: () => jobApi.getFeatureJobs(),
+    queryFn: () => jobApi.getJobs(debouncedFilters),
     staleTime: 1000 * 60 * 5,
     placeholderData: (prev) => prev,
   });
