@@ -8,6 +8,7 @@ import type {
   UpdateStatusRequest,
   UpdateStatusResponse,
   ApplicationDetailResponse,
+  GetMyApplicationsParams,
 } from "../types/application.type";
 import { APPLICATION_ENDPOINTS } from "@/config/endpoints/app.endpoints";
 
@@ -21,7 +22,7 @@ export const applicationApi = {
   },
 
   getMyApplications: async (
-    params?: MyApplicationsParams,
+    params?: GetMyApplicationsParams,
   ): Promise<MyApplicationsResponse> => {
     const response = await axiosInstance.get<MyApplicationsResponse>(
       APPLICATION_ENDPOINTS.MY_APPLICATIONS,

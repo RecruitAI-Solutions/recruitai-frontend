@@ -111,6 +111,17 @@ export type MyApplicationsParams = {
   status?: ApplicationStatusValue;
 };
 
+export interface GetMyApplicationsParams {
+  page?: number;
+  pageSize?: number;
+  status?: number; // 1: Pending, 2: Reviewed, 3: Accepted, 4: Rejected
+  fromDate?: string;
+  toDate?: string;
+  query?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
 //GET APPLICATION BY JOB
 export type JobApplicationItem = {
   applicationId: string;
