@@ -8,6 +8,7 @@ import { useGetCV } from "../hooks/useGetCV";
 import { useMatchingJobsForCV } from "@/features/ai/hooks/useMatchingJobsForCV";
 import { MatchedJobCard } from "@/features/jobs/components/MatchedJobCard";
 import { useState } from "react";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 // Định nghĩa type cho filter
 type SuggestFilter = {
@@ -55,6 +56,7 @@ export const JobSuggestPage = () => {
   return (
     <Section>
       <Container>
+        <ButtonBack className="!mb-5">Quay lại chi tiết</ButtonBack>
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Đề xuất việc làm phù hợp</h1>
           {cv && (

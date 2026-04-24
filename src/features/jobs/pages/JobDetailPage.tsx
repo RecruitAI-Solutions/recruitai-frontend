@@ -34,6 +34,7 @@ import { MatchCVButton } from "@/features/ai/components/MatchCVButton";
 import { ApplySection } from "@/features/applications/components/ApplySection";
 import { useGetSimilarJobs } from "../hooks/useGetSimilarJobs";
 import { JobCard } from "../components/JobCard";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -79,9 +80,7 @@ const JobDetailPage = () => {
             <p className="text-text-secondary mb-8">
               Công việc bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
             </p>
-            <Button onClick={() => navigate(-1)}>
-              <ChevronLeft className="w-4 h-4 mr-2" /> Quay lại
-            </Button>
+            <ButtonBack animation="bounce">Quay lại</ButtonBack>
           </div>
         </Container>
       </Section>

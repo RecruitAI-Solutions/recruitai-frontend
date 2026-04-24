@@ -7,7 +7,7 @@ import { useState } from "react";
 export const useGetMyApplications = (initialParams?: GetMyApplicationsParams) => {
   const [params, setParams] = useState<GetMyApplicationsParams>({
     page: 1,
-    pageSize: 10,
+    pageSize: 6,
     sortBy: "appliedAt",
     sortOrder: "desc",
     ...initialParams,
