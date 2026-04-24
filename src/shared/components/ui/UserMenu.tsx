@@ -13,7 +13,6 @@ import { ROUTES } from "@/config/routes.config";
 import {
   User,
   KeyRound,
-  ShieldCheck,
   Users,
   Settings,
   LogOut,
