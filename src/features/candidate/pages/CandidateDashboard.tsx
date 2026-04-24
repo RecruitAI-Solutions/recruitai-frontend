@@ -12,16 +12,54 @@ import {
   TrendingUp,
   Eye,
   ChevronRight,
+  Bookmark,
+  Bell,
+  FileCheck,
 } from "lucide-react";
 import { QuickCard } from "@/pages/home/QuickCard";
 import { StatCard } from "@/pages/home/StatCard";
+import { useCandidateDashboard } from "../hooks/useGetCandidateDashboard";
 
 export default function CandidateDashboard() {
   const user = useAppSelector(selectCurrentUser);
+  const { data: dashboardData, isLoading, error } = useCandidateDashboard();
+
+  // Dữ liệu mặc định
+  const defaultData = {
+    newJobsToday: 0,
+    totalApplications: 0,
+    suggestedJobs: 0,
+    reviewedApplications: 0,
+    analyzedCVs: 0,
+    savedJobs: 0,
+    unreadNotifications: 0,
+  };
+
+  const stats = dashboardData || defaultData;
+
+  if (isLoading) {
+    return (
+      <Container className="py-8 space-y-8">
+        <div className="animate-pulse">
+          <div className="h-32 bg-gray-200 rounded-2xl mb-8" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-28 bg-gray-200 rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  if (error) {
+    console.error("Dashboard error:", error);
+    // Vẫn hiển thị UI với dữ liệu mặc định
+  }
 
   return (
     <Container className="py-8 space-y-8">
-      {/* Welcome Banner - Cải thiện gradient và layout */}
+      {/* Welcome Banner */}
       <div className="relative bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 md:p-8 text-white overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -52,7 +90,7 @@ export default function CandidateDashboard() {
         </div>
       </div>
 
-      {/* Quick Actions - Giữ nguyên nhưng thêm hover effect */}
+      {/* Quick Actions */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-text-primary">Thao tác nhanh</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -77,38 +115,81 @@ export default function CandidateDashboard() {
         </div>
       </div>
 
-      {/* Stats - Giữ nguyên layout */}
+      {/* Stats - Cập nhật theo data thực tế */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-text-primary">Tổng quan</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard
-            label="Việc làm mới"
-            value="24"
+            label="Việc làm mới hôm nay"
+            value={stats.newJobsToday.toString()}
             color="primary"
             icon={<Briefcase className="w-5 h-5" />}
-            trend={{ value: 12, isUp: true }}
           />
           <StatCard
             label="Đã ứng tuyển"
-            value="3"
+            value={stats.totalApplications.toString()}
             color="success"
             icon={<FileText className="w-5 h-5" />}
           />
           <StatCard
-            label="Tin phù hợp"
-            value="12"
+            label="Việc làm phù hợp"
+            value={stats.suggestedJobs.toString()}
             color="warning"
             icon={<TrendingUp className="w-5 h-5" />}
           />
           <StatCard
-            label="Hồ sơ đã xem"
-            value="58"
+            label="Lượt xem đơn ứng tuyển"
+            value={stats.reviewedApplications.toString()}
             color="error"
             icon={<Eye className="w-5 h-5" />}
-            trend={{ value: 8, isUp: true }}
           />
         </div>
       </div>
+
+      {/* Additional Stats - Hàng thứ 2 nếu muốn hiển thị thêm */}
+      {(
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-text-primary">Thông tin khác</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {(
+              <StatCard
+                label="CV đã phân tích"
+                value={stats.analyzedCVs.toString()}
+                color="primary"
+                icon={<FileCheck className="w-5 h-5" />}
+              />
+            )}
+            {(
+              <StatCard
+                label="Việc làm đã lưu"
+                value={stats.savedJobs.toString()}
+                color="warning"
+                icon={<Bookmark className="w-5 h-5" />}
+              />
+            )}
+            {(
+              <StatCard
+                label="Thông báo chưa đọc"
+                value={stats.unreadNotifications.toString()}
+                color="error"
+                icon={<Bell className="w-5 h-5" />}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Message when no data */}
+      {stats.newJobsToday === 0 &&
+        stats.totalApplications === 0 &&
+        stats.suggestedJobs === 0 && (
+          <div className="text-center py-12 bg-gray-50 rounded-xl">
+            <p className="text-text-secondary">Chưa có dữ liệu thống kê</p>
+            <p className="text-sm text-text-muted mt-2">
+              Hãy bắt đầu tìm kiếm việc làm và upload CV để xem thống kê chi tiết
+            </p>
+          </div>
+        )}
     </Container>
   );
 }
