@@ -25,7 +25,7 @@ export type CVFiltersJobsView = {
 };
 
 
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 4;
 const DEFAULT_SORT_BY = "uploadedAt";
 const DEFAULT_SORT_ORDER = "desc";
 
