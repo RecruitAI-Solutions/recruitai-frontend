@@ -18,6 +18,7 @@ import {
   Settings,
   LogOut,
   ChevronDown,
+  ChevronUp,
   FileText,
   Briefcase,
   Bell,
@@ -41,6 +42,8 @@ export const UserMenu = () => {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
+  const role = user?.role;
+
   return (
     <DropdownMenu.Root>
       {/* Trigger */}
@@ -53,7 +56,11 @@ export const UserMenu = () => {
                 {getInitials(user?.fullName)}
               </AvatarFallback>
             </Avatar>
-            <ChevronDown className="w-4 h-4 text-text-secondary" />
+            {role?.toLocaleLowerCase() === "candidate" ? (
+              <ChevronDown className="w-4 h-4 text-text-secondary" />
+            ) : (
+              <ChevronUp className="w-4 h-4 text-text-secondary" />
+            )}
           </div>
         </button>
       </DropdownMenu.Trigger>
@@ -63,8 +70,13 @@ export const UserMenu = () => {
         align="end"
         sideOffset={8}
         className="
-          w-64 rounded-xl bg-surface border border-border shadow-lg p-1 z-[99999]
-          animate-in fade-in-0 zoom-in-95 duration-100
+           w-64 rounded-xl 
+            bg-surface 
+            border border-border 
+            shadow-2xl shadow-black/20 dark:shadow-black/40
+            p-1 z-[99999]
+            animate-in fade-in-0 zoom-in-95 duration-100
+            ring-1 ring-black/5 dark:ring-white/10
         "
       >
         {/* User info */}
