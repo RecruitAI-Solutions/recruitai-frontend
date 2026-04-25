@@ -16,6 +16,7 @@ import {
   Sparkles,
   BookOpen,
   Heart,
+  Globe,
 } from "lucide-react";
 import { useGetJob } from "../hooks/useGetJob";
 import { useAppSelector } from "@/app/hooks";
@@ -94,7 +95,9 @@ const JobDetailPage = () => {
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Briefcase className="w-12 h-12 text-gray-400" />
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-text-primary">Không tìm thấy công việc</h2>
+            <h2 className="text-2xl font-bold mb-4 text-text-primary">
+              Không tìm thấy công việc
+            </h2>
             <p className="text-text-secondary mb-8">
               Công việc bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
             </p>
@@ -411,3 +414,4 @@ const JobDetailPage = () => {
 };
 
 export default JobDetailPage;
+
