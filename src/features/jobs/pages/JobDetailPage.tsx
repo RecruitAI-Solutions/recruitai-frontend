@@ -10,7 +10,6 @@ import {
   Mail,
   Clock,
   Building2,
-  CheckCircle2,
   Award,
   Target,
   TrendingUp,
@@ -18,6 +17,7 @@ import {
   Shield,
   BookOpen,
   Heart,
+  Globe,
 } from "lucide-react";
 import { useGetJob } from "../hooks/useGetJob";
 import { useAppSelector } from "@/app/hooks";
@@ -75,7 +75,9 @@ const JobDetailPage = () => {
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Briefcase className="w-12 h-12 text-gray-400" />
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-text-primary">Không tìm thấy công việc</h2>
+            <h2 className="text-2xl font-bold mb-4 text-text-primary">
+              Không tìm thấy công việc
+            </h2>
             <p className="text-text-secondary mb-8">
               Công việc bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
             </p>
@@ -98,7 +100,10 @@ const JobDetailPage = () => {
       {/* Hero Section - Sticky với background thụt vào */}
       <div className="sticky top-0 z-10">
         <div className="flex justify-center px-4 sm:px-6 lg:px-8">
-          <div className="w-full shadow-md" style={{ maxWidth: mainContentMaxWidth }}>
+          <div
+            className="w-full shadow-md"
+            style={{ maxWidth: mainContentMaxWidth }}
+          >
             <div className="py-4">
               <button
                 onClick={() => navigate(-1)}
@@ -114,7 +119,10 @@ const JobDetailPage = () => {
 
       {/* Job Header */}
       <div className="flex justify-center px-4 sm:px-6 lg:px-8 mt-4">
-        <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100" style={{ maxWidth: mainContentMaxWidth }}>
+        <div
+          className="w-full bg-white rounded-2xl shadow-sm border border-gray-100"
+          style={{ maxWidth: mainContentMaxWidth }}
+        >
           <div className="p-6">
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
               <div className="space-y-4 flex-1">
@@ -126,7 +134,10 @@ const JobDetailPage = () => {
                     {job.experienceLevel}
                   </Badge>
                   {job.isActive ? (
-                    <Badge variant="success" className="text-xs flex items-center gap-1">
+                    <Badge
+                      variant="success"
+                      className="text-xs flex items-center gap-1"
+                    >
                       <Shield className="w-3 h-3" />
                       Đang tuyển
                     </Badge>
@@ -144,7 +155,9 @@ const JobDetailPage = () => {
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-600">
                   <div className="flex items-center">
                     <Building2 className="w-4 h-4 mr-2 text-primary" />
-                    <span className="font-medium text-gray-900">{job.recruiterName}</span>
+                    <span className="font-medium text-gray-900">
+                      {job.companyName || job.recruiterName}
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <MapPin className="w-4 h-4 mr-2 text-primary" />
@@ -172,7 +185,9 @@ const JobDetailPage = () => {
                     Chỉnh sửa
                   </Button>
                   <Button
-                    onClick={() => navigate(ROUTES.RECRUITER.APPLICANTS(job.id))}
+                    onClick={() =>
+                      navigate(ROUTES.RECRUITER.APPLICANTS(job.id))
+                    }
                     className="bg-primary hover:bg-primary-dark"
                   >
                     Xem ứng viên ({job.applications})
@@ -188,7 +203,10 @@ const JobDetailPage = () => {
       <div className="relative mt-6">
         {/* Left Sidebar - Candidate Actions (Fixed) */}
         {userRole === "candidate" && (
-          <div className="hidden lg:block fixed left-4 xl:left-8 top-32 w-80 space-y-6" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+          <div
+            className="hidden lg:block fixed left-4 xl:left-8 top-32 w-80 space-y-6"
+            style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}
+          >
             {/* Apply Section */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-primary/10 to-transparent px-6 py-4 border-b border-gray-100">
@@ -218,7 +236,10 @@ const JobDetailPage = () => {
         )}
 
         {/* Right Sidebar - Info (Fixed) */}
-        <div className="hidden lg:block fixed right-4 xl:right-8 top-32 w-80 space-y-6" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+        <div
+          className="hidden lg:block fixed right-4 xl:right-8 top-32 w-80 space-y-6"
+          style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}
+        >
           {/* Job Info Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="bg-gradient-to-r from-blue-50 to-transparent px-6 py-4 border-b border-gray-100">
@@ -266,6 +287,52 @@ const JobDetailPage = () => {
               </div>
             </div>
           </div>
+
+          {job.companyName && (
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-transparent px-6 py-4 border-b border-gray-100">
+                <h3 className="font-bold text-gray-900 flex items-center">
+                  <Building2 className="w-5 h-5 mr-2 text-primary" />
+                  Thông tin công ty
+                </h3>
+              </div>
+              <div className="p-6 space-y-3">
+                <div className="flex items-center gap-3">
+                  {job.companyLogo ? (
+                    <img
+                      src={job.companyLogo}
+                      alt={job.companyName}
+                      className="w-12 h-12 rounded-lg object-cover border"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
+                      {job.companyName.charAt(0)}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-gray-900">
+                      {job.companyName}
+                    </p>
+                    {job.companyAddress && (
+                      <p className="text-sm text-gray-500 flex items-center">
+                        <MapPin className="w-3 h-3 mr-1" /> {job.companyAddress}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {job.companyWebsite && (
+                  <a
+                    href={job.companyWebsite}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline flex items-center"
+                  >
+                    <Globe className="w-4 h-4 mr-1" /> {job.companyWebsite}
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Skills Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -372,7 +439,9 @@ const JobDetailPage = () => {
               {similarJobs.length > 0 && (
                 <Section padding="md">
                   <Container>
-                    <h2 className="text-xl font-bold mb-6">Việc làm tương tự</h2>
+                    <h2 className="text-xl font-bold mb-6">
+                      Việc làm tương tự
+                    </h2>
                     <div className="grid md:grid-cols-3 gap-4">
                       {similarJobs.map((job) => (
                         <JobCard key={job.id} job={job} />
@@ -390,3 +459,4 @@ const JobDetailPage = () => {
 };
 
 export default JobDetailPage;
+

@@ -11,6 +11,10 @@ import {
 import type { SelectedSkill } from "@/features/skills/types/skill.types";
 import { SkillInput } from "@/features/skills/components/SkillInput";
 import { LocationInput } from "@/features/geocoding/components/LocationInput";
+import { CompanyInput } from "@/features/companies/components/CompanyInput";
+import { TextareaField } from "@/shared/components/ui/TextAreaField";
+import { useEffect, useState } from "react";
+import { useFillCompanyWebsite } from "@/features/companies/hooks/useCompanyWebsite";
 
 const schema = yup.object({
   title: yup.string().required("Vui lòng nhập tiêu đề"),
@@ -30,13 +34,15 @@ const schema = yup.object({
   currency: yup.number().default(1),
   employmentType: yup.number().required(),
   experienceLevel: yup.number().required(),
-  department: yup.string().default(""),
+  department: yup.string().required("Vui lòng nhập phòng ban"),
   skillIds: yup
     .array(yup.number().required())
     .min(1, "Vui lòng chọn ít nhất 1 kỹ năng")
     .required(),
-  benefits: yup.string().default(""),
+  benefits: yup.string().required("Vui lòng nhập phúc lợi"),
   expirationDate: yup.string().required("Vui lòng chọn ngày hết hạn"),
+  companyName: yup.string().required("Vui lòng nhập tên công ty"),
+  companyWebsite: yup.string().default(""),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -60,6 +66,7 @@ export const JobForm = ({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -71,6 +78,17 @@ export const JobForm = ({
       ...defaultValues,
     },
   });
+
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(
+    null,
+  );
+  const { data: companyWebsite } = useFillCompanyWebsite(selectedCompanyId);
+
+  useEffect(() => {
+    if (companyWebsite) {
+      setValue("companyWebsite", companyWebsite);
+    }
+  }, [companyWebsite, setValue]);
 
   return (
     <form
@@ -92,36 +110,21 @@ export const JobForm = ({
         disabled={isPending}
       />
 
-      <div>
-        <label className="block text-sm font-medium text-text-primary mb-1">
-          Mô tả
-        </label>
-        <textarea
-          rows={4}
-          {...register("description")}
-          disabled={isPending}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
-                     disabled:bg-gray-100 border-gray-300 resize-none"
-        />
-        {errors.description && (
-          <p className="mt-1 text-sm text-red-600">
-            {errors.description.message}
-          </p>
-        )}
-      </div>
+      <TextareaField
+        label="Mô tả"
+        rows={4}
+        {...register("description")}
+        error={errors.description?.message}
+        disabled={isPending}
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-text-primary mb-1">
-          Yêu cầu ứng viên
-        </label>
-        <textarea
-          rows={3}
-          {...register("requirements")}
-          disabled={isPending}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
-                     disabled:bg-gray-100 border-gray-300 resize-none"
-        />
-      </div>
+      <TextareaField
+        label="Yêu cầu ứng viên"
+        rows={3}
+        {...register("requirements")}
+        error={errors.requirements?.message}
+        disabled={isPending}
+      />
 
       <Controller
         name="location"
@@ -202,21 +205,46 @@ export const JobForm = ({
       <Input
         label="Phòng ban"
         {...register("department")}
+        error={errors.department?.message}
         disabled={isPending}
       />
 
-      <div>
-        <label className="block text-sm font-medium text-text-primary mb-1">
-          Phúc lợi
-        </label>
-        <textarea
-          rows={2}
-          {...register("benefits")}
-          disabled={isPending}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
-                     disabled:bg-gray-100 border-gray-300 resize-none"
-        />
-      </div>
+      <TextareaField
+        label="Phúc lợi"
+        rows={2}
+        {...register("benefits")}
+        error={errors.benefits?.message}
+        disabled={isPending}
+      />
+
+      <Controller
+        name="companyName"
+        control={control}
+        render={({ field, fieldState }) => (
+          <CompanyInput
+            value={field.value}
+            onChange={(name) => {
+              field.onChange(name);
+              if (!name) {
+                setSelectedCompanyId(null);
+                setValue("companyWebsite", "");
+              }
+            }}
+            onCompanySelect={(company) => {
+              field.onChange(company.name);
+              setSelectedCompanyId(company.id);
+            }}
+            error={fieldState.error?.message}
+            disabled={isPending}
+          />
+        )}
+      />
+      <Input
+        label="Website công ty (*Optional)"
+        {...register("companyWebsite")}
+        error={errors.companyWebsite?.message}
+        disabled={isPending}
+      />
 
       <Input
         label="Ngày hết hạn"
@@ -226,7 +254,7 @@ export const JobForm = ({
         disabled={isPending}
       />
 
-      <Button type="submit" isLoading={isPending} fullWidth>
+      <Button type="submit" isLoading={isPending} fullWidth variant="primary">
         {submitLabel}
       </Button>
     </form>

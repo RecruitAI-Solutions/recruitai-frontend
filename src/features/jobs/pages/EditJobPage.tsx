@@ -60,6 +60,8 @@ export const EditJobPage = () => {
               skillIds: job.skillIds,
               benefits: job.benefits,
               expirationDate: job.expirationDate.slice(0, 16),
+              companyName: job.companyName || "",
+              companyWebsite: job.companyWebsite || "",
             }}
             defaultSkills={job.skillDetails.map((s) => ({
               id: s.id,
