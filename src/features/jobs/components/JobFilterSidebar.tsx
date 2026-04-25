@@ -6,10 +6,10 @@ import { employmentTypeMap, ExperienceLevelMap } from "../types/job.types";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { memo, useCallback, useMemo, useState, useEffect } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { SkillInput } from "@/features/skills/components/SkillInput";
 import type { SelectedSkill } from "@/features/skills/types/skill.types";
-import styles from "./JobFilterSidebar.module.css";
+// import styles from "./JobFilterSidebar.module.css";
 
 type JobFilterSidebarProps = {
   className?: string;
@@ -19,11 +19,10 @@ type JobFilterSidebarProps = {
 const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
   const { filter, updateFilter, resetFilter } = useFilter();
   const [skillInputKey, setSkillInputKey] = useState(0);
-
-  const skillNames = useMemo(
-    () => filter.skill?.split(",").filter(Boolean) || [],
-    [filter.skill],
-  );
+  // const skillNames = useMemo(
+  //   () => filter.skill?.split(",").filter(Boolean) || [],
+  //   [filter.skill],
+  // );
 
   // const defaultSkills: SelectedSkill[] = useMemo(() => {
   //   return skillNames.map((name, index) => ({

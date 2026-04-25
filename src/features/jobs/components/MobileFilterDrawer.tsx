@@ -42,7 +42,7 @@ export const MobileFilterDrawer = () => {
           </div>
           <div className="p-4 border-t sticky bottom-0 bg-surface">
             <Dialog.Close asChild>
-              <Button fullWidth>Xem kết quả</Button>
+              <Button fullWidth className="!text-white">Xem kết quả</Button>
             </Dialog.Close>
           </div>
         </Dialog.Content>

@@ -5,6 +5,8 @@ import type {
   GeocodingResponse,
   SearchLocationParams,
   ReverseGeocodingParams,
+  Province,
+  District,
 } from "../types/geocoding.types";
 
 export const geocodingApi = {
@@ -29,5 +31,23 @@ export const geocodingApi = {
       { params },
     );
     return res.data.data;
+  },
+
+  // Lấy danh sách tỉnh/thành phố
+  getProvinces: async (search?: string): Promise<Province[]> => {
+    const res = await axiosInstance.get<Province[]>(
+      GEO_ENDPOINTS.PROVINCES,
+      { params: { search } },
+    );
+    return res.data;
+  },
+
+  // Lấy danh sách quận/huyện theo tỉnh
+  getDistricts: async (provinceId: string, search?: string): Promise<District[]> => {
+    const res = await axiosInstance.get<District[]>(
+      GEO_ENDPOINTS.DISTRICTS(provinceId),
+      { params: { search } },
+    );
+    return res.data;
   },
 };
