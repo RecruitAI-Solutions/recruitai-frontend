@@ -12,7 +12,14 @@ export const useUploadAvatar = () => {
     mutationFn: (file: File) => authApi.uploadAvatar(file),
     onSuccess: (data) => {
       if (currentUser) {
-        dispatch(setUser({ ...currentUser, avatar: data.avatarUrl }));
+        dispatch(
+          setUser({
+            ...currentUser,
+            avatar: data.avatarUrl
+              ? `${data.avatarUrl}?t=${Date.now()}`
+              : currentUser.avatar,
+          }),
+        );
       }
       toast.success("Cập nhật ảnh đại diện thành công");
     },
