@@ -30,7 +30,7 @@ export const useLocationInput = ({ value, onChange }: Props) => {
 
       onChange?.({
         refId: item.refId,
-        display: item.display,
+        display: item.fullAddress,
         lat: item.location.lat,
         lng: item.location.lng,
       });

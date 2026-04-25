@@ -138,6 +138,8 @@ export type JobListItemResponse = {
   expirationDate: string;
   isActive: boolean;
   skillNames: string[];
+  companyName?: string;
+  companyLogo?: string;
 };
 
 //JOB LIST PAGINATION
@@ -184,6 +186,11 @@ export type JobDetailResponse = {
   recruiterEmail: string;
   views: number;
   applications: number;
+  companyId?: string | null;
+  companyName?: string | null;
+  companyLogo?: string | null;
+  companyWebsite?: string | null;
+  companyAddress?: string | null;
 };
 
 //REQUEST CREATE JOB
@@ -201,6 +208,8 @@ export type CreateJobRequest = {
   skillIds: number[];
   benefits: string;
   expirationDate: string;
+  companyName?: string;
+  companyWebsite?: string;
 };
 
 //UPDATE JOB
@@ -245,6 +254,7 @@ export type JobListItem = {
   isActive: boolean;
   skillNames?: string[];
   companyName?: string;
+  companyLogo?: string;
   salaryDisplay?: string;
   matchPercentage?: number;
   matchedSkills?: string[];
@@ -277,6 +287,11 @@ export type Job = {
   recruiterEmail: string;
   views: number;
   applications: number;
+  companyId?: string | null;
+  companyName?: string | null;
+  companyLogo?: string | null;
+  companyWebsite?: string | null;
+  companyAddress?: string | null;
 };
 
 // TRANSFORM FUNCTIONS
@@ -302,6 +317,8 @@ export const transformJobListItem = (
   skillIds: data.skillIds || [],
   employmentTypeValue: data.employmentType,
   experienceLevelValue: data.experienceLevel,
+  companyName: data.companyName,
+  companyLogo: data.companyLogo,
 });
 
 export const transformJob = (data: JobDetailResponse): Job => ({
@@ -328,6 +345,11 @@ export const transformJob = (data: JobDetailResponse): Job => ({
   recruiterEmail: data.recruiterEmail,
   views: data.views,
   applications: data.applications,
+  companyId: data.companyId,
+  companyName: data.companyName,
+  companyLogo: data.companyLogo,
+  companyWebsite: data.companyWebsite,
+  companyAddress: data.companyAddress,
 });
 
 export type JobFilters = {

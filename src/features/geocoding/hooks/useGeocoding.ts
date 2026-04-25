@@ -30,8 +30,8 @@ export const useLocationSearch = (
 
   return useQuery({
     queryKey: GEO_QUERY_KEYS.search(params),
-    queryFn:  () => geocodingApi.search(params),
-    enabled:  debouncedText.length >= 2,
+    queryFn: () => geocodingApi.search(params),
+    enabled: debouncedText.length >= 2,
     staleTime: 1000 * 60 * 5,
   });
 };
@@ -43,8 +43,8 @@ export const useLocationSearch = (
 export const useLocationDetail = (refId: string) => {
   return useQuery({
     queryKey: GEO_QUERY_KEYS.detail(refId),
-    queryFn:  () => geocodingApi.getPlace(refId),
-    enabled:  !!refId,
+    queryFn: () => geocodingApi.getPlace(refId),
+    enabled: !!refId,
     staleTime: 1000 * 60 * 60,
   });
 };

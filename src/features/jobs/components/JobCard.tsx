@@ -38,7 +38,9 @@ export const JobCard = React.memo(
           </span>
         </div>
 
-        <p className="text-sm text-text-secondary mt-1">{job.recruiterName}</p>
+        <p className="text-sm text-text-secondary mt-1">
+          {job.companyName || job.recruiterName}
+        </p>
 
         <p className="text-sm text-text-secondary mt-2">
           {job.location ?? "Đang tải địa điểm..."}

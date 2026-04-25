@@ -12,6 +12,7 @@ import VerifyEmailPage from "@/features/auth/pages/VerifyEmailPage";
 import { PublicLayout } from "@/shared/layouts/public/PublicLayout";
 import { JobListPage } from "@/features/jobs/pages/JobListPage";
 import JobDetailPage from "@/features/jobs/pages/JobDetailPage";
+import { CompanyDetailPage } from "@/features/companies/pages/CompanyDetailPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -33,6 +34,10 @@ export const createPublicRoutes = (
       {
         path: ROUTES.JOB_DETAILS(":id"),
         element: <JobDetailPage />,
+      },
+      {
+        path: ROUTES.COMPANY_DETAILS(":id"),
+        element: <CompanyDetailPage />,
       },
 
       {
