@@ -14,7 +14,7 @@ export const useUploadCV = () => {
     onSuccess: (cv) => {
       // Invalidate list → tự refetch
       queryClient.invalidateQueries({ queryKey: CV_QUERY_KEYS.myCVs });
-      if (cv.status === CV_STATUS.FAILED) {
+      if (cv.statusName === CV_STATUS.FAILED) {
         toast.error("Upload CV thất bại. Vui lòng thử lại.");
       } else {
         toast.success("Upload CV thành công!");

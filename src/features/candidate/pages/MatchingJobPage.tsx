@@ -12,6 +12,7 @@ import type { JobListItem, EmploymentTypeLabel, ExperienceLevelLabel } from "@/f
 import { EMPLOYMENT_TYPE, EXPERIENCE_LEVEL } from "@/features/jobs/types/job.types";
 import { useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 // Định nghĩa type cho filter riêng
 type HistoryFilter = {
@@ -94,22 +95,7 @@ export const MatchingJobsPage = () => {
   return (
     <Section>
       <Container>
-        {/* Hero Section - Sticky với background thụt vào */}
-        <div className="sticky top-0 z-10">
-          <div className="flex justify-center">
-            <div className="w-full shadow-md">
-              <div className="py-4">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-                  Quay lại chi tiết
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ButtonBack>Quay lại chi tiết</ButtonBack>
 
         <div className="mb-6 mt-6">
           <h1 className="text-2xl font-bold text-gray-900">Việc làm phù hợp với CV</h1>

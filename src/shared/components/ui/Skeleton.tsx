@@ -1,0 +1,14 @@
+// shared/components/ui/Skeleton.tsx
+import { cn } from "@/lib/utils"; 
+interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
+    className?: string;
+}
+
+export const Skeleton = ({ className, ...props }: SkeletonProps) => {
+    return (
+        <div
+            className={cn("animate-pulse bg-gray-200 rounded", className)}
+            {...props}
+        />
+    );
+};

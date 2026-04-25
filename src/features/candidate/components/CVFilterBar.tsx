@@ -81,7 +81,7 @@ export const CVFilterBar = () => {
       </div>
 
       {/* Nhóm Sắp xếp và Thứ tự lại với nhau */}
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <div className="w-36">
           <label className="block text-sm font-medium mb-1">Sắp xếp theo</label>
           <Select

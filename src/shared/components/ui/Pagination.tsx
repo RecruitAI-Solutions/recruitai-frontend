@@ -45,6 +45,9 @@ export const Pagination = ({
 
   const pages = createPages();
 
+  // Đếm số lần xuất hiện của "..."
+  let ellipsisCount = 0;
+
   return (
     <div className={cn("flex items-center justify-center gap-2", className)}>
       {/* Prev */}
@@ -62,26 +65,35 @@ export const Pagination = ({
       </button>
 
       {/* Page numbers */}
-      {pages.map((p, index) =>
-        p === "..." ? (
-          <span key={index} className="px-2 text-text-disabled !text-white">
-            ...
-          </span>
-        ) : (
+      {pages.map((p) => {
+        if (p === "...") {
+          ellipsisCount++;
+          // Tạo key unique cho mỗi ellipsis
+          return (
+            <span
+              key={`ellipsis-${ellipsisCount}`}
+              className="px-2 text-text-disabled"
+            >
+              ...
+            </span>
+          );
+        }
+
+        return (
           <button
-            key={p}
+            key={`page-${p}`}
             onClick={() => onPageChange(p as number)}
             className={cn(
               "px-3 py-1 rounded-md border transition-all duration-200",
               currentPage === p
-                ? "bg-primary text-white border-primary cursor-pointer !text-white"
+                ? "bg-primary !text-white border-primary cursor-pointer"
                 : "text-text-secondary border-border hover:border-primary/30 hover:bg-primary/5 cursor-pointer"
             )}
           >
             {p}
           </button>
-        )
-      )}
+        );
+      })}
 
       {/* Next */}
       <button
