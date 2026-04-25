@@ -23,12 +23,11 @@ const schema = yup.object({
   location: yup
     .object({
       refId: yup.string().required(),
-      display: yup.string().required(),
+      display: yup.string().required("Vui lòng chọn địa điểm"),
       lat: yup.number().required(),
       lng: yup.number().required(),
     })
-    .required("Vui lòng chọn địa điểm từ gợi ý")
-    .nullable(),
+    .required("Vui lòng chọn địa điểm"),
   salaryMin: yup.number().required("Vui lòng nhập lương tối thiểu").min(0),
   salaryMax: yup.number().required("Vui lòng nhập lương tối đa").min(0),
   currency: yup.number().default(1),
@@ -133,7 +132,7 @@ export const JobForm = ({
           <LocationInput
             value={field.value}
             onChange={field.onChange}
-            error={fieldState.error?.message}
+            error={fieldState.error?.display?.message}
             label="Địa điểm"
           />
         )}
@@ -143,14 +142,20 @@ export const JobForm = ({
         <Input
           label="Lương tối thiểu (VND)"
           type="number"
-          {...register("salaryMin", { valueAsNumber: true })}
+          {...register("salaryMin", {
+            setValueAs: (value: string) =>
+              value === "" ? undefined : Number(value),
+          })}
           error={errors.salaryMin?.message}
           disabled={isPending}
         />
         <Input
           label="Lương tối đa (VND)"
           type="number"
-          {...register("salaryMax", { valueAsNumber: true })}
+          {...register("salaryMax", {
+            setValueAs: (value: string) =>
+              value === "" ? undefined : Number(value),
+          })}
           error={errors.salaryMax?.message}
           disabled={isPending}
         />
