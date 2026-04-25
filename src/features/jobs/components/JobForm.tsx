@@ -259,7 +259,7 @@ export const JobForm = ({
         disabled={isPending}
       />
 
-      <Button type="submit" isLoading={isPending} fullWidth variant="primary">
+      <Button type="submit" isLoading={isPending} fullWidth>
         {submitLabel}
       </Button>
     </form>

@@ -22,15 +22,13 @@ export const Button = ({
 
   const variants = {
     primary:
-      "bg-primary text-primary-foreground " +
-      "hover:bg-primary-hover active:bg-primary-active",
+      "bg-primary !text-primary-foreground hover:bg-primary-hover active:bg-primary-active",
 
     secondary:
-      "bg-secondary text-secondary-foreground " +
-      "hover:opacity-90 active:opacity-80",
+      "bg-secondary !text-primary " + "hover:opacity-90 active:opacity-80",
 
     outline:
-      "border border-border text-text-primary bg-transparent " +
+      "border border-border !text-text-primary bg-transparent " +
       "hover:bg-gray-200 active:bg-gray-200",
   };
 
