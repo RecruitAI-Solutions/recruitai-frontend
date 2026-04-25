@@ -28,8 +28,12 @@ import {
   Star,
   HelpCircle,
 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 
 export const UserMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [arrowDirection, setArrowDirection] = useState<"down" | "up">("down");
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
   const { can } = usePermission();
@@ -43,11 +47,38 @@ export const UserMenu = () => {
 
   const role = user?.role;
 
+  // Tính toán vị trí để quyết định hướng mũi tên
+  useEffect(() => {
+    const calculateArrowDirection = () => {
+      if (triggerRef.current) {
+        const rect = triggerRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+
+        // Nếu ở dưới cuối màn hình (không đủ chỗ đổ xuống)
+        if (spaceBelow < 300 && spaceAbove > spaceBelow) {
+          setArrowDirection("up");
+        } else {
+          setArrowDirection("down");
+        }
+      }
+    };
+
+    calculateArrowDirection();
+    window.addEventListener("scroll", calculateArrowDirection);
+    window.addEventListener("resize", calculateArrowDirection);
+
+    return () => {
+      window.removeEventListener("scroll", calculateArrowDirection);
+      window.removeEventListener("resize", calculateArrowDirection);
+    };
+  }, []);
+
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root onOpenChange={setIsOpen}>
       {/* Trigger */}
       <DropdownMenu.Trigger asChild>
-        <button className="outline-none focus:ring-2 focus:ring-primary/50 rounded-full transition-all">
+        <button ref={triggerRef} className="outline-none focus:ring-2 focus:ring-primary/50 rounded-full transition-all">
           <div className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-primary/5 transition-colors">
             <Avatar className="cursor-pointer">
               <AvatarImage src={user?.avatar} />
@@ -55,17 +86,29 @@ export const UserMenu = () => {
                 {getInitials(user?.fullName)}
               </AvatarFallback>
             </Avatar>
-            {role?.toLocaleLowerCase() === "candidate" ? (
-              <ChevronDown className="w-4 h-4 text-text-secondary" />
+            {/* Mũi tên dựa vào arrowDirection */}
+            {isOpen ? (
+              // Khi mở: nếu arrowDirection là "down" thì ChevronUp, nếu "up" thì ChevronDown
+              arrowDirection === "down" ? (
+                <ChevronUp className="w-4 h-4 text-text-secondary" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-text-secondary" />
+              )
             ) : (
-              <ChevronUp className="w-4 h-4 text-text-secondary" />
+              // Khi đóng: hiển thị theo hướng sẽ đổ
+              arrowDirection === "down" ? (
+                <ChevronDown className="w-4 h-4 text-text-secondary" />
+              ) : (
+                <ChevronUp className="w-4 h-4 text-text-secondary" />
+              )
             )}
           </div>
         </button>
       </DropdownMenu.Trigger>
 
-      {/* Content */}
+      {/* Content - set side theo arrowDirection */}
       <DropdownMenu.Content
+        side={arrowDirection === "down" ? "bottom" : "top"}
         align="end"
         sideOffset={8}
         className="
@@ -78,6 +121,7 @@ export const UserMenu = () => {
             ring-1 ring-black/5 dark:ring-white/10
         "
       >
+        {/* Phần còn lại giữ nguyên */}
         {/* User info */}
         <div className="px-3 py-3 border-b border-border">
           <p className="text-sm font-semibold text-text-primary line-clamp-1">
