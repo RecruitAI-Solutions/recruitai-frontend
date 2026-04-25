@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import { geocodingApi } from "../services/geocodingApi";
 
 type Props = {
@@ -13,46 +13,38 @@ export const useProvinceSelect = ({ value, onChange }: Props = {}) => {
   const [selectedName, setSelectedName] = useState<string | null>(value ?? null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const searchProvinces = useCallback(async (keyword: string) => {
-    if (!keyword) {
-      setProvinces([]);
-      setLoading(false);
-      return;
-    }
+  // Không set loading = true ngay lập tức, để tránh re-render đột ngột
+  const handleSearchChange = useCallback((newSearch: string) => {
+    setSearch(newSearch);
 
-    setLoading(true);
-    try {
-      const data = await geocodingApi.getProvinces(keyword);
-      setProvinces(data.map(p => ({ code: p.id, name: p.name })));
-    } catch (error) {
-      console.error(error);
-      setProvinces([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Debounce search
-  useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      searchProvinces(search);
-    }, 300);
+    if (!newSearch) {
+      setProvinces([]);
+      return;
+    }
 
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+    // Delay 300ms mới gọi API
+    timeoutRef.current = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const data = await geocodingApi.getProvinces(newSearch);
+        setProvinces(data.map(p => ({ code: p.id, name: p.name })));
+      } catch (error) {
+        console.error(error);
+        setProvinces([]);
+      } finally {
+        setLoading(false);
       }
-    };
-  }, [search, searchProvinces]);
+    }, 300);
+  }, []);
 
   const handleChange = (name: string) => {
     setSelectedName(name);
     onChange?.(name);
-    setSearch(""); // clear search khi chọn xong
+    setSearch("");
     setProvinces([]);
   };
 
@@ -70,6 +62,6 @@ export const useProvinceSelect = ({ value, onChange }: Props = {}) => {
     handleChange,
     clear,
     search,
-    setSearch,
+    setSearch: handleSearchChange,
   };
 };
