@@ -78,3 +78,15 @@ export type ReverseGeocodingParams = {
   lng: number;
   radius?: number;
 };
+export interface Province {
+  id: string;
+  name: string;
+  code?: string;
+}
+
+export interface District {
+  id: string;
+  name: string;
+  provinceId: string;
+  code?: string;
+}
