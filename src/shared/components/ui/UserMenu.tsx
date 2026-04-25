@@ -45,8 +45,6 @@ export const UserMenu = () => {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
-  const role = user?.role;
-
   // Tính toán vị trí để quyết định hướng mũi tên
   useEffect(() => {
     const calculateArrowDirection = () => {
@@ -78,10 +76,19 @@ export const UserMenu = () => {
     <DropdownMenu.Root onOpenChange={setIsOpen}>
       {/* Trigger */}
       <DropdownMenu.Trigger asChild>
-        <button ref={triggerRef} className="outline-none focus:ring-2 focus:ring-primary/50 rounded-full transition-all">
+        <button
+          ref={triggerRef}
+          className="outline-none focus:ring-2 focus:ring-primary/50 rounded-full transition-all"
+        >
           <div className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-primary/5 transition-colors">
             <Avatar className="cursor-pointer">
-              <AvatarImage src={user?.avatar} />
+              <AvatarImage
+                src={
+                  user?.avatar
+                    ? `${import.meta.env.VITE_API_BASE_URL}${user.avatar}`
+                    : undefined
+                }
+              />
               <AvatarFallback className="bg-primary/10 text-primary">
                 {getInitials(user?.fullName)}
               </AvatarFallback>
@@ -94,13 +101,11 @@ export const UserMenu = () => {
               ) : (
                 <ChevronDown className="w-4 h-4 text-text-secondary" />
               )
+            ) : // Khi đóng: hiển thị theo hướng sẽ đổ
+            arrowDirection === "down" ? (
+              <ChevronDown className="w-4 h-4 text-text-secondary" />
             ) : (
-              // Khi đóng: hiển thị theo hướng sẽ đổ
-              arrowDirection === "down" ? (
-                <ChevronDown className="w-4 h-4 text-text-secondary" />
-              ) : (
-                <ChevronUp className="w-4 h-4 text-text-secondary" />
-              )
+              <ChevronUp className="w-4 h-4 text-text-secondary" />
             )}
           </div>
         </button>
@@ -281,3 +286,4 @@ export const UserMenu = () => {
     </DropdownMenu.Root>
   );
 };
+

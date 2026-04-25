@@ -58,6 +58,7 @@ const transformUserMeResponse = (data: UserMeResponse): User => {
     status: data.status,
     createdAt: data.createdAt,
     lastLoginAt: data.lastLoginAt,
+    avatar: data.avatarUrl || undefined,
   };
 };
 

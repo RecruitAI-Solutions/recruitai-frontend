@@ -108,6 +108,7 @@ export type UserMeResponse = {
   permissions: string[];
   createdAt: string;
   lastLoginAt: string;
+  avatarUrl?: string;
 };
 
 export type UserPermissionsResponse = {
@@ -213,7 +214,7 @@ export type AuthState = {
 export type UpdateProfileRequest = {
   fullName?: string;
   phoneNumber?: string;
-  gender?: string;
+  gender?: GenderType;
   dateOfBirth?: string;
   avatarUrl?: string;
 };
@@ -223,7 +224,7 @@ export type UpdateProfileResponse = {
   email: string;
   fullName: string;
   phoneNumber: string | null;
-  gender: string | null;
+  gender: GenderType | null;
   dateOfBirth: string | null;
   avatarUrl: string | null;
   updatedAt: string;

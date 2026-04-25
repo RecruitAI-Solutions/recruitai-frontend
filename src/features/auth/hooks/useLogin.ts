@@ -32,8 +32,6 @@ export const useLogin = () => {
     onError: (error) => {
       const data = error.response?.data;
 
-      console.log(error);
-
       if (status === 403 && message.includes("Email")) {
         return;
       }
