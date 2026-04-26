@@ -22,6 +22,7 @@ const getInitials = (name?: string) => {
 export const CandidateHeader = () => {
   const user = useAppSelector(selectCurrentUser);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const avatarSrc = `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user?.avatar}` || user?.avatar;
 
   return (
     <header className="bg-surface border-b border-border sticky top-0 z-30">
@@ -49,7 +50,7 @@ export const CandidateHeader = () => {
         <div className="flex items-center gap-3 shrink-0">
           <div className="hidden md:flex items-center gap-2">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar} />
+              <AvatarImage src={avatarSrc} />
               <AvatarFallback className="text-xs bg-blue-100 text-blue-600">
                 {getInitials(user?.fullName)}
               </AvatarFallback>

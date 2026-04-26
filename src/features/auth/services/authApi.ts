@@ -32,6 +32,7 @@ const transformAuthResponse = (data: AuthResponse): LoginResponse => {
     roleNumber: data.role,
     roleName: data.roleName,
     permissions: data.permissions,
+    avatar: data.avatarUrl || data.avatar || undefined,
   };
 
   return {

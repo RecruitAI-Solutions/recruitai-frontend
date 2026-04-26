@@ -87,7 +87,7 @@ export const UserMenu = () => {
               <AvatarImage
                 src={
                   user?.avatar
-                    ? `${import.meta.env.VITE_API_BASE_URL}${user.avatar}`
+                    ? `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user.avatar}`
                     : undefined
                 }
               />
@@ -104,11 +104,11 @@ export const UserMenu = () => {
                 <ChevronDown className="w-4 h-4 text-text-secondary" />
               )
             ) : // Khi đóng: hiển thị theo hướng sẽ đổ
-            arrowDirection === "down" ? (
-              <ChevronDown className="w-4 h-4 text-text-secondary" />
-            ) : (
-              <ChevronUp className="w-4 h-4 text-text-secondary" />
-            )}
+              arrowDirection === "down" ? (
+                <ChevronDown className="w-4 h-4 text-text-secondary" />
+              ) : (
+                <ChevronUp className="w-4 h-4 text-text-secondary" />
+              )}
           </div>
         </button>
       </DropdownMenu.Trigger>

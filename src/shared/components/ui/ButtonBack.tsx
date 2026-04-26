@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { forwardRef } from "react";
+import { forwardRef, useState, useRef } from "react";
 import type { ButtonHTMLAttributes } from "react";
 
 interface ButtonBackProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -33,6 +33,8 @@ export const ButtonBack = forwardRef<HTMLButtonElement, ButtonBackProps>(({
     ...props
 }, ref) => {
     const navigate = useNavigate();
+    const [isHoveringText, setIsHoveringText] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout>();
 
     const handleBack = () => {
         if (onBack) {
@@ -43,6 +45,18 @@ export const ButtonBack = forwardRef<HTMLButtonElement, ButtonBackProps>(({
             } else {
                 navigate(fallbackPath);
             }
+        }
+    };
+
+    const handleTextMouseEnter = () => {
+        if (animation === "bounce" || animation === "shake") {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            setIsHoveringText(true);
+            timeoutRef.current = setTimeout(() => {
+                setIsHoveringText(false);
+            }, 500);
         }
     };
 
@@ -67,38 +81,35 @@ export const ButtonBack = forwardRef<HTMLButtonElement, ButtonBackProps>(({
         xl: "w-6 h-6"
     };
 
-    // Animation classes với keyframes
-    const animations = {
-        none: "",
-        slide: "hover:translate-x-[-4px] transition-transform duration-300 ease-out",
-        bounce: "hover:animate-[bounce_0.5s_ease]",
-        fade: "hover:opacity-70 transition-opacity duration-300",
-        scale: "hover:scale-105 transition-transform duration-300 ease-out active:scale-95",
-        glow: "hover:shadow-[0_0_10px_rgba(59,130,246,0.5)] hover:border-primary/50 transition-all duration-300",
-        shake: "hover:animate-[shake_0.3s_ease-in-out]"
+    // Chỉ trigger bounce/shake khi hover đúng vào text
+    const getTextAnimation = () => {
+        if (!isHoveringText) return "";
+        if (animation === "bounce") return "animate-[bounce_0.5s_ease_1]";
+        if (animation === "shake") return "animate-[shake_0.3s_ease-in-out_1]";
+        return "";
     };
 
-    const iconAnimations = {
-        none: "",
-        slide: "group-hover:translate-x-[-2px] transition-transform duration-300",
-        bounce: "group-hover:animate-[bounce_0.5s_ease]",
-        fade: "group-hover:opacity-70 transition-opacity duration-300",
-        scale: "group-hover:scale-110 transition-transform duration-300",
-        glow: "group-hover:drop-shadow-[0_0_3px_rgba(59,130,246,0.5)] transition-all duration-300",
-        shake: "group-hover:animate-[shake_0.3s_ease-in-out]"
+    const getIconAnimation = () => {
+        if (!isHoveringText) return "";
+        if (animation === "bounce") return "animate-[bounce_0.5s_ease_1]";
+        if (animation === "shake") return "animate-[shake_0.3s_ease-in-out_1]";
+        return "";
+    };
+
+    // Các animation khác vẫn dùng hover bình thường
+    const getButtonAnimation = () => {
+        switch (animation) {
+            case "slide": return "hover:translate-x-[-4px] transition-transform duration-300 ease-out";
+            case "fade": return "hover:opacity-70 transition-opacity duration-300";
+            case "scale": return "hover:scale-105 transition-transform duration-300 ease-out active:scale-95";
+            case "glow": return "hover:shadow-[0_0_10px_rgba(59,130,246,0.5)] hover:border-primary/50 transition-all duration-300";
+            default: return "";
+        }
     };
 
     const defaultIcon = variant === "primary" ?
-        <ArrowLeft className={cn(iconSizes[size], iconAnimations[animation])} /> :
-        <ChevronLeft className={cn(iconSizes[size], iconAnimations[animation])} />;
-
-    const content = (
-        <>
-            {iconPosition === "left" && (icon || defaultIcon)}
-            {showText && (children !== undefined ? children : (variant === "default" ? "Quay lại" : "Back"))}
-            {iconPosition === "right" && (icon || defaultIcon)}
-        </>
-    );
+        <ArrowLeft className={cn(iconSizes[size], getIconAnimation())} /> :
+        <ChevronLeft className={cn(iconSizes[size], getIconAnimation())} />;
 
     return (
         <button
@@ -111,16 +122,27 @@ export const ButtonBack = forwardRef<HTMLButtonElement, ButtonBackProps>(({
                 "disabled:opacity-50 disabled:cursor-not-allowed",
                 variants[variant],
                 sizes[size],
-                animations[animation],
+                getButtonAnimation(),
                 className
             )}
             {...props}
         >
-            {/* Ripple effect khi click */}
-            <span className="absolute inset-0 overflow-hidden">
+            <span className="absolute inset-0 overflow-hidden pointer-events-none">
                 <span className="absolute inset-0 opacity-0 group-active:opacity-100 group-active:animate-[ripple_0.4s_ease-out] bg-white/20 rounded-full" />
             </span>
-            {content}
+
+            {/* Nội dung - chỉ hover vào đây mới trigger bounce/shake */}
+            <span
+                className={cn(
+                    "inline-flex items-center gap-2",
+                    getTextAnimation()
+                )}
+                onMouseEnter={handleTextMouseEnter}
+            >
+                {iconPosition === "left" && (icon || defaultIcon)}
+                {showText && (children !== undefined ? children : (variant === "default" ? "Quay lại" : "Back"))}
+                {iconPosition === "right" && (icon || defaultIcon)}
+            </span>
         </button>
     );
 });

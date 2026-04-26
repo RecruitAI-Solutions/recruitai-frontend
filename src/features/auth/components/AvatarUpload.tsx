@@ -48,12 +48,14 @@ export const AvatarUpload = () => {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
+  const avatarSrc = `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user?.avatar}` || user?.avatar;
+
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Avatar */}
       <div className="relative group">
         <Avatar className="w-32 h-32 ring-4 ring-white shadow-lg">
-          <AvatarImage src={user?.avatar} />
+          <AvatarImage src={avatarSrc} />
           <AvatarFallback className="text-4xl bg-primary/10 text-primary">
             {getInitials(user?.fullName)}
           </AvatarFallback>
