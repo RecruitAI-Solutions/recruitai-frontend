@@ -375,7 +375,7 @@ export interface LocationFilterInputProps {
 }
 
 export interface EmploymentTypeFilterProps {
-  value?: string; // single value or comma-separated
+  value?: string;
   onChange: (value: string | undefined) => void;
 }
 
@@ -385,3 +385,37 @@ export interface SalaryRangeFilterProps {
   onChangeMin: (value: number | undefined) => void;
   onChangeMax: (value: number | undefined) => void;
 }
+
+// SAVE JOBS
+export type SavedJobItem = {
+  jobId: string;
+  jobTitle: string;
+  companyName: string;
+  companyLogo: string | null;
+  location: string;
+  salaryMin: number;
+  salaryMax: number;
+  skillNames: string[];
+  savedAt: string;
+};
+
+export type SavedJobListResponse = {
+  data: SavedJobItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+};
+
+export type SaveJobResponse = {
+  success: boolean;
+  message: string;
+  savedAt: string;
+};
+
+export type UnsaveJobResponse = {
+  success: boolean;
+  message: string;
+};

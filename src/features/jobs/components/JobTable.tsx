@@ -1,4 +1,4 @@
-import { Table, Button, Space, Tag } from "antd";
+import { Table, Button, Space, Tag, Popconfirm } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
   EditOutlined,
@@ -103,12 +103,16 @@ export const JobTable = ({
           <Link to={ROUTES.RECRUITER.JOB_EDIT(record.id)}>
             <Button icon={<EditOutlined />} size="small" />
           </Link>
-          <Button
-            icon={<DeleteOutlined />}
-            size="small"
-            danger
-            onClick={() => onDelete?.(record.id)}
-          />
+          <Popconfirm
+            title="Xóa công việc?"
+            description="Bạn có chắc chắn muốn xóa job này không?"
+            okText="Xóa"
+            cancelText="Hủy"
+            okButtonProps={{ danger: true }}
+            onConfirm={() => onDelete?.(record.id)}
+          >
+            <Button icon={<DeleteOutlined />} size="small" danger />
+          </Popconfirm>
         </Space>
       ),
       width: "8.3%",

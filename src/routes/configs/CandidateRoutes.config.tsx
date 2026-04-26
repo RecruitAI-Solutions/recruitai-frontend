@@ -9,6 +9,7 @@ import { MyApplicationsPage } from "@/features/applications/pages/MyApplications
 import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
 import CandidateDashboard from "@/features/candidate/pages/CandidateDashboard";
 import { JobSuggestPage } from "@/features/candidate/pages/JobsSuggestPage";
+import { SavedJobsPage } from "@/features/jobs/pages/SavedJobsPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -47,7 +48,6 @@ export const createCandidateRoutes = (
           element: <JobSuggestPage />,
         },
         {
-
           path: ROUTES.CANDIDATE.APPLICATIONS,
           element: <MyApplicationsPage />,
         },
@@ -55,6 +55,10 @@ export const createCandidateRoutes = (
         {
           path: ROUTES.CANDIDATE.APPLICATION_DETAIL(":applicationId"),
           element: <ApplicationDetailPage />,
+        },
+        {
+          path: ROUTES.CANDIDATE.SAVED_JOBS,
+          element: <SavedJobsPage />,
         },
       ],
     },

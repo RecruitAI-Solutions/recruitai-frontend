@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { JobListItem } from "../types/job.types";
 import { ROUTES } from "@/config/routes.config";
 import React from "react";
+import { SaveJobButton } from "./SaveJobButton";
 
 type Props = {
   job: JobListItem;
@@ -29,13 +30,19 @@ export const JobCard = React.memo(
         "
       >
         <div className="flex justify-between items-start gap-2">
-          <h3 className="font-semibold text-text-primary line-clamp-2">
+          {/* LEFT */}
+          <h3 className="font-semibold text-text-primary line-clamp-2 flex-1">
             {job.title}
           </h3>
 
-          <span className="text-sm px-2 py-1 rounded-md bg-primary/10 text-primary whitespace-nowrap">
-            {job.employmentType}
-          </span>
+          {/* RIGHT */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-sm px-2 py-1 rounded-md bg-primary/10 text-primary whitespace-nowrap">
+              {job.employmentType}
+            </span>
+
+            <SaveJobButton jobId={job.id} />
+          </div>
         </div>
 
         <p className="text-sm text-text-secondary mt-1">
