@@ -3,12 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Briefcase,
   MapPin,
-  Calendar,
-  DollarSign,
-  Users,
-  Eye,
   Mail,
-  Clock,
   Building2,
   Award,
   Target,
@@ -16,7 +11,6 @@ import {
   Sparkles,
   BookOpen,
   Heart,
-  Globe,
 } from "lucide-react";
 import { useGetJob } from "../hooks/useGetJob";
 import { useAppSelector } from "@/app/hooks";
@@ -31,7 +25,6 @@ import { ApplySection } from "@/features/applications/components/ApplySection";
 import { useGetSimilarJobs } from "../hooks/useGetSimilarJobs";
 import { JobCard } from "../components/JobCard";
 import { ButtonBack } from "@/shared/components/ui/ButtonBack";
-import { useEffect, useState, useRef } from "react";
 
 const JobDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,29 +34,6 @@ const JobDetailPage = () => {
   const userRole = useAppSelector(selectUserRole);
   const { data: similarData } = useGetSimilarJobs(id ?? "", !!id);
   const similarJobs = similarData?.data ?? [];
-
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [leftPosition, setLeftPosition] = useState(0);
-  const [rightPosition, setRightPosition] = useState(0);
-
-  useEffect(() => {
-    const updatePositions = () => {
-      if (contentRef.current) {
-        const rect = contentRef.current.getBoundingClientRect();
-        // Sidebar cách content 24px
-        setLeftPosition(rect.left - 320 - 24);
-        setRightPosition(window.innerWidth - rect.right - 320 - 24);
-      }
-    };
-
-    updatePositions();
-    window.addEventListener("resize", updatePositions);
-    window.addEventListener("scroll", updatePositions);
-    return () => {
-      window.removeEventListener("resize", updatePositions);
-      window.removeEventListener("scroll", updatePositions);
-    };
-  }, [job]);
 
   if (isLoading) {
     return (
@@ -109,122 +79,58 @@ const JobDetailPage = () => {
   }
 
   const isOwner = userRole === "recruiter" && job.recruiterId === user?.id;
+  const isCandidate = userRole === "candidate";
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Left Sidebar */}
-      {userRole === "candidate" && leftPosition > 0 && (
-        <div
-          className="hidden lg:block fixed top-32 w-80 z-10"
-          style={{ left: leftPosition }}
-        >
-          <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-primary/10 to-transparent px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
-                  <TrendingUp className="w-4 h-4 mr-2 text-primary" />
-                  Ứng tuyển ngay
-                </h3>
-              </div>
-              <div className="p-4">
-                <ApplySection jobId={job.id} />
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-50 to-transparent px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
-                  <Sparkles className="w-4 h-4 mr-2 text-primary" />
-                  Kiểm tra độ phù hợp
-                </h3>
-              </div>
-              <div className="p-4">
-                <MatchCVButton jobId={job.id} />
-              </div>
-            </div>
-          </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Back button */}
+        <div className="mb-4">
+          <ButtonBack>Quay lại</ButtonBack>
         </div>
-      )}
 
-      {/* Right Sidebar */}
-      {rightPosition > 0 && (
-        <div
-          className="hidden lg:block fixed top-32 w-80 z-10"
-          style={{ right: rightPosition }}
-        >
-          <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-50 to-transparent px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
-                  <Award className="w-4 h-4 mr-2 text-primary" />
-                  Thông tin chung
-                </h3>
-              </div>
-              <div className="p-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Ngày đăng:</span>
-                  <span>{new Date(job.createdAt).toLocaleDateString("vi-VN")}</span>
+        {/* Grid Layout - Responsive 3 cột */}
+        <div className={`
+          grid gap-6 items-start
+          ${isCandidate
+            ? "xl:grid-cols-[320px_minmax(0,1fr)_320px] grid-cols-1"
+            : "xl:grid-cols-[minmax(0,1fr)_320px] grid-cols-1"
+          }
+        `}>
+          {/* LEFT SIDEBAR - Chỉ hiển thị cho candidate */}
+          {isCandidate && (
+            <div className="space-y-4 xl:sticky xl:top-24 order-2 xl:order-1">
+              {/* Ứng tuyển ngay */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-primary/10 to-transparent px-4 py-3 border-b border-gray-100">
+                  <h3 className="font-semibold text-gray-900 text-sm flex items-center">
+                    <TrendingUp className="w-4 h-4 mr-2 text-primary" />
+                    Ứng tuyển ngay
+                  </h3>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Hết hạn:</span>
-                  <span className="text-red-600">{new Date(job.expirationDate).toLocaleDateString("vi-VN")}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Lượt ứng tuyển:</span>
-                  <span>{job.applications}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Lượt xem:</span>
-                  <span>{job.views}</span>
+                <div className="p-4">
+                  <ApplySection jobId={job.id} />
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-50 to-transparent px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
-                  <BookOpen className="w-4 h-4 mr-2 text-primary" />
-                  Kỹ năng yêu cầu
-                </h3>
-              </div>
-              <div className="p-4">
-                <div className="flex flex-wrap gap-1.5">
-                  {job.skillDetails.map((skill) => (
-                    <Badge key={skill.id} variant={skill.isRequired ? "danger" : "gray"} className="text-xs">
-                      {skill.name}
-                    </Badge>
-                  ))}
+              {/* Kiểm tra độ phù hợp */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-purple-50 to-transparent px-4 py-3 border-b border-gray-100">
+                  <h3 className="font-semibold text-gray-900 text-sm flex items-center">
+                    <Sparkles className="w-4 h-4 mr-2 text-primary" />
+                    Kiểm tra độ phù hợp
+                  </h3>
+                </div>
+                <div className="p-4">
+                  <MatchCVButton jobId={job.id} />
                 </div>
               </div>
             </div>
+          )}
 
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-50 to-transparent px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
-                  <Mail className="w-4 h-4 mr-2 text-primary" />
-                  Liên hệ
-                </h3>
-              </div>
-              <div className="p-4">
-                <a href={`mailto:${job.recruiterEmail}`} className="text-primary hover:underline text-sm break-all">
-                  {job.recruiterEmail}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div ref={contentRef} className="max-w-7xl mx-auto">
-          {/* Back button */}
-          <div className="py-4">
-            <ButtonBack>Quay lại</ButtonBack>
-          </div>
-
-          {/* Job Header */}
-          <div className="mb-6">
+          {/* MAIN CONTENT */}
+          <div className={`space-y-6 order-1 ${isCandidate ? "xl:order-2" : "xl:order-1"}`}>
+            {/* Job Header */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
@@ -261,7 +167,7 @@ const JobDetailPage = () => {
                         <span>{job.location}</span>
                       </div>
                       <div className="flex items-center">
-                        <DollarSign className="w-4 h-4 mr-2 text-primary" />
+                        <Briefcase className="w-4 h-4 mr-2 text-primary" />
                         <span className="font-medium">
                           {job.salaryMin && job.salaryMax
                             ? `${job.salaryMin.toLocaleString()} - ${job.salaryMax.toLocaleString()} ${job.currency}`
@@ -291,10 +197,7 @@ const JobDetailPage = () => {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Main Content */}
-          <div className="space-y-6">
             {/* Job Description */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="border-b border-gray-100 bg-gradient-to-r from-primary/5 to-transparent px-6 py-4">
@@ -347,65 +250,84 @@ const JobDetailPage = () => {
               <div className="pt-4">
                 <h2 className="text-xl font-bold mb-4 text-gray-900">Việc làm tương tự</h2>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {similarJobs.map((job) => (
-                    <JobCard key={job.id} job={job} />
+                  {similarJobs.map((similarJob) => (
+                    <JobCard key={similarJob.id} job={similarJob} />
                   ))}
                 </div>
               </div>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Mobile Layout */}
-      <div className="lg:hidden container mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div className="space-y-4">
-          {userRole === "candidate" && (
-            <>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <ApplySection jobId={job.id} />
+          {/* RIGHT SIDEBAR - Luôn hiển thị trên desktop */}
+          <div className="space-y-4 xl:sticky xl:top-24 order-3">
+            {/* Thông tin chung */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-transparent px-4 py-3 border-b border-gray-100">
+                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
+                  <Award className="w-4 h-4 mr-2 text-primary" />
+                  Thông tin chung
+                </h3>
               </div>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <MatchCVButton jobId={job.id} />
+              <div className="p-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Ngày đăng:</span>
+                  <span>{new Date(job.createdAt).toLocaleDateString("vi-VN")}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Hết hạn:</span>
+                  <span className="text-red-600">{new Date(job.expirationDate).toLocaleDateString("vi-VN")}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Lượt ứng tuyển:</span>
+                  <span>{job.applications}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Lượt xem:</span>
+                  <span>{job.views}</span>
+                </div>
               </div>
-            </>
-          )}
+            </div>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Ngày đăng:</span>
-              <span>{new Date(job.createdAt).toLocaleDateString("vi-VN")}</span>
+            {/* Kỹ năng yêu cầu */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-purple-50 to-transparent px-4 py-3 border-b border-gray-100">
+                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
+                  <BookOpen className="w-4 h-4 mr-2 text-primary" />
+                  Kỹ năng yêu cầu
+                </h3>
+              </div>
+              <div className="p-4">
+                <div className="flex flex-wrap gap-1.5">
+                  {job.skillDetails.map((skill) => (
+                    <Badge
+                      key={skill.id}
+                      variant={skill.isRequired ? "danger" : "gray"}
+                      className="text-xs"
+                    >
+                      {skill.name}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Hết hạn:</span>
-              <span className="text-red-600">{new Date(job.expirationDate).toLocaleDateString("vi-VN")}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Lượt ứng tuyển:</span>
-              <span>{job.applications}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Lượt xem:</span>
-              <span>{job.views}</span>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <h3 className="font-semibold mb-2 text-gray-900">Kỹ năng yêu cầu</h3>
-            <div className="flex flex-wrap gap-1.5">
-              {job.skillDetails.map((skill) => (
-                <Badge key={skill.id} variant={skill.isRequired ? "danger" : "gray"} className="text-xs">
-                  {skill.name}
-                </Badge>
-              ))}
+            {/* Liên hệ */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-green-50 to-transparent px-4 py-3 border-b border-gray-100">
+                <h3 className="font-semibold text-gray-900 text-sm flex items-center">
+                  <Mail className="w-4 h-4 mr-2 text-primary" />
+                  Liên hệ
+                </h3>
+              </div>
+              <div className="p-4">
+                <a
+                  href={`mailto:${job.recruiterEmail}`}
+                  className="text-primary hover:underline text-sm break-all"
+                >
+                  {job.recruiterEmail}
+                </a>
+              </div>
             </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <h3 className="font-semibold mb-2 text-gray-900">Liên hệ</h3>
-            <a href={`mailto:${job.recruiterEmail}`} className="text-primary hover:underline text-sm break-all">
-              {job.recruiterEmail}
-            </a>
           </div>
         </div>
       </div>
@@ -414,4 +336,3 @@ const JobDetailPage = () => {
 };
 
 export default JobDetailPage;
-
