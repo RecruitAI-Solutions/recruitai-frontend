@@ -93,6 +93,8 @@ export type AuthResponse = {
   role: number;
   roleName: string;
   permissions: string[];
+  avatarUrl?: string;
+  avatar?: string;
 };
 
 export type UserMeResponse = {
