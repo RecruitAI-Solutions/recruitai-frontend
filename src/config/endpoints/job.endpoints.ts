@@ -1,4 +1,5 @@
 const JOB_BASE = "/v1/jobs";
+const SAVED_JOB_BASE = "/v1/SavedJobs";
 
 export const JOB_ENDPOINTS = {
   LIST: JOB_BASE,
@@ -11,5 +12,7 @@ export const JOB_ENDPOINTS = {
   FEATURED: `${JOB_BASE}/featured`,
   SIMILAR: (id: string) => `${JOB_BASE}/similar/${id}`,
   MATCH_CV_JOBS: (cvId: string) => `${JOB_BASE}/suggestions/by-cv/${cvId}`,
-  SAVED_LIST: `${JOB_BASE}/saved`,
+  SAVE: (jobId: string) => `${SAVED_JOB_BASE}/jobs/${jobId}/save`,
+  GET_SAVED: `${SAVED_JOB_BASE}/jobs/saved`,
+  UNSAVE: (jobId: string) => `${SAVED_JOB_BASE}/jobs/${jobId}/save`,
 } as const;

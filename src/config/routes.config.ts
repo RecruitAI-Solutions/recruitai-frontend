@@ -25,7 +25,7 @@ export const ROUTES = {
     CV_DETAIL: (id: string) => `/candidate/cv/${id}`,
     CV_MATCHING_JOBS: (cvId: string) => `/candidate/cv/${cvId}/matching-jobs`,
     SETTINGS: "/candidate/settings",
-    SAVED_JOBS: "",
+    SAVED_JOBS: "/candidate/saved-jobs",
   },
 
   RECRUITER: {

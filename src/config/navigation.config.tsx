@@ -82,7 +82,7 @@ export const NAV_CONFIG: NavGroup[] = [
       },
       {
         label: "Tài khoản",
-        to: ROUTES.CANDIDATE.PROFILE,
+        to: ROUTES.PROFILE,
         icon: <User className="w-4 h-4" />,
       },
     ],

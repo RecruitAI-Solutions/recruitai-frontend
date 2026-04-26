@@ -29,10 +29,12 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [arrowDirection, setArrowDirection] = useState<"down" | "up">("down");
+  const [openLogout, setOpenLogout] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
@@ -276,14 +278,27 @@ export const UserMenu = () => {
 
         {/* Logout */}
         <DropdownMenu.Item
-          onClick={() => dispatch(logout())}
+          onSelect={(e) => e.preventDefault()}
+          onClick={() => setOpenLogout(true)}
           className="flex items-center gap-3 px-3 py-2 text-sm text-error rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer outline-none focus:bg-red-50 dark:focus:bg-red-950/20"
         >
           <LogOut className="w-4 h-4" />
           <span>Đăng xuất</span>
         </DropdownMenu.Item>
+        <ConfirmDialog
+          open={openLogout}
+          onOpenChange={setOpenLogout}
+          title="Đăng xuất?"
+          description="Bạn sẽ cần đăng nhập lại."
+          confirmText="Đăng xuất"
+          cancelText="Hủy"
+          variant="destructive"
+          onConfirm={() => {
+            dispatch(logout());
+            setOpenLogout(false);
+          }}
+        />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 };
-
