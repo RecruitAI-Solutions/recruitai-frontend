@@ -87,7 +87,7 @@ export const UserMenu = () => {
               <AvatarImage
                 src={
                   user?.avatar
-                    ? `${import.meta.env.VITE_API_BASE_URL}${user.avatar}`
+                    ? `${import.meta.env.VITE_UPLOAD_BASE_URL}${user.avatar}`
                     : undefined
                 }
               />

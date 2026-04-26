@@ -48,12 +48,19 @@ export const CandidateHeader = () => {
         {/* Right: User info + Logout */}
         <div className="flex items-center gap-3 shrink-0">
           <div className="hidden md:flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar} />
-              <AvatarFallback className="text-xs bg-blue-100 text-blue-600">
+            <Avatar>
+              <AvatarImage
+                src={
+                  user?.avatar
+                    ? `${import.meta.env.VITE_UPLOAD_BASE_URL}${user.avatar}`
+                    : undefined
+                }
+              />
+              <AvatarFallback className="bg-primary/10 text-primary">
                 {getInitials(user?.fullName)}
               </AvatarFallback>
             </Avatar>
+
             <span className="text-sm font-medium text-text-primary">
               {user?.fullName}
             </span>
