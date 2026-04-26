@@ -64,7 +64,13 @@ export const VerifyEmailForm = () => {
           <p className="text-gray-600 text-sm mb-6">
             Email của bạn đã được xác thực. Bạn có thể đăng nhập ngay bây giờ.
           </p>
-          <Button onClick={() => navigate(ROUTES.LOGIN)}>Đăng nhập</Button>
+          <div className="w-full flex justify-center">
+            <Button
+              onClick={() => navigate(ROUTES.LOGIN)}
+            >
+              Đăng nhập
+            </Button>
+          </div>
         </div>
       );
     }
@@ -93,9 +99,13 @@ export const VerifyEmailForm = () => {
           <p className="text-gray-600 text-sm mb-6">
             Link xác thực không hợp lệ hoặc đã hết hạn.
           </p>
-          <Button onClick={() => navigate(ROUTES.LOGIN)}>
-            Quay về đăng nhập
-          </Button>
+          <div className="w-full flex justify-center">
+            <Button
+              onClick={() => navigate(ROUTES.LOGIN)}
+            >
+              Quay về đăng nhập
+            </Button>
+          </div>
         </div>
       );
     }
@@ -128,15 +138,17 @@ export const VerifyEmailForm = () => {
           kiểm tra hộp thư và làm theo hướng dẫn.
         </p>
         {!isSent ? (
-          <Button
-            onClick={() => {
-              sendVerification(email);
-              setIsSent(true);
-            }}
-            isLoading={isSending}
-          >
-            Gửi lại email xác thực
-          </Button>
+          <div className="w-full flex justify-center">
+            <Button
+              onClick={() => {
+                sendVerification(email);
+                setIsSent(true);
+              }}
+              isLoading={isSending}
+            >
+              Gửi lại email xác thực
+            </Button>
+          </div>
         ) : (
           <p className="text-sm text-green-600">
             Đã gửi lại email. Vui lòng kiểm tra hộp thư.
