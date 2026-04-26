@@ -115,39 +115,3 @@
     opacity: 0;
   }
 }
-
-@keyframes bounceFixed {
-
-  0%,
-  100% {
-    transform: translateX(0) translateY(0);
-  }
-
-  50% {
-    transform: translateX(-3px) translateY(-2px);
-  }
-}
-
-@keyframes shakeFixed {
-
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-2px);
-  }
-
-  50% {
-    transform: translateX(2px);
-  }
-
-  75% {
-    transform: translateX(-1px);
-  }
-}
-
-button:active {
-  pointer-events: none;
-}
