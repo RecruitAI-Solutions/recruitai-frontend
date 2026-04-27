@@ -50,6 +50,7 @@ export const ROUTES = {
     APPLICATIONS: "/admin/applications",
     SKILLS: "/admin/skills",
     AUDIT_LOGS: "/admin/audit-logs",
+    REPORTS: "/admin/reports",
   },
 
   NOTFOUND: "/404",

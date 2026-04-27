@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
-import { Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input } from "antd";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { useAdminJobs } from "../hooks/useAdminJobs";
 import { useDeleteJob } from "@/features/jobs/hooks/useDeleteJob";
 import { AdminJobTable } from "../components/AdminJobTable";
@@ -10,6 +10,7 @@ import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import type { TablePaginationConfig } from "antd/es/table";
 import type { JobFilters, JobListItem } from "@/features/jobs/types/job.types";
 import { useDebounce } from "@/lib/useDebounce";
+import { useExportJobs } from "../hooks/useExportJobs";
 
 const DEFAULT_FILTERS: JobFilters = {
   page: 1,
@@ -29,6 +30,7 @@ export const JobsManagementPage = () => {
 
   const { data, isLoading } = useAdminJobs(filter);
   const { mutate: deleteJob } = useDeleteJob();
+  const { mutate: exportJobs, isPending: isExporting } = useExportJobs();
 
   useEffect(() => {
     const nextTitle = debouncedSearch || undefined;
@@ -75,7 +77,7 @@ export const JobsManagementPage = () => {
           <h1 className="text-2xl font-bold text-text-primary">
             Quản lý công việc
           </h1>
-          <div className="w-full sm:w-64">
+          <div className="flex gap-2 items-center">
             <Input
               placeholder="Tìm kiếm..."
               prefix={<SearchOutlined />}
@@ -83,6 +85,19 @@ export const JobsManagementPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               allowClear
             />
+            <Button
+              icon={<DownloadOutlined />}
+              loading={isExporting}
+              onClick={() =>
+                exportJobs({
+                  format: "excel",
+                  keyword: searchTerm || undefined,
+                  status: undefined,
+                })
+              }
+            >
+              Xuất file
+            </Button>
           </div>
         </div>
         <div className="w-full overflow-x-auto rounded-lg border border-border">

@@ -156,6 +156,11 @@ export const NAV_CONFIG: NavGroup[] = [
         to: "/admin/audit-logs",
         icon: <BarChart className="w-4 h-4" />,
       },
+      {
+        label: "Báo cáo",
+        to: "/admin/reports",
+        icon: <BarChart className="w-4 h-4" />,
+      },
     ],
   },
   // PUBLIC LINK IN SIDEBAR
