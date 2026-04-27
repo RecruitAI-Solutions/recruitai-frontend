@@ -7,6 +7,7 @@ import { authApi } from "../services/authApi";
 import { getRefreshToken } from "@/services/storage/localStorage";
 import { ROUTES } from "@/config/routes.config";
 import { queryClient } from "@/services/api/QueryClient";
+import { signalRService } from "@/services/signalR/signalRService";
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ export const useLogout = () => {
       toast.success("Đăng xuất thành công!", {
         duration: 2000,
       });
-
+      signalRService.stop();
       navigate(ROUTES.LOGIN, { replace: true });
     },
 

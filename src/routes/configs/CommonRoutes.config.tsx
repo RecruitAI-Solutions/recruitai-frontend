@@ -3,6 +3,7 @@ import { ProtectedRoute } from "../ProtectedRoute";
 import { ROUTES } from "@/config/routes.config";
 import ChangePasswordPage from "@/features/auth/pages/ChangePasswordPage";
 import { ProfilePage } from "@/features/auth/pages/ProfilePage";
+import { NotificationsPage } from "@/features/notifications/pages/NotificationPage";
 
 export const createCommonRoutes = (isAuthenticated: boolean): RouteObject[] => [
   {
@@ -20,6 +21,10 @@ export const createCommonRoutes = (isAuthenticated: boolean): RouteObject[] => [
       {
         path: ROUTES.PROFILE,
         element: <ProfilePage />,
+      },
+      {
+        path: "/notifications",
+        element: <NotificationsPage />,
       },
     ],
   },

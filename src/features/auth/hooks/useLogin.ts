@@ -2,9 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { authApi, type LoginRequest } from "../services/authApi";
-import { setCredentials } from "../slices/authSlice";
+import { setCredentials, setUser } from "../slices/authSlice";
 import { useAppDispatch } from "@/app/hooks";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
+import { signalRService } from "@/services/signalR/signalRService";
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -12,7 +13,7 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (credentials: LoginRequest) => authApi.login(credentials),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       dispatch(
         setCredentials({
           user: data.user,
@@ -21,10 +22,17 @@ export const useLogin = () => {
         }),
       );
 
+      try {
+        const fullUser = await authApi.getMe();
+        dispatch(setUser(fullUser));
+      } catch (error) {
+        console.error("Không thể lấy thông tin đầy đủ:", error);
+      }
+
       toast.success(`Chào mừng`, {
         duration: 3000,
       });
-
+      signalRService.start();
       const redirectPath = redirectByRole(data.user.role);
       navigate(redirectPath, { replace: true });
     },

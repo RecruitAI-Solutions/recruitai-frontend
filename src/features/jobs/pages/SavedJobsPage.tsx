@@ -7,10 +7,16 @@ import { SaveJobButton } from "../components/SaveJobButton";
 import { ROUTES } from "@/config/routes.config";
 import { MapPin, Clock, Bookmark, ChevronLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
+import { useAppSelector } from "@/app/hooks";
+import { selectIsAuthenticated } from "@/features/auth/slices/authSlice";
 
 export const SavedJobsPage = () => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useGetSavedJobs({ page, pageSize: 10 });
+  const { data, isLoading } = useGetSavedJobs(
+    { page, pageSize: 10 },
+    isAuthenticated,
+  );
   const jobs = data?.data || [];
 
   return (

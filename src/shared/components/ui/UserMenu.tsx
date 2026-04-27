@@ -87,7 +87,7 @@ export const UserMenu = () => {
               <AvatarImage
                 src={
                   user?.avatar
-                    ? `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user.avatar}`
+                    ? `${import.meta.env.VITE_UPLOAD_BASE_URL}${user.avatar}`
                     : undefined
                 }
               />
@@ -126,6 +126,7 @@ export const UserMenu = () => {
             p-1 z-[99999]
             animate-in fade-in-0 zoom-in-95 duration-100
             ring-1 ring-black/5 dark:ring-white/10
+            overflow-auto
         "
       >
         {/* Phần còn lại giữ nguyên */}
