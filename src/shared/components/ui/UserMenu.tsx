@@ -126,6 +126,7 @@ export const UserMenu = () => {
             p-1 z-[99999]
             animate-in fade-in-0 zoom-in-95 duration-100
             ring-1 ring-black/5 dark:ring-white/10
+            overflow-auto
         "
       >
         {/* Phần còn lại giữ nguyên */}

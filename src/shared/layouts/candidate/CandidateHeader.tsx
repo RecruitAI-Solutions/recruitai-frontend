@@ -11,6 +11,8 @@ import {
   AvatarImage,
 } from "@/shared/components/ui/Avatar";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { NotificationBell } from "@/features/notifications/components/NotificationBell";
+import { NotificationPopover } from "@/features/notifications/components/NotificationPopover";
 
 const getInitials = (name?: string) => {
   if (!name) return "U";
@@ -47,6 +49,7 @@ export const CandidateHeader = () => {
 
         {/* Right: User info + Logout */}
         <div className="flex items-center gap-3 shrink-0">
+          <NotificationPopover />
           <div className="hidden md:flex items-center gap-2">
             <Avatar>
               <AvatarImage
@@ -114,6 +117,13 @@ export const CandidateHeader = () => {
             onClick={() => setMobileOpen(false)}
           >
             Applications
+          </Link>
+          <Link
+            to="/notifications"
+            className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100"
+            onClick={() => setMobileOpen(false)}
+          >
+            Thông báo
           </Link>
         </div>
       )}

@@ -12,6 +12,7 @@ import {
 } from "@/services/storage/localStorage";
 import { axiosInstance } from "@/services/api/axiosInstance";
 import { authApi } from "../services/authApi";
+import { signalRService } from "@/services/signalR/signalRService";
 
 export default function OAuthCallbackPage() {
   const [searchParams] = useSearchParams();
@@ -47,6 +48,8 @@ export default function OAuthCallbackPage() {
         dispatch(
           setCredentials({ user: fullUser, accessToken: token, refreshToken }),
         );
+
+        signalRService.start();
 
         toast.success(`Chào mừng ${fullUser.fullName}`, { duration: 3000 });
         const redirectPath = redirectByRole(fullUser.role);

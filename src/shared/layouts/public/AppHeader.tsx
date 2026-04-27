@@ -5,6 +5,8 @@ import { Container } from "../Container";
 import { useAuth } from "@/lib/useAuth";
 import { UserMenu } from "@/shared/components/ui/UserMenu";
 import { HeaderNav } from "@/shared/components/navigation/HeaderNav";
+import { NotificationBell } from "@/features/notifications/components/NotificationBell";
+import { NotificationPopover } from "@/features/notifications/components/NotificationPopover";
 
 export const AppHeader = ({
   variant = "public",
@@ -29,6 +31,7 @@ export const AppHeader = ({
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
+            {isReady && <NotificationPopover />}
             {/* <Link to="/jobs">Find Jobs</Link> */}
             {isReady ? (
               <UserMenu />
@@ -49,17 +52,27 @@ export const AppHeader = ({
         </div>
 
         {/* Mobile Menu */}
+
         {open && (
-          <div className="md:hidden py-4 space-y-3 border-t">
-            {/* <Link to="/jobs" className="block">
-              Find Jobs
-            </Link> */}
-            <Link
-              to={ROUTES.LOGIN}
-              className="block px-4 py-2 bg-primary text-primary-foreground rounded"
-            >
-              Đăng nhập
-            </Link>
+          <div className="md:hidden py-4 border-t flex justify-end items-center gap-4">
+            {isReady && (
+              <div className="flex items-center h-10">
+                <NotificationPopover />
+              </div>
+            )}
+
+            {isReady ? (
+              <div className="flex items-center h-10">
+                <UserMenu />
+              </div>
+            ) : (
+              <Link
+                to={ROUTES.LOGIN}
+                className="flex items-center h-10 px-4 bg-primary text-primary-foreground rounded"
+              >
+                Đăng nhập
+              </Link>
+            )}
           </div>
         )}
       </Container>

@@ -12,8 +12,15 @@ class SignalRService {
     const token = getToken();
     if (!token) return;
 
+    let baseUrl = (import.meta.env.VITE_API_BASE_URL as string).replace(
+      /\/api$/,
+      "",
+    );
+    if (!baseUrl) baseUrl = window.location.origin;
+
+    // Tạo connection URL: baseUrl + /api/v1/notification-hub
     this.connection = new HubConnectionBuilder()
-      .withUrl(`${import.meta.env.VITE_API_BASE_URL}/api/v1/notification-hub`, {
+      .withUrl(`${baseUrl}/api/v1/notification-hub`, {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
@@ -21,7 +28,6 @@ class SignalRService {
       .build();
 
     this.connection.on("ReceiveNotification", (notification) => {
-      // Dispatch custom event để NotificationBell lắng nghe
       window.dispatchEvent(
         new CustomEvent("new-notification", { detail: notification }),
       );
@@ -32,7 +38,8 @@ class SignalRService {
       console.log("SignalR connected");
     } catch (err) {
       console.error("SignalR connection error:", err);
-      setTimeout(() => this.start(), 5000); // retry sau 5s
+      // Retry sau 5s
+      setTimeout(() => this.start(), 5000);
     }
   }
 

@@ -32,7 +32,7 @@ export const useLogin = () => {
       toast.success(`Chào mừng`, {
         duration: 3000,
       });
-      // signalRService.start();
+      signalRService.start();
       const redirectPath = redirectByRole(data.user.role);
       navigate(redirectPath, { replace: true });
     },

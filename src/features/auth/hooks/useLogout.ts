@@ -33,7 +33,7 @@ export const useLogout = () => {
       toast.success("Đăng xuất thành công!", {
         duration: 2000,
       });
-      // signalRService.stop();
+      signalRService.stop();
       navigate(ROUTES.LOGIN, { replace: true });
     },
 
