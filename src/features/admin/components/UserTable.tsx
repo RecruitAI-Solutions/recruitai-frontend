@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 type Props = {
   users: AdminUserSummary[];
   loading?: boolean;
+  onEdit: (user: AdminUserSummary) => void;
   onDelete: (id: string) => void;
   onUpdateStatus: (user: AdminUserSummary) => void;
   onUpdateRole: (user: AdminUserSummary) => void;
@@ -37,6 +38,7 @@ type Props = {
 export const UserTable = ({
   users,
   loading,
+  onEdit,
   onDelete,
   onUpdateStatus,
   onUpdateRole,
@@ -103,9 +105,11 @@ export const UserTable = ({
       key: "actions",
       render: (_, record) => (
         <Space>
-          <Link to={`/admin/users/${record.id}`}>
-            <Button icon={<EditOutlined />} size="small" />
-          </Link>
+          <Button
+            icon={<EditOutlined />}
+            size="small"
+            onClick={() => onEdit(record)}
+          />
           <Button
             icon={<LockOutlined />}
             size="small"

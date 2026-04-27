@@ -2,24 +2,35 @@
 import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
-import { Input, Modal, Form, Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Input, Modal, Form, Select, Button } from "antd";
+import {
+  DownloadOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {
   useAdminUsers,
   useDeleteUser,
   useUpdateUserStatus,
   useUpdateUserRole,
+  useUpdateUser,
+  useAdminUserDetail,
 } from "../hooks/useAdminUsers";
 import { UserTable } from "../components/UserTable";
 import type {
   AdminUsersParams,
   AdminUserSummary,
+  AdminUserUpdateRequest,
   UserStatusValue,
 } from "../types/admin.types";
 import { USER_STATUS_LABEL, USER_ROLE_LABEL } from "../types/admin.types";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import type { TablePaginationConfig } from "antd/es/table";
 import { useDebounce } from "@/lib/useDebounce";
+import { useNavigate } from "react-router-dom";
+import { useExportUsers } from "../hooks/useExportUsers";
+import { ROUTES } from "@/config/routes.config";
+import { EditUserModal } from "../components/EditUserModal";
 
 const { Option } = Select;
 
@@ -36,15 +47,26 @@ export const UserManagementPage = () => {
   const debouncedSearch = useDebounce(searchTerm, 300);
 
   const { data, isLoading } = useAdminUsers(filter);
+  const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
   const { mutate: deleteUser } = useDeleteUser();
   const { mutate: updateStatus } = useUpdateUserStatus();
   const { mutate: updateRole } = useUpdateUserRole();
+  const { mutate: exportUsers, isPending: isExporting } = useExportUsers();
+  const navigate = useNavigate();
 
   const [selectedUser, setSelectedUser] = useState<AdminUserSummary | null>(
     null,
   );
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [editUserId, setEditUserId] = useState<string | null>(null);
+  const { data: userDetail, isLoading: isLoadingDetail } = useAdminUserDetail(
+    editUserId || "",
+    !!editUserId,
+  );
+
   const [statusForm] = Form.useForm();
   const [roleForm] = Form.useForm();
 
@@ -120,27 +142,69 @@ export const UserManagementPage = () => {
     }
   };
 
+  // HANDLE EDIT USER
+  const handleEditUser = (user: AdminUserSummary) => {
+    setEditUserId(user.id);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = (values: AdminUserUpdateRequest) => {
+    if (editUserId) {
+      updateUser({ id: editUserId, data: values });
+      setIsEditModalOpen(false);
+      setEditUserId(null);
+    }
+  };
+
+  const handleEditCancel = () => {
+    setIsEditModalOpen(false);
+    setEditUserId(null);
+  };
+
   return (
     <Section>
       <Container size="full">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h1 className="text-2xl font-bold text-text-primary">
-            Quản lý người dùng
-          </h1>
-          <div className="w-full sm:w-64">
-            <Input
-              placeholder="Tìm kiếm..."
-              prefix={<SearchOutlined />}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              allowClear
-            />
+        <div className="w-full overflow-x-auto p-4 rounded-lg">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-2xl font-bold text-text-primary">
+              Quản lý người dùng
+            </h1>
+            <div className="flex gap-2 items-center">
+              <Input
+                placeholder="Tìm kiếm..."
+                prefix={<SearchOutlined />}
+                style={{ width: 250 }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                allowClear
+              />
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => navigate(ROUTES.RECRUITER.JOB_CREATE)}
+              >
+                Đăng tin
+              </Button>
+              <Button
+                icon={<DownloadOutlined />}
+                loading={isExporting}
+                onClick={() =>
+                  exportUsers({
+                    format: "excel",
+                    keyword: searchTerm || undefined,
+                    role: filter.role,
+                    status: filter.status,
+                  })
+                }
+              >
+                Xuất file
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="w-full overflow-x-auto rounded-lg border border-border">
           <UserTable
             users={data?.data || []}
             loading={isLoading}
+            onEdit={handleEditUser}
             onDelete={deleteUser}
             onUpdateStatus={openStatusModal}
             onUpdateRole={openRoleModal}
@@ -154,7 +218,14 @@ export const UserManagementPage = () => {
           />
         </div>
 
-        {/* Modals giữ nguyên */}
+        <EditUserModal
+          visible={isEditModalOpen}
+          user={userDetail || null}
+          loading={isUpdating}
+          onSubmit={handleEditSubmit}
+          onCancel={handleEditCancel}
+        />
+
         <Modal
           title="Cập nhật trạng thái"
           open={isStatusModalOpen}

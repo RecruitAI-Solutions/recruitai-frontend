@@ -8,6 +8,7 @@ import { JobsManagementPage } from "@/features/admin/pages/JobManagementPage";
 import { SkillsManagementPage } from "@/features/admin/pages/SkillsManagementPage";
 import { AuditLogsPage } from "@/features/admin/pages/AuditLogsPage";
 import { AdminDashboard } from "@/features/admin/pages/AdminDashboard";
+import { ReportsPage } from "@/features/admin/pages/ReportsPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -34,6 +35,7 @@ export const createAdminRoutes = (userRole: UserRole | null): RouteObject => ({
         { path: ROUTES.ADMIN.JOBS, element: <JobsManagementPage /> },
         { path: ROUTES.ADMIN.SKILLS, element: <SkillsManagementPage /> },
         { path: ROUTES.ADMIN.AUDIT_LOGS, element: <AuditLogsPage /> },
+        { path: ROUTES.ADMIN.REPORTS, element: <ReportsPage /> },
       ],
     },
   ],
