@@ -8,6 +8,7 @@ import {
 } from "../slices/authSlice";
 import { useEffect } from "react";
 import { authApi } from "../services/authApi";
+import { signalRService } from "@/services/signalR/signalRService";
 
 export const useInitAuth = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +36,10 @@ export const useInitAuth = () => {
         dispatch(setInitialized(true));
       }
     };
+
+    if (isAuthenticated) {
+      signalRService.start();
+    }
 
     init();
   }, [isAuthenticated, user, dispatch]);

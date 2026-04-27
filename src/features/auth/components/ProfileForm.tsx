@@ -6,10 +6,12 @@ import * as yup from "yup";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
 import { useUpdateProfile } from "../hooks/useUpdateProfile";
-import { useAppSelector } from "@/app/hooks";
-import { selectCurrentUser } from "../slices/authSlice";
 import { Gender } from "../types/auth.types";
-import type { GenderType, UpdateProfileRequest } from "../types/auth.types";
+import type {
+  GenderType,
+  UpdateProfileRequest,
+  User,
+} from "../types/auth.types";
 
 const profileSchema = yup.object({
   fullName: yup
@@ -30,9 +32,12 @@ const profileSchema = yup.object({
 });
 
 type ProfileFormData = yup.InferType<typeof profileSchema>;
+interface Props {
+  user: User;
+  isLoading?: boolean;
+}
 
-export const ProfileForm = () => {
-  const user = useAppSelector(selectCurrentUser);
+export const ProfileForm = ({ user, isLoading }: Props) => {
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
   const {
@@ -45,17 +50,17 @@ export const ProfileForm = () => {
     defaultValues: {
       fullName: user?.fullName || "",
       phoneNumber: user?.phoneNumber || "",
-      gender: (user?.gender ?? Gender.UNSPECIFIED) as GenderType | undefined,
+      gender: user?.gender ?? Gender.UNSPECIFIED,
       dateOfBirth: user?.dateOfBirth?.split("T")[0] || "",
     },
   });
 
-  // Reset form khi user thay đổi
+  // Reset form khi user thay đổi (khi fetch xong)
   useEffect(() => {
     reset({
       fullName: user?.fullName || "",
       phoneNumber: user?.phoneNumber || "",
-      gender: (user?.gender ?? Gender.UNSPECIFIED) as GenderType | undefined,
+      gender: user?.gender ?? Gender.UNSPECIFIED,
       dateOfBirth: user?.dateOfBirth?.split("T")[0] || "",
     });
   }, [user, reset]);
@@ -70,6 +75,16 @@ export const ProfileForm = () => {
     updateProfile(payload);
   };
 
+  if (isLoading) {
+    return (
+      <div className="animate-pulse space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-10 bg-gray-100 rounded" />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
@@ -78,7 +93,6 @@ export const ProfileForm = () => {
         error={errors.fullName?.message}
         disabled={isPending}
       />
-
       <Input
         label="Số điện thoại"
         placeholder="0901234567"
@@ -86,7 +100,6 @@ export const ProfileForm = () => {
         error={errors.phoneNumber?.message}
         disabled={isPending}
       />
-
       <div>
         <label className="block text-sm font-medium mb-1">Giới tính</label>
         <select
@@ -103,16 +116,14 @@ export const ProfileForm = () => {
           <p className="mt-1 text-sm text-red-500">{errors.gender.message}</p>
         )}
       </div>
-
       <Input
         label="Ngày sinh"
         type="date"
         {...register("dateOfBirth")}
         error={errors.dateOfBirth?.message}
         disabled={isPending}
-        max={new Date().toISOString().split("T")[0]} // Không cho chọn ngày tương lai
+        max={new Date().toISOString().split("T")[0]}
       />
-
       <Button type="submit" isLoading={isPending} fullWidth>
         Lưu thay đổi
       </Button>

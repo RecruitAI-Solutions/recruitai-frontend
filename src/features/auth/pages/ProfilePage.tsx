@@ -7,9 +7,13 @@ import { ProfileForm } from "../components/ProfileForm";
 import { useAppSelector } from "@/app/hooks";
 import { selectCurrentUser } from "../slices/authSlice";
 import { Mail, Calendar, Shield } from "lucide-react";
+import { useGetProfile } from "../hooks/useGetProfile";
 
 export const ProfilePage = () => {
-  const user = useAppSelector(selectCurrentUser);
+  const reduxUser = useAppSelector(selectCurrentUser);
+  const { data: fullUser, isLoading } = useGetProfile();
+
+  const user = fullUser ?? reduxUser;
 
   const getRoleLabel = (role?: string) => {
     switch (role) {
@@ -23,12 +27,10 @@ export const ProfilePage = () => {
         return "";
     }
   };
-
   return (
     <Section>
       <Container size="lg">
         <ButtonBack animation="bounce">Quay lại</ButtonBack>
-
         <div className="max-w-4xl mx-auto mt-4">
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -61,7 +63,7 @@ export const ProfilePage = () => {
           {/* Form */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold mb-4">Chỉnh sửa thông tin</h2>
-            <ProfileForm />
+            {user && <ProfileForm user={user} isLoading={isLoading} />}
           </div>
         </div>
       </Container>

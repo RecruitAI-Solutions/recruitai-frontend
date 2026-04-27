@@ -14,7 +14,7 @@ export const SaveJobButton = ({ jobId, className }: Props) => {
   const userRole = useAppSelector(selectUserRole);
   const { mutate: save, isPending: saving } = useSaveJob();
   const { mutate: unsave, isPending: unsaving } = useUnsaveJob();
-  const { data } = useGetSavedJobs({ pageSize: 100 });
+  const { data } = useGetSavedJobs({ pageSize: 100 }, isAuthenticated);
   const isSaved = data?.data?.some((j) => j.jobId === jobId);
 
   if (!isAuthenticated || userRole !== "candidate") return null;

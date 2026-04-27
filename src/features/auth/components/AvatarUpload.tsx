@@ -55,7 +55,13 @@ export const AvatarUpload = () => {
       {/* Avatar */}
       <div className="relative group">
         <Avatar className="w-32 h-32 ring-4 ring-white shadow-lg">
-          <AvatarImage src={avatarSrc} />
+          <AvatarImage
+            src={
+              user?.avatar
+                ? `${import.meta.env.VITE_UPLOAD_BASE_URL}${user.avatar}`
+                : undefined
+            }
+          />
           <AvatarFallback className="text-4xl bg-primary/10 text-primary">
             {getInitials(user?.fullName)}
           </AvatarFallback>
