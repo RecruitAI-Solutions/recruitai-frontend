@@ -16,7 +16,7 @@ type JobFilterSidebarProps = {
   onReset?: () => void;
 };
 
-const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
+const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
   const { filter, updateFilter, resetFilter } = useFilter();
   const [skillInputKey, setSkillInputKey] = useState(0);
   // const skillNames = useMemo(
@@ -76,7 +76,7 @@ const JobFilterSidebar = ({ className, onReset }: JobFilterSidebarProps) => {
   );
 
   const handleSkillChange = useCallback(
-    (ids: number[], skills: SelectedSkill[]) => {
+    (_ids: number[], skills: SelectedSkill[]) => {
       const names = skills.map((s) => s.name);
       updateFilter({ skills: names.length ? names : [] });
     },

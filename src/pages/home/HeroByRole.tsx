@@ -35,14 +35,20 @@ export const HeroByRole = () => {
         gradient="from-primary to-primary/80"
         primaryAction={
           <Link to={ROUTES.CANDIDATE.DASHBOARD}>
-            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+            <Button
+              variant="outline"
+              className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20"
+            >
               Dashboard
             </Button>
           </Link>
         }
         secondaryAction={
           <Link to={ROUTES.JOB}>
-            <Button variant="outline" className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20">
+            <Button
+              variant="outline"
+              className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20"
+            >
               Tìm việc ngay
             </Button>
           </Link>
@@ -94,14 +100,20 @@ export const HeroByRole = () => {
         gradient="from-success to-success/80"
         primaryAction={
           <Link to={ROUTES.RECRUITER.DASHBOARD}>
-            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+            <Button
+              variant="outline"
+              className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20"
+            >
               Dashboard
             </Button>
           </Link>
         }
         secondaryAction={
           <Link to={ROUTES.JOB}>
-            <Button variant="outline" className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20">
+            <Button
+              variant="outline"
+              className="!bg-white/10 !border-white/30 !text-white hover:!bg-white/20"
+            >
               Tìm việc
             </Button>
           </Link>
@@ -153,7 +165,10 @@ export const HeroByRole = () => {
         gradient="from-purple-500 to-purple-600"
         primaryAction={
           <Link to={ROUTES.ADMIN.DASHBOARD}>
-            <Button variant="outline" className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20">
+            <Button
+              variant="outline"
+              className="!bg-white/10 !border-white/50 !text-white hover:!bg-white/20"
+            >
               Dashboard
             </Button>
           </Link>
@@ -174,8 +189,8 @@ export const HeroByRole = () => {
             color: "text-gray-800",
           },
           {
-            to: ROUTES.ADMIN.SETTINGS,
-            label: "Cài đặt",
+            to: ROUTES.ADMIN.REPORTS,
+            label: "Báo cáo",
             icon: <Settings className="w-4 h-4 text-gray-700" />,
             bg: "bg-white",
             color: "text-gray-800",
@@ -194,14 +209,20 @@ export const HeroByRole = () => {
       gradient="from-gray-900 to-gray-700"
       primaryAction={
         <Link to={ROUTES.JOB}>
-          <Button variant="outline" className="!bg-white !text-gray-900 hover:!bg-gray-100">
+          <Button
+            variant="outline"
+            className="!bg-white !text-gray-900 hover:!bg-gray-100"
+          >
             Tìm việc làm
           </Button>
         </Link>
       }
       secondaryAction={
         <Link to={ROUTES.LOGIN}>
-          <Button variant="outline" className="!border-white/50 !text-white hover:!bg-white/10">
+          <Button
+            variant="outline"
+            className="!border-white/50 !text-white hover:!bg-white/10"
+          >
             Đăng nhập
           </Button>
         </Link>
@@ -209,3 +230,4 @@ export const HeroByRole = () => {
     />
   );
 };
+

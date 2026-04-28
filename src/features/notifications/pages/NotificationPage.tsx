@@ -16,7 +16,7 @@ export const NotificationsPage = () => {
     page: 1,
     pageSize: 10,
   });
-  const { data, isLoading, isFetching } = useNotifications(params);
+  const { data, isLoading } = useNotifications(params);
   const { mutate: readAll, isPending: isReadingAll } = useMarkAllAsRead();
 
   const handlePageChange = (page: number) => {

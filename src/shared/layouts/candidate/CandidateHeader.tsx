@@ -11,7 +11,6 @@ import {
   AvatarImage,
 } from "@/shared/components/ui/Avatar";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
-import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 import { NotificationPopover } from "@/features/notifications/components/NotificationPopover";
 
 const getInitials = (name?: string) => {
@@ -24,7 +23,6 @@ const getInitials = (name?: string) => {
 export const CandidateHeader = () => {
   const user = useAppSelector(selectCurrentUser);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const avatarSrc = `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user?.avatar}` || user?.avatar;
 
   return (
     <header className="bg-surface border-b border-border sticky top-0 z-30">

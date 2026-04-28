@@ -19,7 +19,7 @@ export const NotificationBell = () => {
   }, [unreadCount]);
 
   useEffect(() => {
-    const handler = (event: CustomEvent) => {
+    const handler = () => {
       setLiveCount((prev) => prev + 1);
     };
     window.addEventListener("new-notification", handler as EventListener);

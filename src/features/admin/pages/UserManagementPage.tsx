@@ -161,6 +161,23 @@ export const UserManagementPage = () => {
     setEditUserId(null);
   };
 
+  if (isLoading && !data) {
+    return (
+      <Section>
+        <Container size="full">
+          <div className="p-4 space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="h-12 bg-gray-100 rounded-lg animate-pulse"
+              />
+            ))}
+          </div>
+        </Container>
+      </Section>
+    );
+  }
+
   return (
     <Section>
       <Container size="full">
@@ -222,6 +239,7 @@ export const UserManagementPage = () => {
           visible={isEditModalOpen}
           user={userDetail || null}
           loading={isUpdating}
+          fetchLoading={isLoadingDetail}
           onSubmit={handleEditSubmit}
           onCancel={handleEditCancel}
         />

@@ -7,11 +7,15 @@ type Props = {
 };
 
 export const useProvinceSelect = ({ value, onChange }: Props = {}) => {
-  const [provinces, setProvinces] = useState<{ code: string; name: string }[]>([]);
+  const [provinces, setProvinces] = useState<{ code: string; name: string }[]>(
+    [],
+  );
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedName, setSelectedName] = useState<string | null>(value ?? null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [selectedName, setSelectedName] = useState<string | null>(
+    value ?? null,
+  );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Không set loading = true ngay lập tức, để tránh re-render đột ngột
   const handleSearchChange = useCallback((newSearch: string) => {
@@ -31,7 +35,7 @@ export const useProvinceSelect = ({ value, onChange }: Props = {}) => {
       setLoading(true);
       try {
         const data = await geocodingApi.getProvinces(newSearch);
-        setProvinces(data.map(p => ({ code: p.id, name: p.name })));
+        setProvinces(data.map((p) => ({ code: p.id, name: p.name })));
       } catch (error) {
         console.error(error);
         setProvinces([]);
@@ -65,3 +69,4 @@ export const useProvinceSelect = ({ value, onChange }: Props = {}) => {
     setSearch: handleSearchChange,
   };
 };
+

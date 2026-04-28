@@ -2,7 +2,6 @@ import { useAppDispatch } from "@/app/hooks";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { mapRoleNumberToString, type User } from "../types/auth.types";
 import { setCredentials } from "../slices/authSlice";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
 import {
@@ -10,7 +9,6 @@ import {
   setRefreshToken,
   setToken,
 } from "@/services/storage/localStorage";
-import { axiosInstance } from "@/services/api/axiosInstance";
 import { authApi } from "../services/authApi";
 import { signalRService } from "@/services/signalR/signalRService";
 

@@ -6,6 +6,7 @@ import { setCredentials, setUser } from "../slices/authSlice";
 import { useAppDispatch } from "@/app/hooks";
 import { redirectByRole } from "@/routes/utils/roleRedirect";
 import { signalRService } from "@/services/signalR/signalRService";
+import type { AxiosError } from "axios";
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -37,14 +38,17 @@ export const useLogin = () => {
       navigate(redirectPath, { replace: true });
     },
 
-    onError: (error) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       const data = error.response?.data;
 
-      if (status === 403 && message.includes("Email")) {
+      if (
+        error.response?.status === 403 &&
+        error.response?.data?.message.includes("Email")
+      ) {
         return;
       }
 
-      toast.error(data.message || "Đăng nhập thất bại");
+      toast.error(data?.message || "Đăng nhập thất bại");
     },
   });
 };

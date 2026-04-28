@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { savedJobApi } from "../services/savedJobApi";
 import toast from "react-hot-toast";
+import type { AxiosError } from "axios";
 
 export const useSaveJob = () => {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export const useSaveJob = () => {
       toast.success(data.message || "Đã lưu công việc");
       queryClient.invalidateQueries({ queryKey: ["saved-jobs"] });
     },
-    onError: (err) =>
+    onError: (err: AxiosError<{ message: string }>) =>
       toast.error(err?.response?.data?.message || "Lưu thất bại"),
   });
 };
@@ -23,7 +24,7 @@ export const useUnsaveJob = () => {
       toast.success(data.message || "Đã bỏ lưu");
       queryClient.invalidateQueries({ queryKey: ["saved-jobs"] });
     },
-    onError: (err) =>
+    onError: (err: AxiosError<{ message: string }>) =>
       toast.error(err?.response?.data?.message || "Bỏ lưu thất bại"),
   });
 };

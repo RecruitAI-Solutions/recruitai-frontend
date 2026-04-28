@@ -132,7 +132,7 @@ export const JobForm = ({
           <LocationInput
             value={field.value}
             onChange={field.onChange}
-            error={fieldState.error?.display?.message}
+            error={fieldState.error?.message}
             label="Địa điểm"
           />
         )}

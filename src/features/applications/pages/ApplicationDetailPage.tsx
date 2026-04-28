@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { Button } from "@/shared/components/ui/Button";
@@ -8,18 +8,14 @@ import { useApplicationDetail } from "../hooks/useApplicationDetail";
 import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
 import { useAppSelector } from "@/app/hooks";
 import { selectUserRole } from "@/features/auth/slices/authSlice";
-import { ChevronLeft, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Select } from "@/shared/components/ui/Select";
 import { useState } from "react";
-import type {
-  ApplicationStatusLabel,
-  ApplicationStatusValue,
-} from "../types/application.type";
+import type { ApplicationStatusValue } from "../types/application.type";
 import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 export const ApplicationDetailPage = () => {
   const { applicationId } = useParams<{ applicationId: string }>();
-  const navigate = useNavigate();
   const userRole = useAppSelector(selectUserRole);
   const { data, isLoading } = useApplicationDetail(applicationId!);
 
