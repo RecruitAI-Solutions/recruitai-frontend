@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notificationApi } from "../services/notificationApi";
-import { NOTIFICATION_QUERY_KEYS } from "./notificationQueryKeys";
 import toast from "react-hot-toast";
 
 export const useMarkAllAsRead = () => {

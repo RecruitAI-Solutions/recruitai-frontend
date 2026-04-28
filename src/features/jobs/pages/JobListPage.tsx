@@ -41,7 +41,7 @@ export const JobListPage = () => {
   const { data: cvData } = useGetMyCVs({
     filters: {
       pageSize: 1,
-      status: 5,  // chỉ lấy CV đã hoàn thiện để match
+      status: 5, // chỉ lấy CV đã hoàn thiện để match
       sortBy: "uploadedAt",
       sortOrder: "desc",
     },
@@ -57,7 +57,11 @@ export const JobListPage = () => {
 
   const matchMap = useMemo(() => {
     if (!matchData?.data) return undefined;
-    return new Map(matchData.data.map((m) => [m.jobId, m.matchPercentage]));
+    return new Map(
+      matchData.data
+        .filter((m) => m.jobId != null)
+        .map((m) => [m.jobId as string, m.matchPercentage] as [string, number]),
+    );
   }, [matchData]);
 
   const jobs = data?.data ?? [];
@@ -190,3 +194,4 @@ export const JobListPage = () => {
     </Section>
   );
 };
+

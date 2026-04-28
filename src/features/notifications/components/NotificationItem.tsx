@@ -9,7 +9,7 @@ import { NOTIFICATION_TYPE_LABEL } from "../types/notification.types";
 type Props = { notification: NotificationItemType };
 
 export const NotificationItem = ({ notification }: Props) => {
-  const { mutate: markRead, isPending } = useMarkAsRead();
+  const { mutate: markRead } = useMarkAsRead();
   dayjs.extend(relativeTime);
   dayjs.locale("vi");
 

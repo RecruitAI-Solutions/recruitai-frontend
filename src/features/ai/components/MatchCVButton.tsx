@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   XCircle,
   Lightbulb,
-  Upload
+  Upload,
 } from "lucide-react";
 import { Select } from "@/shared/components/ui/Select";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
@@ -27,11 +27,18 @@ type Props = { jobId: string };
 
 export const MatchCVButton = ({ jobId }: Props) => {
   const { filter } = useCVFilter();
-  const { data: cvData } = useGetMyCVs({ ...filter, pageSize: 100 });
+  const { data: cvData } = useGetMyCVs({
+    filters: {
+      ...filter,
+      pageSize: 100,
+    },
+  });
 
   // Chỉ lấy CV đã được phân tích (status = 5)
   const cvs = useMemo(() => {
-    return (cvData?.data ?? []).filter(cv => cv.statusName === CV_STATUS.ANALYZED);
+    return (cvData?.data ?? []).filter(
+      (cv) => cv.statusName === CV_STATUS.ANALYZED,
+    );
   }, [cvData?.data]);
 
   const [selectedCVId, setSelectedCVId] = useState<string>("");
@@ -40,7 +47,11 @@ export const MatchCVButton = ({ jobId }: Props) => {
 
   const effectiveCVId = selectedCVId || cvs[0]?.id || "";
 
-  const { mutate: matchCV, isPending: isMatching, data: matchResult } = useMatchCVWithJob();
+  const {
+    mutate: matchCV,
+    isPending: isMatching,
+    data: matchResult,
+  } = useMatchCVWithJob();
 
   const handleMatch = () => {
     if (effectiveCVId) {
@@ -50,8 +61,10 @@ export const MatchCVButton = ({ jobId }: Props) => {
   };
 
   const getMatchLevel = (percentage: number) => {
-    if (percentage >= 70) return { label: "Cơ hội cao", icon: TrendingUp, variant: "success" };
-    if (percentage >= 50) return { label: "Tiềm năng", icon: Minus, variant: "warning" };
+    if (percentage >= 70)
+      return { label: "Cơ hội cao", icon: TrendingUp, variant: "success" };
+    if (percentage >= 50)
+      return { label: "Tiềm năng", icon: Minus, variant: "warning" };
     return { label: "Cần cải thiện", icon: TrendingDown, variant: "danger" };
   };
 
@@ -68,7 +81,7 @@ export const MatchCVButton = ({ jobId }: Props) => {
               Bạn cần có CV đã được phân tích để kiểm tra độ phù hợp.
             </p>
             <Link to={ROUTES.CANDIDATE.CV_MANAGEMENT}>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" className="gap-2">
                 <Upload className="w-4 h-4" />
                 Tải lên CV ngay
               </Button>
@@ -132,7 +145,10 @@ export const MatchCVButton = ({ jobId }: Props) => {
                   const level = getMatchLevel(matchResult.matchPercentage);
                   const LevelIcon = level.icon;
                   return (
-                    <Badge variant={level.variant as any} className="text-xs gap-1">
+                    <Badge
+                      variant={level.variant as any}
+                      className="text-xs gap-1"
+                    >
                       <LevelIcon className="w-3 h-3" />
                       {level.label}
                     </Badge>
@@ -189,8 +205,9 @@ export const MatchCVButton = ({ jobId }: Props) => {
                       <CheckCircle2 className="w-4 h-4" />
                       Kỹ năng phù hợp
                     </h4>
-                    <Badge variant="success" size="sm">
-                      {matchResult.matchedSkillCount}/{matchResult.requiredSkillCount}
+                    <Badge variant="success">
+                      {matchResult.matchedSkillCount}/
+                      {matchResult.requiredSkillCount}
                     </Badge>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -210,7 +227,7 @@ export const MatchCVButton = ({ jobId }: Props) => {
                         <XCircle className="w-4 h-4" />
                         Kỹ năng cần bổ sung
                       </h4>
-                      <Badge variant="danger" size="sm">
+                      <Badge variant="danger">
                         {matchResult.missingSkills.length}
                       </Badge>
                     </div>
@@ -230,13 +247,15 @@ export const MatchCVButton = ({ jobId }: Props) => {
                 <div className="mt-3 pt-3 border-t border-gray-100">
                   <p className="text-xs text-text-secondary flex items-center gap-1">
                     <Lightbulb className="w-3 h-3" />
-                    Gợi ý: Hãy phát triển các kỹ năng còn thiếu để tăng cơ hội trúng tuyển
+                    Gợi ý: Hãy phát triển các kỹ năng còn thiếu để tăng cơ hội
+                    trúng tuyển
                   </p>
                 </div>
               )}
 
               {/* Success Suggestion */}
-              {matchResult.matchedSkillCount === matchResult.requiredSkillCount && (
+              {matchResult.matchedSkillCount ===
+                matchResult.requiredSkillCount && (
                 <div className="mt-3 pt-3 border-t border-gray-100">
                   <p className="text-xs text-green-600 flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3" />
@@ -251,3 +270,4 @@ export const MatchCVButton = ({ jobId }: Props) => {
     </div>
   );
 };
+

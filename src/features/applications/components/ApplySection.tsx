@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   XCircle,
   Lightbulb,
-  ChevronRight
 } from "lucide-react";
 import { useCVFilter } from "@/features/candidate/hooks/useCVFilter";
 import { useGetMyCVs } from "@/features/candidate/hooks/useGetMyCVs";
@@ -42,9 +41,19 @@ export const ApplySection = ({ jobId }: Props) => {
   };
 
   const getMatchLevel = (percentage: number) => {
-    if (percentage >= 70) return { label: "Cơ hội cao", icon: TrendingUp, variant: "success" };
-    if (percentage >= 50) return { label: "Tiềm năng", icon: Minus, variant: "warning" };
-    return { label: "Cần cải thiện", icon: TrendingDown, variant: "danger" };
+    if (percentage >= 70)
+      return {
+        label: "Cơ hội cao",
+        icon: TrendingUp,
+        variant: "success",
+      } as const;
+    if (percentage >= 50)
+      return { label: "Tiềm năng", icon: Minus, variant: "warning" } as const;
+    return {
+      label: "Cần cải thiện",
+      icon: TrendingDown,
+      variant: "danger",
+    } as const;
   };
 
   if (analyzedCVs.length === 0) {
@@ -115,7 +124,7 @@ export const ApplySection = ({ jobId }: Props) => {
                   const level = getMatchLevel(result.matchPercentage);
                   const LevelIcon = level.icon;
                   return (
-                    <Badge variant={level.variant as any} className="text-xs gap-1">
+                    <Badge variant={level.variant} className="text-xs gap-1">
                       <LevelIcon className="w-3 h-3" />
                       {level.label}
                     </Badge>
@@ -150,27 +159,30 @@ export const ApplySection = ({ jobId }: Props) => {
                     Phân tích từ AI (Nếu có)
                   </h4>
                   <div className="space-y-2 text-sm">
-                    {result.aiAnalysis.strengths && result.aiAnalysis.strengths.length > 0 && (
-                      <p className="text-blue-800">
-                        <CheckCircle2 className="w-4 h-4 inline mr-2 text-green-600" />
-                        <span className="font-medium">Điểm mạnh:</span>{" "}
-                        {result.aiAnalysis.strengths.join(", ")}
-                      </p>
-                    )}
-                    {result.aiAnalysis.weaknesses && result.aiAnalysis.weaknesses.length > 0 && (
-                      <p className="text-blue-800">
-                        <XCircle className="w-4 h-4 inline mr-2 text-red-600" />
-                        <span className="font-medium">Cần cải thiện:</span>{" "}
-                        {result.aiAnalysis.weaknesses.join(", ")}
-                      </p>
-                    )}
-                    {result.aiAnalysis.recommendations && result.aiAnalysis.recommendations.length > 0 && (
-                      <p className="text-blue-800">
-                        <Lightbulb className="w-4 h-4 inline mr-2 text-yellow-600" />
-                        <span className="font-medium">Đề xuất:</span>{" "}
-                        {result.aiAnalysis.recommendations.join(", ")}
-                      </p>
-                    )}
+                    {result.aiAnalysis.strengths &&
+                      result.aiAnalysis.strengths.length > 0 && (
+                        <p className="text-blue-800">
+                          <CheckCircle2 className="w-4 h-4 inline mr-2 text-green-600" />
+                          <span className="font-medium">Điểm mạnh:</span>{" "}
+                          {result.aiAnalysis.strengths.join(", ")}
+                        </p>
+                      )}
+                    {result.aiAnalysis.weaknesses &&
+                      result.aiAnalysis.weaknesses.length > 0 && (
+                        <p className="text-blue-800">
+                          <XCircle className="w-4 h-4 inline mr-2 text-red-600" />
+                          <span className="font-medium">Cần cải thiện:</span>{" "}
+                          {result.aiAnalysis.weaknesses.join(", ")}
+                        </p>
+                      )}
+                    {result.aiAnalysis.recommendations &&
+                      result.aiAnalysis.recommendations.length > 0 && (
+                        <p className="text-blue-800">
+                          <Lightbulb className="w-4 h-4 inline mr-2 text-yellow-600" />
+                          <span className="font-medium">Đề xuất:</span>{" "}
+                          {result.aiAnalysis.recommendations.join(", ")}
+                        </p>
+                      )}
                   </div>
                 </div>
               )}
@@ -184,7 +196,7 @@ export const ApplySection = ({ jobId }: Props) => {
                       <CheckCircle2 className="w-4 h-4" />
                       Kỹ năng phù hợp
                     </h4>
-                    <Badge variant="success" size="sm">
+                    <Badge variant="success">
                       {result.matchedSkillCount}/{result.requiredSkillCount}
                     </Badge>
                   </div>
@@ -205,7 +217,7 @@ export const ApplySection = ({ jobId }: Props) => {
                         <XCircle className="w-4 h-4" />
                         Kỹ năng cần bổ sung
                       </h4>
-                      <Badge variant="danger" size="sm">
+                      <Badge variant="danger">
                         {result.missingSkills.length}
                       </Badge>
                     </div>
@@ -225,7 +237,8 @@ export const ApplySection = ({ jobId }: Props) => {
                 <div className="mt-3 pt-3 border-t border-gray-100">
                   <p className="text-xs text-text-secondary flex items-center gap-1">
                     <Lightbulb className="w-3 h-3" />
-                    Gợi ý: Hãy cập nhật CV với các kỹ năng còn thiếu để tăng cơ hội trúng tuyển
+                    Gợi ý: Hãy cập nhật CV với các kỹ năng còn thiếu để tăng cơ
+                    hội trúng tuyển
                   </p>
                 </div>
               )}

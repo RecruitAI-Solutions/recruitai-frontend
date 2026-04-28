@@ -44,7 +44,7 @@ export const NotificationPopover = () => {
 
   // Lắng nghe sự kiện realtime
   useEffect(() => {
-    const handler = (event: CustomEvent) => {
+    const handler = () => {
       setLiveCount((prev) => prev + 1);
     };
     window.addEventListener("new-notification", handler as EventListener);

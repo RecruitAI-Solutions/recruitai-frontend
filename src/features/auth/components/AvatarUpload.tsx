@@ -48,8 +48,6 @@ export const AvatarUpload = () => {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
-  const avatarSrc = `${import.meta.env.VITE_API_BASE_AVATAR_URL}${user?.avatar}` || user?.avatar;
-
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Avatar */}

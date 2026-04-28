@@ -5,7 +5,6 @@ import { Container } from "../Container";
 import { useAuth } from "@/lib/useAuth";
 import { UserMenu } from "@/shared/components/ui/UserMenu";
 import { HeaderNav } from "@/shared/components/navigation/HeaderNav";
-import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 import { NotificationPopover } from "@/features/notifications/components/NotificationPopover";
 
 export const AppHeader = ({

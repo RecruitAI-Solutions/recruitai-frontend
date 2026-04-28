@@ -2,7 +2,6 @@ import { axiosInstance } from "@/services/api/axiosInstance";
 import type {
   ApplyJobResponse,
   MyApplicationsResponse,
-  MyApplicationsParams,
   JobApplicationsResponse,
   JobApplicationsParams,
   UpdateStatusRequest,

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { useMatchingJobsCVHistory } from "@/features/ai/hooks/useMatchingJobsCVHistory";
@@ -8,10 +8,16 @@ import { JobSkeleton } from "@/features/jobs/components/JobSkeleton";
 import { Select } from "@/shared/components/ui/Select";
 import { useGetCV } from "../hooks/useGetCV";
 import type { MatchedJobItem } from "@/features/ai/types/ai.types";
-import type { JobListItem, EmploymentTypeLabel, ExperienceLevelLabel } from "@/features/jobs/types/job.types";
-import { EMPLOYMENT_TYPE, EXPERIENCE_LEVEL } from "@/features/jobs/types/job.types";
+import type {
+  JobListItem,
+  EmploymentTypeLabel,
+  ExperienceLevelLabel,
+} from "@/features/jobs/types/job.types";
+import {
+  EMPLOYMENT_TYPE,
+  EXPERIENCE_LEVEL,
+} from "@/features/jobs/types/job.types";
 import { useMemo, useState } from "react";
-import { ChevronLeft } from "lucide-react";
 import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 // Định nghĩa type cho filter riêng
@@ -25,7 +31,6 @@ type HistoryFilter = {
 
 export const MatchingJobsPage = () => {
   const { cvId } = useParams<{ cvId: string }>();
-  const navigate = useNavigate();
   const { data: cv } = useGetCV(cvId || "");
 
   // STATE RIÊNG - không dùng useMatchingFilter
@@ -38,7 +43,7 @@ export const MatchingJobsPage = () => {
   });
 
   const updateFilter = (updates: Partial<HistoryFilter>) => {
-    setFilter(prev => ({ ...prev, ...updates }));
+    setFilter((prev) => ({ ...prev, ...updates }));
   };
 
   const params = {
@@ -53,7 +58,7 @@ export const MatchingJobsPage = () => {
   const { data, isLoading } = useMatchingJobsCVHistory(cvId!, params);
 
   const handlePageChange = (page: number) => {
-    setFilter(prev => ({ ...prev, page }));
+    setFilter((prev) => ({ ...prev, page }));
   };
 
   // Chuyển đổi MatchedJobItem sang JobListItem
@@ -98,7 +103,9 @@ export const MatchingJobsPage = () => {
         <ButtonBack>Quay lại chi tiết</ButtonBack>
 
         <div className="mb-6 mt-6">
-          <h1 className="text-2xl font-bold text-gray-900">Việc làm phù hợp với CV</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Việc làm phù hợp với CV
+          </h1>
           {cv && (
             <p className="text-text-secondary mt-1">
               Dựa trên phân tích AI từ "{cv.fileName}"
@@ -109,7 +116,9 @@ export const MatchingJobsPage = () => {
         <div className="flex gap-4 mb-6">
           <Select
             value={String(filter.minMatch)}
-            onChange={(e) => updateFilter({ minMatch: Number(e.target.value), page: 1 })}
+            onChange={(e) =>
+              updateFilter({ minMatch: Number(e.target.value), page: 1 })
+            }
             options={[
               { value: "0", label: "Tất cả" },
               { value: "50", label: "≥ 50%" },
@@ -134,15 +143,14 @@ export const MatchingJobsPage = () => {
         ) : (
           <>
             <div className="grid md:grid-cols-3 gap-6">
-              {
-                uniqueJobs.map((job, index) => (
-                  <JobCard
-                    key={`${job.jobId}-${index}`}
-                    job={adaptJob(job)}
-                    matchPercentage={job.matchPercentage}
-                  />
-                ))
-              };
+              {uniqueJobs.map((job, index) => (
+                <JobCard
+                  key={`${job.jobId}-${index}`}
+                  job={adaptJob(job)}
+                  matchPercentage={job.matchPercentage}
+                />
+              ))}
+              ;
             </div>
             {data.totalPages > 1 && (
               <div className="mt-8">
@@ -159,3 +167,4 @@ export const MatchingJobsPage = () => {
     </Section>
   );
 };
+

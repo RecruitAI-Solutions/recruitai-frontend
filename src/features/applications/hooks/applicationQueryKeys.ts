@@ -1,5 +1,4 @@
 import type {
-  MyApplicationsParams,
   JobApplicationsParams,
   GetMyApplicationsParams,
 } from "../types/application.type";

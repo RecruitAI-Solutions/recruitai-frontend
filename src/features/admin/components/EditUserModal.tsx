@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Select, DatePicker } from "antd";
+import { Modal, Form, Input, Select, DatePicker, Spin } from "antd";
 import type {
   AdminUserDetail,
   AdminUserUpdateRequest,
@@ -11,6 +11,7 @@ type Props = {
   visible: boolean;
   user: AdminUserDetail | null;
   loading: boolean;
+  fetchLoading?: boolean;
   onSubmit: (data: AdminUserUpdateRequest) => void;
   onCancel: () => void;
 };
@@ -19,6 +20,7 @@ export const EditUserModal = ({
   visible,
   user,
   loading,
+  fetchLoading,
   onSubmit,
   onCancel,
 }: Props) => {
@@ -50,7 +52,7 @@ export const EditUserModal = ({
       };
       onSubmit(data);
     } catch (error) {
-      // validation failed, do nothing
+      console.log(error);
     }
   };
 
@@ -63,32 +65,46 @@ export const EditUserModal = ({
       confirmLoading={loading}
       destroyOnClose
     >
-      <Form form={form} layout="vertical">
-        <Form.Item
-          name="fullName"
-          label="Họ tên"
-          rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
-        >
-          <Input />
-        </Form.Item>
+      {fetchLoading ? (
+        <div className="flex justify-center py-8">
+          <Spin size="large" />
+        </div>
+      ) : !user ? (
+        <p className="text-center py-4 text-gray-500">
+          Không thể tải thông tin người dùng.
+        </p>
+      ) : (
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="fullName"
+            label="Họ tên"
+            rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item name="phoneNumber" label="Số điện thoại">
-          <Input placeholder="0901234567" />
-        </Form.Item>
+          <Form.Item name="phoneNumber" label="Số điện thoại">
+            <Input placeholder="0901234567" />
+          </Form.Item>
 
-        <Form.Item name="gender" label="Giới tính">
-          <Select
-            options={Object.entries(GENDER_LABEL).map(([value, label]) => ({
-              value: Number(value),
-              label,
-            }))}
-          />
-        </Form.Item>
+          <Form.Item name="gender" label="Giới tính">
+            <Select
+              options={Object.entries(GENDER_LABEL).map(([value, label]) => ({
+                value: Number(value),
+                label,
+              }))}
+            />
+          </Form.Item>
 
-        <Form.Item name="dateOfBirth" label="Ngày sinh">
-          <DatePicker format="DD/MM/YYYY" style={{ width: "100%" }} />
-        </Form.Item>
-      </Form>
+          <Form.Item name="dateOfBirth" label="Ngày sinh">
+            <DatePicker
+              format="DD/MM/YYYY"
+              style={{ width: "100%" }}
+              disabledDate={(current) => current && current.isAfter(dayjs())}
+            />
+          </Form.Item>
+        </Form>
+      )}
     </Modal>
   );
 };
