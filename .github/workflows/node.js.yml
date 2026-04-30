@@ -26,7 +26,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
-      - run: npm run build --if-present
+      - name: Build project
+        run: npm run build --if-present
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_UPLOAD_BASE_URL: ${{ secrets.VITE_UPLOAD_BASE_URL }}
       - name: Check dist
         run: ls -la dist
       - name: Clean VPS
