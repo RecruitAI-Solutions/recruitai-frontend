@@ -12,6 +12,8 @@ import type {
   AdminApplicationsResponse,
   RecruiterApplicationsParams,
   RecruiterApplicationsResponse,
+  RecruiterCandidatesParams,
+  RecruiterCandidatesResponse,
 } from "../types/application.type";
 import { APPLICATION_ENDPOINTS } from "@/config/endpoints/app.endpoints";
 
@@ -79,6 +81,15 @@ export const applicationApi = {
   ): Promise<RecruiterApplicationsResponse> => {
     const response = await axiosInstance.get<RecruiterApplicationsResponse>(
       APPLICATION_ENDPOINTS.RECRUITER_ALL,
+      { params },
+    );
+    return response.data;
+  },
+  getRecruiterCandidates: async (
+    params?: RecruiterCandidatesParams,
+  ): Promise<RecruiterCandidatesResponse> => {
+    const response = await axiosInstance.get<RecruiterCandidatesResponse>(
+      APPLICATION_ENDPOINTS.RECRUITER_CANDIDATES,
       { params },
     );
     return response.data;

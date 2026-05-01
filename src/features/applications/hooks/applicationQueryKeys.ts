@@ -3,6 +3,7 @@ import type {
   GetMyApplicationsParams,
   AdminApplicationsParams,
   RecruiterApplicationsParams,
+  RecruiterCandidatesParams,
 } from "../types/application.type";
 
 export const APPLICATION_QUERY_KEYS = {
@@ -18,4 +19,6 @@ export const APPLICATION_QUERY_KEYS = {
     [...APPLICATION_QUERY_KEYS.all, "admin", params] as const,
   recruiterApplications: (params?: RecruiterApplicationsParams) =>
     [...APPLICATION_QUERY_KEYS.all, "recruiter", params] as const,
+  recruiterCandidates: (params?: RecruiterCandidatesParams) =>
+    [...APPLICATION_QUERY_KEYS.all, "recruiter", "candidates", params] as const,
 };
