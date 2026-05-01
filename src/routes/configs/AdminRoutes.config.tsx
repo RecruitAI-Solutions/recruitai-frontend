@@ -9,7 +9,7 @@ import { SkillsManagementPage } from "@/features/admin/pages/SkillsManagementPag
 import { AuditLogsPage } from "@/features/admin/pages/AuditLogsPage";
 import { AdminDashboard } from "@/features/admin/pages/AdminDashboard";
 import { ReportsPage } from "@/features/admin/pages/ReportsPage";
-import { AdminApplicationsPage } from "@/features/admin/pages/AdminApplicationTable";
+import { AdminApplicationsPage } from "@/features/admin/pages/AdminApplicationPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 

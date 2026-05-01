@@ -11,7 +11,6 @@ import type { TablePaginationConfig } from "antd/es/table";
 import type { JobFilters, JobListItem } from "@/features/jobs/types/job.types";
 import { useDebounce } from "@/lib/useDebounce";
 import { useExportJobs } from "../hooks/useExportJobs";
-import type { JobStatusValue } from "../types/admin.types";
 
 const DEFAULT_FILTERS: JobFilters = {
   page: 1,
