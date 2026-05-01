@@ -32,7 +32,7 @@ export const LocationInput = ({
   } = useLocationInput({ value, onChange });
 
   const [localInput, setLocalInput] = useState(displayValue);
-  const debounceTimerRef = useRef<NodeJS.Timeout>();
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -62,15 +62,18 @@ export const LocationInput = ({
     [setInputValue, value, onChange],
   );
 
-  const handleSelectSuggestion = useCallback((item: any) => {
-    selectSuggestion(item);
-    // Focus lại input sau khi chọn
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  }, [selectSuggestion]);
+  const handleSelectSuggestion = useCallback(
+    (item: any) => {
+      selectSuggestion(item);
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    },
+    [selectSuggestion],
+  );
 
-  const shouldShowDropdown = showDropdown &&
+  const shouldShowDropdown =
+    showDropdown &&
     localInput.length >= 3 &&
     (rawSuggestions.length > 0 || isFetching);
 
@@ -127,9 +130,13 @@ export const LocationInput = ({
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {isFetching ? (
-            <div className="px-3 py-2 text-sm text-gray-400">Đang tìm kiếm...</div>
+            <div className="px-3 py-2 text-sm text-gray-400">
+              Đang tìm kiếm...
+            </div>
           ) : rawSuggestions.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-gray-400">Không tìm thấy địa chỉ</div>
+            <div className="px-3 py-2 text-sm text-gray-400">
+              Không tìm thấy địa chỉ
+            </div>
           ) : (
             rawSuggestions.map((item) => (
               <div
