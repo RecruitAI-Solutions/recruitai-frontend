@@ -38,6 +38,7 @@ export const ROUTES = {
     JOB_DETAIL: (id: string) => `/recruiter/jobs/${id}`,
     APPLICANTS: (jobId: string) => `/recruiter/jobs/${jobId}/applicants`,
     All_APPLICANTS: `/recruiter/jobs/applicants`,
+    APPLICATIONS_ALL: "/recruiter/applications",
     APPLICATION_DETAIL: (applicationId: string) =>
       `/recruiter/applications/${applicationId}`,
     COMPANY_PROFILE: "/recruiter/company",

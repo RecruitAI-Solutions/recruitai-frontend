@@ -8,4 +8,6 @@ export const APPLICATION_ENDPOINTS = {
   UPDATE_STATUS: (applicationId: string) =>
     `${APP_BASE}/${applicationId}/status`,
   DETAIL: (applicationId: string) => `${APP_BASE}/${applicationId}`,
+  ADMIN_ALL: `/v1/admin/admin/all`,
+  RECRUITER_ALL: `${APP_BASE}/recruiter/applications`,
 } as const;

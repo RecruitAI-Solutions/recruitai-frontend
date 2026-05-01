@@ -6,6 +6,14 @@ export const APPLICATION_STATUS = {
   REJECTED: 4,
 } as const;
 
+export const APPLICATION_STATUS_LABEL: Record<ApplicationStatusValue, string> =
+  {
+    [APPLICATION_STATUS.PENDING]: "Đang chờ",
+    [APPLICATION_STATUS.REVIEWED]: "Đã xem",
+    [APPLICATION_STATUS.ACCEPTED]: "Đã duyệt",
+    [APPLICATION_STATUS.REJECTED]: "Từ chối",
+  };
+
 export type ApplicationStatusValue =
   (typeof APPLICATION_STATUS)[keyof typeof APPLICATION_STATUS];
 
@@ -216,3 +224,99 @@ export type ApplicationDetailResponse = {
   reviewedAt: string | null;
   notes: string | null;
 };
+
+// Admin Application Item
+export interface AdminApplicationItem {
+  applicationId: string;
+  jobId: string;
+  jobTitle: string;
+  jobLocation: string;
+  recruiterId: string;
+  recruiterName: string;
+  recruiterEmail: string;
+  candidateId: string;
+  candidateName: string;
+  candidateEmail: string;
+  candidatePhone: string | null;
+  matchPercentage: number;
+  matchedSkillCount: number;
+  requiredSkillCount: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  status: ApplicationStatusValue;
+  statusName: string;
+  statusDisplay: string;
+  appliedAt: string;
+  reviewedAt: string | null;
+}
+
+export interface AdminApplicationsResponse {
+  data: AdminApplicationItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+export interface AdminApplicationsParams {
+  page?: number;
+  pageSize?: number;
+  status?: ApplicationStatusValue;
+  fromDate?: string;
+  toDate?: string;
+  minMatch?: number;
+  query?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+// Recruiter application Item
+export interface RecruiterApplicationItem {
+  applicationId: string;
+  jobId: string;
+  jobTitle: string;
+  jobLocation: string;
+  candidateId: string;
+  candidateName: string;
+  candidateEmail: string;
+  candidatePhone: string | null;
+  cvId: string;
+  cvName: string;
+  cvDownloadUrl: string;
+  matchPercentage: number;
+  matchedSkillCount: number;
+  requiredSkillCount: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  status: ApplicationStatusValue;
+  statusName: string;
+  statusDisplay: string;
+  appliedAt: string;
+  reviewedAt: string | null;
+  notes: string | null;
+}
+
+export interface RecruiterApplicationsResponse {
+  data: RecruiterApplicationItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+export interface RecruiterApplicationsParams {
+  page?: number;
+  pageSize?: number;
+  status?: ApplicationStatusValue;
+  jobId?: string;
+  fromDate?: string;
+  toDate?: string;
+  minMatch?: number;
+  query?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}

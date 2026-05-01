@@ -58,7 +58,7 @@ export const AdminJobTable = ({
       key: "employmentType",
       filters: Object.entries(employmentTypeMap).map(([value, label]) => ({
         text: label,
-        value: Number(value), // 👈 sửa thành số
+        value: Number(value),
       })),
       render: (_, record) => <Tag color="blue">{record.employmentType}</Tag>,
     },

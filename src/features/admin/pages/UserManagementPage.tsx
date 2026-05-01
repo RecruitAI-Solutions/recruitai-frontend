@@ -3,11 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/shared/layouts/Container";
 import { Section } from "@/shared/layouts/Section";
 import { Input, Modal, Form, Select, Button } from "antd";
-import {
-  DownloadOutlined,
-  PlusOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   useAdminUsers,
   useDeleteUser,
@@ -27,9 +23,7 @@ import { USER_STATUS_LABEL, USER_ROLE_LABEL } from "../types/admin.types";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import type { TablePaginationConfig } from "antd/es/table";
 import { useDebounce } from "@/lib/useDebounce";
-import { useNavigate } from "react-router-dom";
 import { useExportUsers } from "../hooks/useExportUsers";
-import { ROUTES } from "@/config/routes.config";
 import { EditUserModal } from "../components/EditUserModal";
 
 const { Option } = Select;
@@ -52,7 +46,6 @@ export const UserManagementPage = () => {
   const { mutate: updateStatus } = useUpdateUserStatus();
   const { mutate: updateRole } = useUpdateUserRole();
   const { mutate: exportUsers, isPending: isExporting } = useExportUsers();
-  const navigate = useNavigate();
 
   const [selectedUser, setSelectedUser] = useState<AdminUserSummary | null>(
     null,
@@ -195,13 +188,6 @@ export const UserManagementPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 allowClear
               />
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => navigate(ROUTES.RECRUITER.JOB_CREATE)}
-              >
-                Đăng tin
-              </Button>
               <Button
                 icon={<DownloadOutlined />}
                 loading={isExporting}
