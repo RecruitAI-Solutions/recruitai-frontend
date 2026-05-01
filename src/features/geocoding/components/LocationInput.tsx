@@ -6,7 +6,6 @@ import { useState, useCallback, useRef, useEffect } from "react";
 
 type LocationInputProps = {
   label?: string;
-  // value + onChange: field.value / field.onChange từ RHF Controller
   value?: LocationValue | null;
   onChange?: (data: LocationValue | null) => void;
   disabled?: boolean;
@@ -32,43 +31,48 @@ export const LocationInput = ({
     clearSelection,
   } = useLocationInput({ value, onChange });
 
-  // Debounce state
-  const [debouncedValue, setDebouncedValue] = useState("");
   const [localInput, setLocalInput] = useState(displayValue);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Update local input when displayValue changes (from selection)
   useEffect(() => {
     setLocalInput(displayValue);
   }, [displayValue]);
 
-  // Debounce logic: only update after 3+ characters and 500ms delay
   const handleInputChange = useCallback(
     (val: string) => {
       setLocalInput(val);
 
-      // Clear previous timer
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
 
-      // Clear selection when user types
       if (value) {
         onChange?.(null);
       }
 
-      // CHỈ GỌI API KHI ĐỦ 3 KÝ TỰ
       if (val.length >= 3) {
         debounceTimerRef.current = setTimeout(() => {
-          setInputValue(val);  // Chỉ gọi API ở đây
+          setInputValue(val);
         }, 500);
       } else {
-        // KHÔNG GỌI API, chỉ clear suggestions
-        setInputValue("");  // Hoặc gọi với chuỗi rỗng để clear
+        setInputValue("");
       }
     },
     [setInputValue, value, onChange],
   );
+
+  const handleSelectSuggestion = useCallback((item: any) => {
+    selectSuggestion(item);
+    // Focus lại input sau khi chọn
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  }, [selectSuggestion]);
+
+  const shouldShowDropdown = showDropdown &&
+    localInput.length >= 3 &&
+    (rawSuggestions.length > 0 || isFetching);
 
   return (
     <div className="w-full">
@@ -76,7 +80,7 @@ export const LocationInput = ({
         <label className="block text-sm font-medium mb-1">{label}</label>
       )}
 
-      <Popover.Root open={showDropdown && (rawSuggestions.length > 0 || isFetching)}>
+      <Popover.Root open={shouldShowDropdown}>
         <Popover.Trigger asChild>
           <div
             className={cn(
@@ -84,13 +88,10 @@ export const LocationInput = ({
               error && "border-red-500",
             )}
           >
-            {/* Input */}
             <input
+              ref={inputRef}
               value={localInput}
-              onChange={(e) => {
-                const val = e.target.value;
-                handleInputChange(val);
-              }}
+              onChange={(e) => handleInputChange(e.target.value)}
               disabled={disabled}
               placeholder="Nhập địa chỉ chi tiết..."
               className="flex-1 outline-none bg-transparent text-sm"
@@ -103,12 +104,10 @@ export const LocationInput = ({
               }}
             />
 
-            {/* Loading */}
-            {isFetching && (
+            {isFetching && localInput.length >= 3 && (
               <span className="text-xs text-gray-400 ml-2">...</span>
             )}
 
-            {/* Clear */}
             {hasSelection && (
               <button
                 type="button"
@@ -121,27 +120,24 @@ export const LocationInput = ({
           </div>
         </Popover.Trigger>
 
-        {/* Dropdown */}
         <Popover.Content
           className="w-[320px] bg-white border rounded shadow-md p-1 z-50"
           align="start"
           sideOffset={4}
+          onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {isFetching ? (
             <div className="px-3 py-2 text-sm text-gray-400">Đang tìm kiếm...</div>
           ) : rawSuggestions.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-gray-400">
-              {localInput.length >= 3 ? "Không tìm thấy địa chỉ" : "Nhập ít nhất 3 ký tự"}
-            </div>
+            <div className="px-3 py-2 text-sm text-gray-400">Không tìm thấy địa chỉ</div>
           ) : (
             rawSuggestions.map((item) => (
               <div
                 key={item.refId}
-                onClick={() => selectSuggestion(item)}
+                onClick={() => handleSelectSuggestion(item)}
                 className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer rounded"
               >
                 <div className="font-medium truncate">{item.display}</div>
-
                 {item.fullAddress !== item.display && (
                   <div className="text-xs text-gray-400 truncate">
                     {item.fullAddress}
