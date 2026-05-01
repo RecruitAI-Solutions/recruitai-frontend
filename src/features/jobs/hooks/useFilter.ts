@@ -71,6 +71,7 @@ export const useFilter = () => {
   );
 
   const resetFilter = useCallback(() => {
+    // Reset toàn bộ filter về mặc định
     setSearchParams({}, { replace: true });
   }, [setSearchParams]);
 
