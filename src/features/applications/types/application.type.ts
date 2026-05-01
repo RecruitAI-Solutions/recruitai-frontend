@@ -320,3 +320,46 @@ export interface RecruiterApplicationsParams {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
+
+// RECRUITER CANDIDATE
+export interface RecruiterCandidateItem {
+  candidateId: string;
+  candidateName: string;
+  candidateEmail: string;
+  candidatePhone: string | null;
+  avatarUrl: string | null;
+  jobId: string;
+  jobTitle: string;
+  jobLocation: string;
+  applicationId: string;
+  matchPercentage: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  status: ApplicationStatusValue;
+  statusName: string;
+  statusDisplay: string;
+  appliedAt: string;
+  reviewedAt: string | null;
+  notes: string | null;
+}
+
+export interface RecruiterCandidatesResponse {
+  data: RecruiterCandidateItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+export interface RecruiterCandidatesParams {
+  page?: number;
+  pageSize?: number;
+  status?: ApplicationStatusValue;
+  jobId?: string;
+  minMatch?: number;
+  query?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}

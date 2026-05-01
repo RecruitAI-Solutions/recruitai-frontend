@@ -10,6 +10,7 @@ import { JobApplicationsPage } from "@/features/applications/pages/JobApplicatio
 import { ApplicationDetailPage } from "@/features/applications/pages/ApplicationDetailPage";
 import { recruiterNavConfig } from "@/shared/layouts/configs";
 import { RecruiterApplicationsPage } from "@/features/applications/pages/RecruiterApplicationPage";
+import { RecruiterCandidatesPage } from "@/features/applications/pages/RecruiterCandidatesPage";
 
 export type UserRole = "candidate" | "recruiter" | "admin";
 
@@ -54,6 +55,10 @@ export const createRecuiterRoutes = (
         {
           path: ROUTES.RECRUITER.APPLICATIONS_ALL,
           element: <RecruiterApplicationsPage />,
+        },
+        {
+          path: ROUTES.RECRUITER.CANDIDATES,
+          element: <RecruiterCandidatesPage />,
         },
       ],
     },

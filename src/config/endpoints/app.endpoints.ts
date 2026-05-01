@@ -1,4 +1,5 @@
 const APP_BASE = "/v1/Applications";
+const RECRUITER_BASE = "/v1/recruiters";
 
 export const APPLICATION_ENDPOINTS = {
   APPLY: (jobId: string) => `${APP_BASE}/jobs/${jobId}/apply`,
@@ -10,4 +11,5 @@ export const APPLICATION_ENDPOINTS = {
   DETAIL: (applicationId: string) => `${APP_BASE}/${applicationId}`,
   ADMIN_ALL: `/v1/admin/admin/all`,
   RECRUITER_ALL: `${APP_BASE}/recruiter/applications`,
+  RECRUITER_CANDIDATES: `${RECRUITER_BASE}/candidates`,
 } as const;

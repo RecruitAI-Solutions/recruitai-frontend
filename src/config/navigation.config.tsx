@@ -115,7 +115,7 @@ export const NAV_CONFIG: NavGroup[] = [
       },
       {
         label: "Candidates",
-        to: "/recruiter/candidates",
+        to: ROUTES.RECRUITER.CANDIDATES,
         icon: <Users className="w-4 h-4" />,
       },
     ],
