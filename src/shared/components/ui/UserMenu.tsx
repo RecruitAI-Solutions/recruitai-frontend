@@ -5,7 +5,7 @@ import {
   AvatarFallback,
 } from "@/shared/components/ui/Avatar";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { selectCurrentUser, logout } from "@/features/auth/slices/authSlice";
+import { selectCurrentUser, logout, selectUserRole } from "@/features/auth/slices/authSlice";
 import { usePermission } from "@/lib/usePermission";
 import { PERMISSIONS } from "@/config/permissions.constants";
 import { Link } from "react-router-dom";
@@ -23,13 +23,14 @@ import {
   Bell,
   Heart,
   Clock,
-  Award,
-  MessageSquare,
-  Star,
-  HelpCircle,
+  LayoutDashboard,
+  FilePlus,
+  BarChart3,
+  Brain
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { UserRoleValue } from "@/features/auth/types/auth.types";
 
 export const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +40,7 @@ export const UserMenu = () => {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
   const { can } = usePermission();
+  const userRole = useAppSelector(selectUserRole);
 
   const getInitials = (name?: string) => {
     if (!name) return "U";
@@ -146,50 +148,164 @@ export const UserMenu = () => {
             Nhanh
           </p>
 
-          {/* Dashboard */}
-          <DropdownMenu.Item asChild>
-            <Link
-              to={ROUTES.CANDIDATE.DASHBOARD}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
-            >
-              <Briefcase className="w-4 h-4 text-text-secondary" />
-              <span>Tổng quan</span>
-            </Link>
-          </DropdownMenu.Item>
+          {(userRole === UserRoleValue.CANDIDATE.toLowerCase()) && (
+            <>
+              {/* Dashboard */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.CANDIDATE.DASHBOARD}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Briefcase className="w-4 h-4 text-text-secondary" />
+                  <span>Tổng quan</span>
+                </Link>
+              </DropdownMenu.Item>
 
-          {/* CV Management */}
-          <DropdownMenu.Item asChild>
-            <Link
-              to={ROUTES.CANDIDATE.CV_MANAGEMENT}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
-            >
-              <FileText className="w-4 h-4 text-text-secondary" />
-              <span>Quản lý CV</span>
-            </Link>
-          </DropdownMenu.Item>
+              {/* CV Management */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.CANDIDATE.CV_MANAGEMENT}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <FileText className="w-4 h-4 text-text-secondary" />
+                  <span>Quản lý CV</span>
+                </Link>
+              </DropdownMenu.Item>
 
-          {/* Saved Jobs */}
-          <DropdownMenu.Item asChild>
-            <Link
-              to={ROUTES.CANDIDATE.SAVED_JOBS}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
-            >
-              <Heart className="w-4 h-4 text-text-secondary" />
-              <span>Việc làm đã lưu</span>
-            </Link>
-          </DropdownMenu.Item>
+              {/* Saved Jobs */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.CANDIDATE.SAVED_JOBS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Heart className="w-4 h-4 text-text-secondary" />
+                  <span>Việc làm đã lưu</span>
+                </Link>
+              </DropdownMenu.Item>
 
-          {/* Applications */}
-          <DropdownMenu.Item asChild>
-            <Link
-              to={ROUTES.CANDIDATE.APPLICATIONS}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
-            >
-              <Clock className="w-4 h-4 text-text-secondary" />
-              <span>Đơn đã ứng tuyển</span>
-            </Link>
-          </DropdownMenu.Item>
+              {/* Applications */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.CANDIDATE.APPLICATIONS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Clock className="w-4 h-4 text-text-secondary" />
+                  <span>Đơn đã ứng tuyển</span>
+                </Link>
+              </DropdownMenu.Item>
+            </>
+          )}
+
+
+          {(userRole === UserRoleValue.RECRUITER.toLowerCase()) && (
+            <>
+              {/* Dashboard */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.RECRUITER.DASHBOARD}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-text-secondary" />
+                  <span>Tổng quan</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Quản lý tin đăng */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.RECRUITER.JOBS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Briefcase className="w-4 h-4 text-text-secondary" />
+                  <span>Quản lý tin đăng</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Đăng tin mới */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.RECRUITER.JOB_CREATE}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <FilePlus className="w-4 h-4 text-text-secondary" />
+                  <span>Đăng tin mới</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Đơn ứng tuyển */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.RECRUITER.All_APPLICANTS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Users className="w-4 h-4 text-text-secondary" />
+                  <span>Đơn ứng tuyển</span>
+                </Link>
+              </DropdownMenu.Item>
+            </>
+          )}
+
+          {(userRole === UserRoleValue.ADMIN.toLowerCase()) && (
+            <>
+              {/* Dashboard - Tổng quan */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.ADMIN.DASHBOARD}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-text-secondary" />
+                  <span>Tổng quan</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Quản lý người dùng */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.ADMIN.USERS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Users className="w-4 h-4 text-text-secondary" />
+                  <span>Quản lý người dùng</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Quản lý kỹ năng */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.ADMIN.SKILLS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <Brain className="w-4 h-4 text-text-secondary" />
+                  <span>Quản lý kỹ năng</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Audit Log */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.ADMIN.AUDIT_LOGS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <FileText className="w-4 h-4 text-text-secondary" />
+                  <span>Nhật ký hệ thống</span>
+                </Link>
+              </DropdownMenu.Item>
+
+              {/* Báo cáo */}
+              <DropdownMenu.Item asChild>
+                <Link
+                  to={ROUTES.ADMIN.REPORTS}
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5"
+                >
+                  <BarChart3 className="w-4 h-4 text-text-secondary" />
+                  <span>Báo cáo</span>
+                </Link>
+              </DropdownMenu.Item>
+            </>
+          )}
         </div>
+
+
 
         {/* === ACCOUNT === */}
         {can(PERMISSIONS.EDIT_PROFILE) && (
@@ -219,14 +335,16 @@ export const UserMenu = () => {
             </DropdownMenu.Item>
 
             <DropdownMenu.Item className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer outline-none focus:bg-primary/5">
-              <Bell className="w-4 h-4 text-text-secondary" />
-              <span>Thông báo</span>
+              <Link to={ROUTES.NOTIFICATIONS} className="flex items-center gap-3">
+                <Bell className="w-4 h-4 text-text-secondary" />
+                <span>Thông báo</span>
+              </Link>
             </DropdownMenu.Item>
           </div>
         )}
 
         {/* === ACHIEVEMENTS === */}
-        <div className="py-1">
+        {/* <div className="py-1">
           <p className="px-3 py-1 text-xs font-medium text-text-secondary uppercase tracking-wider">
             Thành tích
           </p>
@@ -238,10 +356,10 @@ export const UserMenu = () => {
             <Star className="w-4 h-4 text-text-secondary" />
             <span>Đánh giá của tôi</span>
           </DropdownMenu.Item>
-        </div>
+        </div> */}
 
         {/* === SUPPORT === */}
-        <div className="py-1">
+        {/*<div className="py-1">
           <p className="px-3 py-1 text-xs font-medium text-text-secondary uppercase tracking-wider">
             Hỗ trợ
           </p>
@@ -253,7 +371,7 @@ export const UserMenu = () => {
             <HelpCircle className="w-4 h-4 text-text-secondary" />
             <span>Hướng dẫn sử dụng</span>
           </DropdownMenu.Item>
-        </div>
+        </div> */}
 
         {/* === ADMIN (if has permission) === */}
         {can(PERMISSIONS.FULL_ACCESS) && (
@@ -300,6 +418,6 @@ export const UserMenu = () => {
           }}
         />
       </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    </DropdownMenu.Root >
   );
 };

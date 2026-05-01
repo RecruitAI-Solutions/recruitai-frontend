@@ -85,7 +85,7 @@ export default function CandidateDashboard() {
             <Link to={ROUTES.CANDIDATE.CV_MANAGEMENT}>
               <Button
                 variant="outline"
-                className="bg-transparent border-white/30 text-white hover:bg-white/10"
+                className="bg-transparent border-white/30 !text-white hover:bg-white/10"
               >
                 Quản lý CV
               </Button>

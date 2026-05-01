@@ -4,6 +4,7 @@ export const ROUTES = {
   REGISTER: "/register",
   AUTH_CALLBACK: "/auth/callback",
   FORGOT_PASSWORD: "/forgot-password",
+  NOTIFICATIONS: "/notifications",
   RESET_PASSWORD: "/reset-password",
   CHANGE_PASSWORD: "/change-password",
   VERIFY_EMAIL: "/verify-email",
@@ -36,6 +37,7 @@ export const ROUTES = {
     JOB_EDIT: (id: string) => `/recruiter/jobs/${id}/edit`,
     JOB_DETAIL: (id: string) => `/recruiter/jobs/${id}`,
     APPLICANTS: (jobId: string) => `/recruiter/jobs/${jobId}/applicants`,
+    All_APPLICANTS: `/recruiter/jobs/applicants`,
     APPLICATION_DETAIL: (applicationId: string) =>
       `/recruiter/applications/${applicationId}`,
     COMPANY_PROFILE: "/recruiter/company",
