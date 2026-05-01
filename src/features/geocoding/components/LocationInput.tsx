@@ -2,7 +2,8 @@ import { useLocationInput } from "../hooks/useLocationInput";
 import type { LocationValue } from "../hooks/useLocationInput";
 import { cn } from "@/lib/utils";
 import * as Popover from "@radix-ui/react-popover";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
+import type { LocationData } from "../types/geocoding.types";
 
 type LocationInputProps = {
   label?: string;
@@ -21,7 +22,6 @@ export const LocationInput = ({
   error,
 }: LocationInputProps) => {
   const {
-    displayValue,
     setInputValue,
     rawSuggestions,
     isFetching,
@@ -31,13 +31,10 @@ export const LocationInput = ({
     clearSelection,
   } = useLocationInput({ value, onChange });
 
-  const [localInput, setLocalInput] = useState(displayValue);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  // Khởi tạo localInput từ value?.display hoặc rỗng
+  const [localInput, setLocalInput] = useState(value?.display || "");
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setLocalInput(displayValue);
-  }, [displayValue]);
 
   const handleInputChange = useCallback(
     (val: string) => {
@@ -63,8 +60,12 @@ export const LocationInput = ({
   );
 
   const handleSelectSuggestion = useCallback(
-    (item: any) => {
+    (item: LocationData) => {
+      // Cập nhật localInput ngay với display name
+      setLocalInput(item.display);
+      // Gọi selectSuggestion để cập nhật value trong hook
       selectSuggestion(item);
+      // Focus lại input
       setTimeout(() => {
         inputRef.current?.focus();
       }, 0);
@@ -76,6 +77,12 @@ export const LocationInput = ({
     showDropdown &&
     localInput.length >= 3 &&
     (rawSuggestions.length > 0 || isFetching);
+
+  const handleClear = useCallback(() => {
+    clearSelection();
+    setLocalInput("");
+    inputRef.current?.focus();
+  }, [clearSelection]);
 
   return (
     <div className="w-full">
@@ -114,7 +121,7 @@ export const LocationInput = ({
             {hasSelection && (
               <button
                 type="button"
-                onClick={clearSelection}
+                onClick={handleClear}
                 className="ml-2 text-gray-400 hover:text-red-500 cursor-pointer transition-colors rounded-full p-1"
               >
                 ×
