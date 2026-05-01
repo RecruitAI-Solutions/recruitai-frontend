@@ -80,14 +80,16 @@ export const NotificationPopover = () => {
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <button className="relative p-2 rounded-full hover:bg-primary/5 transition-colors">
+        <button className="cursor-pointer relative p-2 rounded-full hover:bg-primary/5 transition-colors">
           <Bell className="w-5 h-5 text-text-secondary hover:text-primary transition-colors" />
           {liveCount > 0 && (
             <>
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+              {/* Badge số */}
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-medium rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center z-10 shadow-sm">
                 {liveCount > 99 ? "99+" : liveCount}
               </span>
-              <span className="absolute -top-1 -right-1 animate-ping bg-red-400 text-white text-xs rounded-full h-5 w-5 opacity-75" />
+              {/* Hiệu ứng ping */}
+              <span className="absolute -top-1 -right-1 animate-ping bg-red-400 rounded-full min-w-[18px] h-[18px] opacity-60" />
             </>
           )}
         </button>
