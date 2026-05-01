@@ -110,7 +110,7 @@ export const NAV_CONFIG: NavGroup[] = [
       },
       {
         label: "Applications",
-        to: ROUTES.RECRUITER.APPLICANTS(""),
+        to: ROUTES.RECRUITER.APPLICATIONS_ALL,
         icon: <FileText className="w-4 h-4" />,
       },
       {
@@ -141,11 +141,11 @@ export const NAV_CONFIG: NavGroup[] = [
         to: ROUTES.ADMIN.JOBS,
         icon: <Briefcase className="w-4 h-4" />,
       },
-      // {
-      //   label: "Đơn ứng tuyển",
-      //   to: "/admin/applications",
-      //   icon: <FileUser className="w-4 h-4" />,
-      // },
+      {
+        label: "Đơn ứng tuyển",
+        to: ROUTES.ADMIN.APPLICATIONS,
+        icon: <FileText className="w-4 h-4" />,
+      },
       {
         label: "Kỹ năng",
         to: "/admin/skills",

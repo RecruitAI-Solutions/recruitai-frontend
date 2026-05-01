@@ -1,3 +1,5 @@
+import type { JobStatusValue } from "@/features/admin/types/admin.types";
+
 // EMPLOYMENT TYPE
 export const EMPLOYMENT_TYPE = {
   FULL_TIME: 1,
@@ -140,6 +142,7 @@ export type JobListItemResponse = {
   skillNames: string[];
   companyName?: string;
   companyLogo?: string;
+  status?: JobStatusValue;
 };
 
 //JOB LIST PAGINATION
@@ -261,6 +264,7 @@ export type JobListItem = {
   missingSkills?: string[];
   views?: number;
   applications?: number;
+  status?: JobStatusValue;
 };
 
 export type Job = {

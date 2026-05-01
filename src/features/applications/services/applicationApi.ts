@@ -8,6 +8,10 @@ import type {
   UpdateStatusResponse,
   ApplicationDetailResponse,
   GetMyApplicationsParams,
+  AdminApplicationsParams,
+  AdminApplicationsResponse,
+  RecruiterApplicationsParams,
+  RecruiterApplicationsResponse,
 } from "../types/application.type";
 import { APPLICATION_ENDPOINTS } from "@/config/endpoints/app.endpoints";
 
@@ -57,6 +61,25 @@ export const applicationApi = {
   ): Promise<ApplicationDetailResponse> => {
     const response = await axiosInstance.get<ApplicationDetailResponse>(
       APPLICATION_ENDPOINTS.DETAIL(applicationId),
+    );
+    return response.data;
+  },
+
+  getAdminApplications: async (
+    params?: AdminApplicationsParams,
+  ): Promise<AdminApplicationsResponse> => {
+    const response = await axiosInstance.get<AdminApplicationsResponse>(
+      APPLICATION_ENDPOINTS.ADMIN_ALL,
+      { params },
+    );
+    return response.data;
+  },
+  getRecruiterApplications: async (
+    params?: RecruiterApplicationsParams,
+  ): Promise<RecruiterApplicationsResponse> => {
+    const response = await axiosInstance.get<RecruiterApplicationsResponse>(
+      APPLICATION_ENDPOINTS.RECRUITER_ALL,
+      { params },
     );
     return response.data;
   },

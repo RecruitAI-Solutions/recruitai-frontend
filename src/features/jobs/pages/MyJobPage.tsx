@@ -2,8 +2,8 @@ import { useState, useCallback, useEffect } from "react";
 import { useGetMyJobs } from "../hooks/useGetMyJobs";
 import { useDeleteJob } from "../hooks/useDeleteJob";
 import { JobTable } from "../components/JobTable";
-import { Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input } from "antd";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { useDebounce } from "@/lib/useDebounce";
 import { Section } from "@/shared/layouts/Section";
 import { Container } from "@/shared/layouts/Container";
@@ -13,6 +13,8 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table/interface";
 import type { JobListItem, JobFilters } from "../types/job.types";
+import { ROUTES } from "@/config/routes.config";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FILTERS: JobFilters = {
   page: 1,
@@ -32,6 +34,8 @@ export const MyJobsPage = () => {
 
   const { data, isLoading } = useGetMyJobs(filter);
   const { mutate: deleteJob } = useDeleteJob();
+
+  const navigate = useNavigate();
 
   const updateFilter = useCallback((newValues: Partial<JobFilters>) => {
     setFilter((prev) => ({
@@ -95,11 +99,19 @@ export const MyJobsPage = () => {
     <Section>
       <Container size="full">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h1 className="text-2xl font-bold text-text-primary">
+          <h1 className="text-2xl flex-1 font-bold text-text-primary">
             Công việc của tôi
           </h1>
-          <div className="w-full sm:w-64">
+          <div className="flex flex-1 gap-4 w-full sm:w-64">
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => navigate(ROUTES.RECRUITER.JOB_CREATE)}
+            >
+              Đăng tin
+            </Button>
             <Input
+              className="flex-1"
               placeholder="Tìm kiếm..."
               prefix={<SearchOutlined />}
               value={searchTerm}
