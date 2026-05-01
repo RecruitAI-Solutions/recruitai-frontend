@@ -187,7 +187,7 @@ export const NotificationPopover = () => {
 
                       <div className="flex items-center gap-2 mt-2">
                         <Badge
-                          variant={!item.isRead ? "primary" : "secondary"}
+                          variant={!item.isRead ? "purple" : "gray"}
                           className="text-xs px-2 py-0 h-5"
                         >
                           {NOTIFICATION_TYPE_LABEL[item.type] || "Chung"}
