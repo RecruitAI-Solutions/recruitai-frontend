@@ -73,6 +73,13 @@ export const SkillInput = ({
               disabled={disabled}
               placeholder={selectedSkills.length === 0 ? placeholder : ""}
               className="flex-1 outline-none bg-transparent text-sm min-w-[100px]"
+              style={{
+                lineHeight: "24px",
+                paddingTop: "8px",
+                paddingBottom: "8px",
+                height: "auto",
+                minHeight: "38px"
+              }}
             />
           </div>
         </Popover.Trigger>

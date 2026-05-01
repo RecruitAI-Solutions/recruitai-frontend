@@ -22,7 +22,6 @@ export const ProvinceSelect = ({
 
   const displayValue = search || selectedName || "";
 
-  // Click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -33,14 +32,18 @@ export const ProvinceSelect = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Kiểm tra có nên hiện dropdown không
   const shouldShowDropdown = isOpen && (search?.length > 0 || loading);
 
   return (
     <div className="w-full relative" ref={wrapperRef}>
       {label && <label className="block text-sm font-medium mb-1">{label}</label>}
 
-      <div className={cn("flex items-center border rounded-lg px-3 py-2", error && "border-red-500")}>
+      {/* Sửa: thêm min-h và py chính xác */}
+      <div className={cn(
+        "flex items-center border rounded-lg px-3",
+        "min-h-[42px]", // đảm bảo chiều cao tối thiểu
+        error && "border-red-500"
+      )}>
         <input
           ref={inputRef}
           type="text"
@@ -53,6 +56,13 @@ export const ProvinceSelect = ({
           onFocus={() => setIsOpen(true)}
           placeholder="Nhập tên tỉnh/thành phố..."
           className="flex-1 outline-none bg-transparent text-sm"
+          style={{
+            lineHeight: "24px",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            height: "auto",
+            minHeight: "38px"
+          }}
         />
         {displayValue && (
           <button
@@ -62,7 +72,7 @@ export const ProvinceSelect = ({
               clear();
               inputRef.current?.focus();
             }}
-            className="ml-2 text-gray-400 hover:text-red-500"
+            className="ml-2 text-gray-400 hover:text-red-500 cursor-pointer transition-colors rounded-full p-1"
           >
             ×
           </button>
