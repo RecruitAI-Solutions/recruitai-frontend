@@ -6,10 +6,9 @@ import { employmentTypeMap, ExperienceLevelMap } from "../types/job.types";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { SkillInput } from "@/features/skills/components/SkillInput";
 import type { SelectedSkill } from "@/features/skills/types/skill.types";
-// import styles from "./JobFilterSidebar.module.css";
 
 type JobFilterSidebarProps = {
   className?: string;
@@ -18,41 +17,23 @@ type JobFilterSidebarProps = {
 
 const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
   const { filter, updateFilter, resetFilter } = useFilter();
-  const [skillInputKey, setSkillInputKey] = useState(0);
-  // const skillNames = useMemo(
-  //   () => filter.skill?.split(",").filter(Boolean) || [],
-  //   [filter.skill],
-  // );
 
-  // const defaultSkills: SelectedSkill[] = useMemo(() => {
-  //   return skillNames.map((name, index) => ({
-  //     id: -index - 1,
-  //     name,
-  //   }));
-  // }, [skillNames]);
+  // Compute selected values directly from filter
+  const selectedExperienceLevels = filter.experienceLevel ?? [];
+  const selectedEmploymentTypes = filter.employmentType ?? [];
+  const selectedSkills = filter.skills ?? [];
 
-  // // Re-mount SkillInput khi defaultSkills thay đổi (bao gồm cả khi reset)
-  // useEffect(() => {
-  //   setSkillInputKey((pre) => pre + 1);
-  // }, [defaultSkills]);
-
-  const selectedExperienceLevels = useMemo(
-    () => filter.experienceLevel ?? [],
-    [filter.experienceLevel],
-  );
-
-  const selectedEmploymentTypes = useMemo(
-    () => filter.employmentType ?? [],
-    [filter.employmentType],
-  );
-
-  const selectedSkills = useMemo(() => filter.skills ?? [], [filter.skills]);
-
+  // Convert skills to SelectedSkill format for SkillInput
   const defaultSkills: SelectedSkill[] = useMemo(() => {
     return selectedSkills.map((name, index) => ({
       id: -index - 1,
       name,
     }));
+  }, [selectedSkills]);
+
+  // Generate unique key for SkillInput based on skills array
+  const skillInputKey = useMemo(() => {
+    return `skills-${selectedSkills.length}-${selectedSkills.join(",")}`;
   }, [selectedSkills]);
 
   const handleEmploymentTypeChange = useCallback(
@@ -93,14 +74,13 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
 
   const handleReset = useCallback(() => {
     resetFilter();
-    setSkillInputKey((prev) => prev + 1);
   }, [resetFilter]);
 
   return (
     <aside
       className={cn(
         "w-full md:w-72 bg-surface p-5 rounded-xl border border-border",
-        "sticky top-[16px] max-h-[calc(100vh-100px)] overflow-auto",
+        "sticky top-[16px] overflow-auto",
         className,
       )}
       style={{
@@ -108,9 +88,10 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
       }}
     >
       <div className="space-y-5">
+        {/* Header */}
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-lg">Bộ lọc</h3>
-          <Button variant="outline" onClick={handleReset}>
+          <Button variant="outline" onClick={handleReset} className="h-8 text-xs px-3">
             Xóa tất cả
           </Button>
         </div>
@@ -121,6 +102,7 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
             Tỉnh / Thành phố
           </label>
           <ProvinceSelect
+            key={`province-${filter.location ?? 'none'}`}
             value={filter.location || null}
             onChange={(name) => updateFilter({ location: name || undefined })}
           />
@@ -170,7 +152,7 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
                 }
                 className="h-9 text-sm"
               />
-              <span>-</span>
+              <span className="text-text-secondary">-</span>
               <Input
                 type="number"
                 placeholder="Tối đa"
@@ -190,7 +172,8 @@ const JobFilterSidebar = ({ className }: JobFilterSidebarProps) => {
               ].map((range) => (
                 <button
                   key={range.label}
-                  className="px-3 py-1 text-xs border rounded-full hover:bg-gray-100"
+                  type="button"
+                  className="px-3 py-1 text-xs border border-border rounded-full hover:bg-primary/5 hover:border-primary transition-colors"
                   onClick={() =>
                     updateFilter({ minSalary: range.min, maxSalary: range.max })
                   }
