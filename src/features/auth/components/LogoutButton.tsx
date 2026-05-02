@@ -1,81 +1,96 @@
+import { useState } from "react";
 import { useLogout } from "../hooks/useLogout";
+import { ConfirmDialog } from "@/shared/components/ui/ConfirmDialog";
+import { LogOutIcon } from "lucide-react";
 
 export const LogoutButton = ({ variant = "full", className = "" }) => {
   const { mutate: logout, isPending } = useLogout();
+  const [openConfirm, setOpenConfirm] = useState(false);
 
-  const handleLogout = () => {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) {
-      logout();
-    }
+  const handleLogoutClick = () => {
+    setOpenConfirm(true);
   };
 
   if (variant === "icon") {
     return (
-      <button
-        onClick={handleLogout}
-        disabled={isPending}
-        className={`flex items-center gap-1 text-error p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 ${className}`}
-        title="Đăng xuất"
-      >
-        <svg
-          className="w-5 h-5 text-error"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      <>
+        <button
+          onClick={handleLogoutClick}
+          disabled={isPending}
+          className={`flex items-center gap-1 text-error p-2 bg-red-50 cursor-pointer rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50 ${className}`}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-          />
-        </svg>
-        <span>Đăng xuất</span>
-      </button>
+          <LogOutIcon color="red" />
+          <span>Đăng xuất</span>
+        </button>
+
+        <ConfirmDialog
+          open={openConfirm}
+          onOpenChange={setOpenConfirm}
+          title="Đăng xuất?"
+          description="Bạn sẽ cần đăng nhập lại."
+          confirmText="Đăng xuất"
+          cancelText="Hủy"
+          variant="destructive"
+          onConfirm={() => {
+            logout();
+            setOpenConfirm(false);
+          }}
+        />
+      </>
     );
   }
 
   if (variant === "text") {
     return (
-      <button
-        onClick={handleLogout}
-        disabled={isPending}
-        className={`px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 disabled:opacity-50 ${className}`}
-      >
-        {isPending ? "Đang đăng xuất..." : "Đăng xuất"}
-      </button>
+      <>
+        <button
+          onClick={handleLogoutClick}
+          disabled={isPending}
+          className={`px-4 py-2 text-sm font-medium ${className}`}
+        >
+          {isPending ? "Đang đăng xuất..." : "Đăng xuất"}
+        </button>
+
+        <ConfirmDialog
+          open={openConfirm}
+          onOpenChange={setOpenConfirm}
+          title="Đăng xuất?"
+          description="Bạn sẽ cần đăng nhập lại."
+          confirmText="Đăng xuất"
+          cancelText="Hủy"
+          variant="destructive"
+          onConfirm={() => {
+            logout();
+            setOpenConfirm(false);
+          }}
+        />
+      </>
     );
   }
 
   return (
-    <button
-      onClick={handleLogout}
-      disabled={isPending}
-      className={`
-        flex items-center gap-2 px-4 py-2 
-        bg-red-50 text-red-600 rounded-lg
-        hover:bg-red-100 transition-colors
-        disabled:opacity-50 disabled:cursor-not-allowed
-        ${className}
-      `}
-    >
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <>
+      <button
+        onClick={handleLogoutClick}
+        disabled={isPending}
+        className={`flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg ${className}`}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-        />
-      </svg>
+        <span>{isPending ? "Đang đăng xuất..." : "Đăng xuất"}</span>
+      </button>
 
-      <span className="font-medium">
-        {isPending ? "Đang đăng xuất..." : "Đăng xuất"}
-      </span>
-    </button>
+      <ConfirmDialog
+        open={openConfirm}
+        onOpenChange={setOpenConfirm}
+        title="Đăng xuất?"
+        description="Bạn sẽ cần đăng nhập lại."
+        confirmText="Đăng xuất"
+        cancelText="Hủy"
+        variant="destructive"
+        onConfirm={() => {
+          logout();
+          setOpenConfirm(false);
+        }}
+      />
+    </>
   );
 };
