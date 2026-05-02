@@ -102,19 +102,19 @@ export default function CandidateDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <QuickCard
             to={ROUTES.JOB}
-            icon={<Briefcase className="w-5 h-5" />}
+            icon={<Briefcase className="w-7 h-7" />}
             title="Tìm việc làm"
             desc="Khám phá cơ hội mới"
           />
           <QuickCard
             to={ROUTES.CANDIDATE.CV_MANAGEMENT}
-            icon={<Upload className="w-5 h-5" />}
+            icon={<Upload className="w-7 h-7" />}
             title="Upload CV"
             desc="Quản lý hồ sơ của bạn"
           />
           <QuickCard
             to={ROUTES.PROFILE}
-            icon={<User className="w-5 h-5" />}
+            icon={<User className="w-7 h-7" />}
             title="Hồ sơ cá nhân"
             desc="Xem và chỉnh sửa thông tin"
           />
@@ -202,4 +202,3 @@ export default function CandidateDashboard() {
     </Container>
   );
 }
-

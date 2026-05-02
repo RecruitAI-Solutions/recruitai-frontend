@@ -1,3 +1,4 @@
+import { CircleArrowRightIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,18 +21,23 @@ export const QuickCard = ({
     <Link
       to={to}
       className={`
-        bg-surface p-4 rounded-xl border
+        bg-surface p-5 rounded-xl border border-border
         hover:shadow-md transition-all duration-200
-        flex items-start gap-4
+        flex items-center gap-6 justify-between
         ${className || ""}
       `}
     >
-      <div className="shrink-0 text-primary">{icon}</div>
+      <div className="flex items-center gap-6">
+        <div className="shrink-0 text-primary bg-primary/10 p-3 rounded-xl">
+          {icon}
+        </div>
 
-      <div>
-        <h3 className="font-medium">{title}</h3>
-        {desc && <p className="text-sm text-text-secondary">{desc}</p>}
+        <div>
+          <h3 className="font-medium">{title}</h3>
+          {desc && <p className="text-md text-text-secondary">{desc}</p>}
+        </div>
       </div>
+      <CircleArrowRightIcon className="place-content-end" />
     </Link>
   );
 };
