@@ -10,6 +10,7 @@ import { Skeleton } from "@/shared/components/ui/Skeleton";
 import { Select } from "@/shared/components/ui/Select";
 import type { GetNotificationsParams } from "../types/notification.types";
 import { Check } from "lucide-react";
+import { ButtonBack } from "@/shared/components/ui/ButtonBack";
 
 export const NotificationsPage = () => {
   const [params, setParams] = useState<GetNotificationsParams>({
@@ -26,7 +27,8 @@ export const NotificationsPage = () => {
   return (
     <Section>
       <Container>
-        <div className="flex justify-between items-center mb-6">
+        <ButtonBack />
+        <div className="flex justify-between items-center mb-6 mt-4">
           <h1 className="text-2xl font-bold">Thông báo</h1>
           <div className="flex gap-4">
             <Select
