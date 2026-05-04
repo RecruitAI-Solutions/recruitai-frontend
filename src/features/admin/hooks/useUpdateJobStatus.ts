@@ -18,7 +18,7 @@ export const useUpdateJobStatus = () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "jobs"] });
       queryClient.invalidateQueries({ queryKey: ["jobs", "detail"] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Cập nhật thất bại");
     },
   });
