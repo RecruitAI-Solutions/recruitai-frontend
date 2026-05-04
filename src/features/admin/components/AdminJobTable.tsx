@@ -1,4 +1,4 @@
-import { Table, Tag, Button, Space, Popconfirm } from "antd";
+import { Table, Tag, Button, Space, Popconfirm, Select } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -9,12 +9,14 @@ import {
 } from "@/features/jobs/types/job.types";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import dayjs from "dayjs";
+import { JOB_STATUS_LABEL, type JobStatusValue } from "../types/admin.types";
 
 type Props = {
   jobs: JobListItem[];
   loading?: boolean;
   onDelete: (id: string) => void;
   pagination: TablePaginationConfig;
+  onUpdateStatus?: (jobId: string, status: JobStatusValue) => void;
   onTableChange: (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -27,6 +29,7 @@ export const AdminJobTable = ({
   loading,
   onDelete,
   pagination,
+  onUpdateStatus,
   onTableChange,
 }: Props) => {
   const columns: ColumnsType<JobListItem> = [
@@ -70,6 +73,27 @@ export const AdminJobTable = ({
       sorter: true,
     },
     {
+      title: "Trạng thái",
+      key: "status",
+      width: 150,
+      render: (_, record) => (
+        <Select
+          size="small"
+          style={{ width: 130 }}
+          value={record.status}
+          onChange={(value) =>
+            onUpdateStatus?.(record.id, value as JobStatusValue)
+          }
+        >
+          {Object.entries(JOB_STATUS_LABEL).map(([key, label]) => (
+            <Select.Option key={key} value={Number(key)}>
+              {label}
+            </Select.Option>
+          ))}
+        </Select>
+      ),
+    },
+    {
       title: "Thao tác",
       key: "actions",
       render: (_, record) => (
@@ -96,7 +120,7 @@ export const AdminJobTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
-      scroll={{ x: 1200 }}
+      scroll={{ x: "max-content" }}
     />
   );
 };

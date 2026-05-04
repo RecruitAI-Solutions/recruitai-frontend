@@ -52,6 +52,7 @@ export const DashboardJobTable = ({ jobs, loading }: Props) => {
       pagination={false}
       showHeader={true}
       size="middle"
+      scroll={{ x: "max-content" }}
     />
   );
 };

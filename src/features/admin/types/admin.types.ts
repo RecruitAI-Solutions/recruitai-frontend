@@ -367,3 +367,21 @@ export type ReportParams = {
   year?: number;
   status?: number;
 };
+
+export interface AdminJobStatusUpdateRequest {
+  status: JobStatusValue;
+  reason?: string;
+}
+
+export interface AdminJobStatusUpdateResponse {
+  jobId: string;
+  jobTitle: string;
+  oldStatus: number;
+  oldStatusName: string;
+  newStatus: number;
+  newStatusName: string;
+  isActive: boolean;
+  updatedAt: string;
+  success: boolean;
+  message: string;
+}

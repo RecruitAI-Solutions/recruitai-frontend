@@ -190,7 +190,7 @@ export const ApplicationTable = ({
         pageSizeOptions: ["5", "10", "20"],
       }}
       onChange={handleTableChange}
-      scroll={{ x: 1000 }}
+      scroll={{ x: "max-content" }}
     />
   );
 };

@@ -139,7 +139,7 @@ export const UserTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
-      scroll={{ x: 1200 }}
+      scroll={{ x: "max-content" }}
     />
   );
 };

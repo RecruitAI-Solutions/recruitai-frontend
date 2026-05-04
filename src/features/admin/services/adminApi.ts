@@ -21,6 +21,8 @@ import type {
   JobsByMonthReportResponse,
   ApplicationsByMonthReportResponse,
   ReportParams,
+  AdminJobStatusUpdateRequest,
+  AdminJobStatusUpdateResponse,
 } from "../types/admin.types";
 import { ADMIN_ENDPOINTS } from "@/config/endpoints/admin.enpoints";
 
@@ -116,6 +118,14 @@ export const adminApi = {
       .get<ApplicationsByMonthReportResponse>(
         ADMIN_ENDPOINTS.REPORT_APPLICATIONS_BY_MONTH,
         { params },
+      )
+      .then((res) => res.data),
+
+  updateJobStatus: (jobId: string, data: AdminJobStatusUpdateRequest) =>
+    axiosInstance
+      .patch<AdminJobStatusUpdateResponse>(
+        ADMIN_ENDPOINTS.JOB_STATUS(jobId),
+        data,
       )
       .then((res) => res.data),
 };
