@@ -43,13 +43,11 @@ export const JobTable = ({
         </Link>
       ),
       sorter: true,
-      width: "20%",
     },
     {
       title: "Địa điểm",
       dataIndex: "location",
       key: "location",
-      width: "20%",
     },
     {
       title: "Hình thức",
@@ -61,7 +59,6 @@ export const JobTable = ({
       })),
       render: (_, record) => <Tag color="blue">{record.employmentType}</Tag>,
       sorter: true,
-      width: "8.3%",
     },
     {
       title: "Lương",
@@ -73,7 +70,6 @@ export const JobTable = ({
         return "Thỏa thuận";
       },
       sorter: true,
-      width: "20%",
     },
     {
       title: "Ngày đăng",
@@ -81,7 +77,6 @@ export const JobTable = ({
       key: "createdAt",
       render: (value) => new Date(value).toLocaleDateString("vi-VN"),
       sorter: true,
-      width: "20%",
     },
     {
       title: "Ứng viên",
@@ -93,7 +88,6 @@ export const JobTable = ({
           </Button>
         </Link>
       ),
-      width: "8.3%",
     },
     {
       title: "Thao tác",
@@ -115,7 +109,6 @@ export const JobTable = ({
           </Popconfirm>
         </Space>
       ),
-      width: "8.3%",
     },
   ];
 
@@ -127,8 +120,7 @@ export const JobTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
-      style={{ maxWidth: "100%" }}
-      scroll={{ x: true }}
+      scroll={{ x: "max-content" }}
     />
   );
 };

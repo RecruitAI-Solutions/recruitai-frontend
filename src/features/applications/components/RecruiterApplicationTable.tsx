@@ -111,7 +111,7 @@ export const RecruiterApplicationTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
-      scroll={{ x: 900 }}
+      scroll={{ x: "max-content" }}
     />
   );
 };

@@ -93,6 +93,7 @@ export const SkillTable = ({
       loading={loading}
       pagination={pagination}
       onChange={onTableChange}
+      scroll={{ x: "max-content" }}
     />
   );
 };

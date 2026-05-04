@@ -21,4 +21,6 @@ export const ADMIN_ENDPOINTS = {
 
   REPORT_JOBS_BY_MONTH: `${ADMIN_BASE}/reports/jobs-by-month`,
   REPORT_APPLICATIONS_BY_MONTH: `${ADMIN_BASE}/reports/applications-by-month`,
+
+  JOB_STATUS: (jobId: string) => `${ADMIN_BASE}/jobs/${jobId}/status`,
 } as const;

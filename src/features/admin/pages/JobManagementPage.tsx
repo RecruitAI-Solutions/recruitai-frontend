@@ -11,6 +11,8 @@ import type { TablePaginationConfig } from "antd/es/table";
 import type { JobFilters, JobListItem } from "@/features/jobs/types/job.types";
 import { useDebounce } from "@/lib/useDebounce";
 import { useExportJobs } from "../hooks/useExportJobs";
+import { useUpdateJobStatus } from "../hooks/useUpdateJobStatus";
+import type { JobStatusValue } from "../types/admin.types";
 
 const DEFAULT_FILTERS: JobFilters = {
   page: 1,
@@ -31,6 +33,7 @@ export const JobsManagementPage = () => {
   const { data, isLoading } = useAdminJobs(filter);
   const { mutate: deleteJob } = useDeleteJob();
   const { mutate: exportJobs, isPending: isExporting } = useExportJobs();
+  const { mutate: updateJobStatus } = useUpdateJobStatus();
 
   useEffect(() => {
     const nextTitle = debouncedSearch || undefined;
@@ -68,6 +71,10 @@ export const JobsManagementPage = () => {
     }
 
     updateFilter(newFilter);
+  };
+
+  const handleUpdateStatus = (jobId: string, status: JobStatusValue) => {
+    updateJobStatus({ jobId, data: { status } });
   };
 
   return (
@@ -111,6 +118,7 @@ export const JobsManagementPage = () => {
               total: data?.total || 0,
               showSizeChanger: true,
             }}
+            onUpdateStatus={handleUpdateStatus}
             onTableChange={handleTableChange}
           />
         </div>

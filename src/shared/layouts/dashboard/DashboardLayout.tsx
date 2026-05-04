@@ -17,7 +17,7 @@ export const DashboardLayout = ({ navConfig }: DashboardLayoutProps) => {
       <Sidebar open={open} setOpen={setOpen} navConfig={navConfig} />
 
       {/* Main content — đẩy sang phải bằng ml-64 trên desktop */}
-      <div className="flex-1 flex flex-col md:ml-64">
+      <div className="flex-1 flex flex-col md:ml-64 min-w-0">
         {/* Mobile top bar */}
         <div className="md:hidden h-14 flex items-center px-4 border-b bg-surface">
           <button

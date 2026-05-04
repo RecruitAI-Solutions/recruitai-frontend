@@ -97,12 +97,12 @@ export const MyJobsPage = () => {
 
   return (
     <Section>
-      <Container size="full">
+      <Container size="full" className="overflow-hidden">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h1 className="text-2xl flex-1 font-bold text-text-primary">
             Công việc của tôi
           </h1>
-          <div className="flex flex-1 gap-4 w-full sm:w-64">
+          <div className="flex flex-1 gap-4 w-full">
             <Button
               type="primary"
               icon={<PlusOutlined />}
@@ -120,19 +120,17 @@ export const MyJobsPage = () => {
             />
           </div>
         </div>
-        <div className="w-full overflow-scroll">
-          <JobTable
-            jobs={data?.data || []}
-            loading={isLoading}
-            onDelete={deleteJob}
-            pagination={{
-              current: filter.page || 1,
-              pageSize: filter.pageSize || 2,
-              total: data?.total || 0,
-            }}
-            onTableChange={handleTableChange}
-          />
-        </div>
+        <JobTable
+          jobs={data?.data || []}
+          loading={isLoading}
+          onDelete={deleteJob}
+          pagination={{
+            current: filter.page || 1,
+            pageSize: filter.pageSize || 2,
+            total: data?.total || 0,
+          }}
+          onTableChange={handleTableChange}
+        />
       </Container>
     </Section>
   );

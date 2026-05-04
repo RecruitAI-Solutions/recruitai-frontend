@@ -323,6 +323,7 @@ export const transformJobListItem = (
   experienceLevelValue: data.experienceLevel,
   companyName: data.companyName,
   companyLogo: data.companyLogo,
+  status: data.status,
 });
 
 export const transformJob = (data: JobDetailResponse): Job => ({
