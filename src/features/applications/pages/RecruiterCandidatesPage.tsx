@@ -56,7 +56,7 @@ export const RecruiterCandidatesPage = () => {
   return (
     <Section>
       <Container size="full">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col md:flex-row items-center justify-between">
           <h1 className="text-2xl font-bold text-text-primary">
             Danh sách ứng viên
           </h1>

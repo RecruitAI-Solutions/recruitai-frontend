@@ -57,7 +57,7 @@ export const RecruiterApplicationsPage = () => {
   return (
     <Section>
       <Container size="full">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col md:flex-row items-center justify-between">
           <h1 className="text-2xl font-bold text-text-primary">
             Tất cả đơn ứng tuyển
           </h1>

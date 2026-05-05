@@ -2,6 +2,7 @@ import {
   HubConnectionBuilder,
   HubConnection,
   LogLevel,
+  HttpTransportType,
 } from "@microsoft/signalr";
 import { getToken } from "@/services/storage/localStorage";
 
@@ -22,6 +23,7 @@ class SignalRService {
     this.connection = new HubConnectionBuilder()
       .withUrl(`${baseUrl}/api/v1/notification-hub`, {
         accessTokenFactory: () => token,
+        transport: HttpTransportType.LongPolling,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)

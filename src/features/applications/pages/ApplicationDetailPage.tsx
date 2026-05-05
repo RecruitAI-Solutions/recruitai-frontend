@@ -56,9 +56,9 @@ export const ApplicationDetailPage = () => {
       <Container>
         <ButtonBack className="!mb-5">Quay lại danh sách</ButtonBack>
 
-        <div className="bg-surface rounded-xl border p-6 space-y-6">
+        <div className="bg-surface rounded-xl border border-border p-6 space-y-6">
           {/* Header */}
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">{job.title}</h1>
               <p className="text-text-secondary">
@@ -70,13 +70,11 @@ export const ApplicationDetailPage = () => {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-right">
+              <div className="text-right flex gap-2 items-center justify-center">
                 <span className="text-3xl font-bold text-primary">
                   {matchResult.matchPercentage}%
                 </span>
-                <span className="text-sm text-text-secondary block">
-                  phù hợp
-                </span>
+                <span className="text-sm text-text-secondary">phù hợp</span>
               </div>
               <StatusBadge status={data.status} />
             </div>
@@ -163,7 +161,7 @@ export const ApplicationDetailPage = () => {
 
           {/* Recruiter Status Update */}
           {isRecruiter && (
-            <div className="flex gap-4 items-end border-t pt-6">
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-end border-t pt-6">
               <Select
                 value={newStatus?.toString() || ""}
                 onChange={(e) =>

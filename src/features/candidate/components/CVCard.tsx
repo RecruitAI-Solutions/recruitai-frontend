@@ -48,9 +48,9 @@ export const CVCard = ({ cv }: Props) => {
   return (
     <Link
       to={`/candidate/cv/${cv.id}`}
-      className="bg-surface rounded-lg border p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow"
+      className="bg-surface rounded-lg border p-4 flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-md transition-shadow"
     >
-      <div className="flex items-center gap-3 min-w-0 flex-1">
+      <div className="flex items-center gap-3 min-w-0 flex-1 w-full">
         <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
           <FileText className="w-5 h-5 text-red-600" />
         </div>

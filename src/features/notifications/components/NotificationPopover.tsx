@@ -1,6 +1,16 @@
 // src/features/notifications/components/NotificationPopover.tsx
 import * as Popover from "@radix-ui/react-popover";
-import { AlertCircle, Award, Bell, BellOff, Briefcase, CheckCheck, Heart, MessageSquare, UserPlus } from "lucide-react";
+import {
+  AlertCircle,
+  Award,
+  Bell,
+  BellOff,
+  Briefcase,
+  CheckCheck,
+  Heart,
+  MessageSquare,
+  UserPlus,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNotifications } from "../hooks/useNotifications";
@@ -28,34 +38,34 @@ export const NotificationPopover = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const [open, setOpen] = useState(false);
 
-  const { data: unreadCount } = useUnreadCount(isAuthenticated);
-  const { data: notificationsData } = useNotifications({
+  const { data: unreadCount, refetch: refetchCount } =
+    useUnreadCount(isAuthenticated);
+  const { data: notificationsData, refetch: refetchList } = useNotifications({
     page: 1,
     pageSize: 5,
   });
   const { mutate: markRead } = useMarkAsRead();
   const { mutate: markAllRead } = useMarkAllAsRead();
 
-  const [liveCount, setLiveCount] = useState<number>(unreadCount ?? 0);
-
   useEffect(() => {
-    if (unreadCount !== undefined) setLiveCount(unreadCount);
-  }, [unreadCount]);
+    if (open) {
+      refetchList();
+      refetchCount();
+    }
+  }, [open, refetchList, refetchCount]);
 
-  // Lắng nghe sự kiện realtime
   useEffect(() => {
     const handler = () => {
-      setLiveCount((prev) => prev + 1);
+      refetchList();
+      refetchCount();
     };
-    window.addEventListener("new-notification", handler as EventListener);
-    return () =>
-      window.removeEventListener("new-notification", handler as EventListener);
-  }, []);
+    window.addEventListener("new-notification", handler);
+    return () => window.removeEventListener("new-notification", handler);
+  }, [refetchList, refetchCount]);
 
   const handleNotificationClick = (notification: NotificationItem) => {
     if (!notification.isRead) {
       markRead(notification.id);
-      setLiveCount((prev) => Math.max(0, prev - 1));
     }
   };
 
@@ -76,17 +86,18 @@ export const NotificationPopover = () => {
   if (!isAuthenticated) return null;
 
   const notifications = notificationsData?.data ?? [];
+  const count = unreadCount ?? 0;
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
         <button className="cursor-pointer relative p-2 rounded-full hover:bg-primary/5 transition-colors">
           <Bell className="w-5 h-5 text-text-secondary hover:text-primary transition-colors" />
-          {liveCount > 0 && (
+          {count > 0 && (
             <>
               {/* Badge số */}
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-medium rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center z-10 shadow-sm">
-                {liveCount > 99 ? "99+" : liveCount}
+                {count > 99 ? "99+" : count}
               </span>
               {/* Hiệu ứng ping */}
               <span className="absolute -top-1 -right-1 animate-ping bg-red-400 rounded-full min-w-[18px] h-[18px] opacity-60" />
@@ -99,20 +110,21 @@ export const NotificationPopover = () => {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="w-[400px] max-h-[500px] bg-white rounded-xl shadow-xl border border-border z-50 flex flex-col"
+          avoidCollisions
+          collisionPadding={{ top: 16, bottom: 16, left: 16, right: 16 }}
+          className="w-[calc(100vw-2rem)] max-w-[400px] max-h-[500px] bg-white rounded-xl shadow-xl border border-border z-50 flex flex-col"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-            <h3 className="font-semibold text-sm text-text-primary">Thông báo</h3>
+            <h3 className="font-semibold text-sm text-text-primary">
+              Thông báo
+            </h3>
 
             <div className="flex items-center gap-2">
               {/* Icon Đọc tất cả với tooltip - màu xanh primary */}
               <div className="relative group">
                 <button
-                  onClick={() => {
-                    markAllRead();
-                    setLiveCount(0);
-                  }}
+                  onClick={() => markAllRead()}
                   className="p-1 !text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-primary/10"
                   aria-label="Đánh dấu tất cả đã đọc"
                 >
@@ -141,7 +153,9 @@ export const NotificationPopover = () => {
             {!notifications || notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
                 <BellOff className="w-12 h-12 text-text-muted mb-3" />
-                <p className="text-sm font-medium text-text-primary">Chưa có thông báo</p>
+                <p className="text-sm font-medium text-text-primary">
+                  Chưa có thông báo
+                </p>
                 <p className="text-xs text-text-secondary mt-1">
                   Khi có thông báo mới, chúng sẽ xuất hiện tại đây
                 </p>
@@ -156,26 +170,28 @@ export const NotificationPopover = () => {
                     "hover:bg-gray-50 hover:pl-5",
                     !item.isRead
                       ? "bg-white border-l-4 border-l-primary shadow-sm"
-                      : "bg-white border-l-4 border-l-transparent"
+                      : "bg-white border-l-4 border-l-transparent",
                   )}
                 >
                   <div className="flex items-start gap-3">
                     {/* Icon theo loại thông báo */}
-                    <div className={cn(
-                      "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200",
-                      !item.isRead
-                        ? "bg-primary/10"
-                        : "bg-gray-100"
-                    )}>
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200",
+                        !item.isRead ? "bg-primary/10" : "bg-gray-100",
+                      )}
+                    >
                       {getNotificationIcon(item.type)}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className={cn(
-                          "text-sm font-medium truncate transition-colors duration-200",
-                          !item.isRead ? "text-primary" : "text-text-primary"
-                        )}>
+                        <p
+                          className={cn(
+                            "text-sm font-medium truncate transition-colors duration-200",
+                            !item.isRead ? "text-primary" : "text-text-primary",
+                          )}
+                        >
                           {item.title || "Thông báo"}
                         </p>
                         {!item.isRead && (
