@@ -16,7 +16,7 @@ export const AppHeader = ({
   const { isReady } = useAuth();
 
   return (
-    <header className="bg-surface border-b">
+    <header className="bg-surface border-b border-border">
       <Container>
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -53,7 +53,7 @@ export const AppHeader = ({
         {/* Mobile Menu */}
 
         {open && (
-          <div className="md:hidden py-4 border-t flex justify-end items-center gap-4">
+          <div className="md:hidden py-4 border-t border-border flex justify-end items-center gap-4">
             {isReady && (
               <div className="flex items-center h-10">
                 <NotificationPopover />

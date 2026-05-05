@@ -60,7 +60,7 @@ export const AdminApplicationsPage = () => {
   return (
     <Section>
       <Container size="full">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 w-full flex flex-col md:flex-row sm:items-center sm:justify-between">
           <h1 className="text-2xl font-bold text-text-primary">
             Quản lý đơn ứng tuyển
           </h1>

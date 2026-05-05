@@ -28,9 +28,9 @@ export const NotificationsPage = () => {
     <Section>
       <Container>
         <ButtonBack />
-        <div className="flex justify-between items-center mb-6 mt-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 mt-4">
           <h1 className="text-2xl font-bold">Thông báo</h1>
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <Select
               value={
                 params.isRead === undefined

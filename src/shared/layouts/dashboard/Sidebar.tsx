@@ -30,12 +30,12 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
 
       <aside
         className={cn(
-          "fixed flex flex-col h-screen z-50 top-0 left-0 w-64 bg-white border-r transition-transform",
+          "fixed flex flex-col h-screen z-50 top-0 left-0 w-64 bg-white border-r border-border transition-transform",
           open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
         {/* Logo + Role Badge */}
-        <div className="px-6 py-4 border-b shrink-0">
+        <div className="px-6 py-4 border-b border-border shrink-0">
           <h2 className="font-bold text-primary">JobPortal</h2>
           <div className="flex items-center gap-2 mt-1.5">
             <div className={cn("w-2 h-2 rounded-full", colors.dot)} />
@@ -50,7 +50,7 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
 
         {/* Access Level (admin) */}
         {navConfig.role === "admin" && (
-          <div className="px-4 py-3 border-t">
+          <div className="px-4 py-3 border-t border-border">
             <p className="text-xs font-semibold text-gray-400 mb-1">
               Access Level
             </p>
@@ -64,7 +64,7 @@ export const Sidebar = ({ open, setOpen, navConfig }: SidebarProps) => {
         )}
 
         {/* User Menu */}
-        <div className="px-4 py-4 border-t shrink-0">
+        <div className="px-4 py-4 border-t border-border shrink-0">
           <UserMenu />
         </div>
       </aside>

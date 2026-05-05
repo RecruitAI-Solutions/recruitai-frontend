@@ -41,7 +41,7 @@ export const CandidateHeader = () => {
         </div>
 
         {/* Center nav — dashboard-header items từ navigation.config */}
-        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+        <nav className="hidden xl:flex items-center gap-1 flex-1 justify-center">
           {/* Dashboard-specific nav */}
           <HeaderNav variant="dashboard" />
         </nav>
@@ -67,11 +67,11 @@ export const CandidateHeader = () => {
               {user?.fullName}
             </span>
           </div>
-          <LogoutButton variant="icon" />
+          <LogoutButton variant="icon" className="hidden md:flex" />
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden p-2 text-text-secondary"
+            className="xl:hidden p-2 text-text-secondary"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             ☰
@@ -124,6 +124,7 @@ export const CandidateHeader = () => {
           >
             Thông báo
           </Link>
+          <LogoutButton variant="icon" className="w-full" />
         </div>
       )}
     </header>
