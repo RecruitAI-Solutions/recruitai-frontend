@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FILTERS: JobFilters = {
   page: 1,
-  pageSize: 2,
+  pageSize: 10,
   sortBy: "createdAt",
   sortOrder: "desc",
   employmentType: [],
