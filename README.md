@@ -1,23 +1,24 @@
+```markdown
 # RecruitAI Frontend
 
 An AI-powered recruitment platform built with **React 19**, **TypeScript**, and **Vite**. This frontend connects to a .NET Core API and features role-based access control, AI-assisted job matching, and a modular, scalable architecture.
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
-- **Core:** [React 19](https://react.dev/), [TypeScript 5](https://www.typescriptlang.org/), [Vite 7 (SWC)](https://vitejs.dev/)
+- **Core:** React 19, TypeScript 5, Vite 7 (SWC)
 - **State Management:**
-  - **Global:** [Redux Toolkit](https://redux-toolkit.js.org/) (Auth & User session)
-  - **Server State:** [TanStack React Query v5](https://tanstack.com/query/latest) (Data fetching & caching)
-- **Styling:** [TailwindCSS v4](https://tailwindcss.com/)
-- **Routing:** [React Router DOM v7](https://reactrouter.com/en/main)
-- **Forms:** [React Hook Form](https://react-hook-form.com/) + [Yup](https://github.com/jquense/yup)
-- **Utilities:** [Axios](https://axios-http.com/) (API client), [Lucide React](https://lucide.dev/) (Icons), [React Hot Toast](https://react-hot-toast.com/) (Notifications)
+  - Global: Redux Toolkit (Auth & User session)
+  - Server State: TanStack React Query v5 (Data fetching & caching)
+- **Styling:** TailwindCSS v4
+- **Routing:** React Router DOM v7
+- **Forms:** React Hook Form + Yup
+- **Utilities:** Axios (API client), Lucide React (Icons), React Hot Toast (Notifications)
 
 ---
 
-## 📂 Architecture & Project Structure
+## Architecture & Project Structure
 
 The project follows a **feature-based architecture**, where domain logic, components, and services are co-located for better maintainability and scalability.
 
@@ -44,12 +45,12 @@ src/
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18.0 or higher)
-- [npm](https://www.npmjs.com/) (v9.0 or higher)
+- Node.js (v18.0 or higher)
+- npm (v9.0 or higher)
 
 ### Installation
 
@@ -88,7 +89,7 @@ npm run preview
 
 ---
 
-## 🛡️ Authentication & Security
+## Authentication & Security
 
 - **JWT Authentication:** Secure storage of access and refresh tokens in `localStorage`.
 - **Route Guards:**
@@ -98,7 +99,7 @@ npm run preview
 
 ---
 
-## 🎨 UI & Styling
+## UI & Styling
 
 - **Tailwind v4:** Modern, utility-first styling with a custom design system.
 - **Atomic UI:** A library of reusable components found in `src/shared/components/ui`.
@@ -106,4 +107,4 @@ npm run preview
 
 ---
 
-*Built with ❤️ for the RecruitAI ecosystem.*
+Built with love for the RecruitAI ecosystem.
