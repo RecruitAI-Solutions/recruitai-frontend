@@ -126,7 +126,7 @@ export const MyJobsPage = () => {
           onDelete={deleteJob}
           pagination={{
             current: filter.page || 1,
-            pageSize: filter.pageSize || 2,
+            pageSize: filter.pageSize || 10,
             total: data?.total || 0,
           }}
           onTableChange={handleTableChange}
